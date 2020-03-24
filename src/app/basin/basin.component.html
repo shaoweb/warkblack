@@ -1,0 +1,160 @@
+<!-- 左 -->
+<div class="contentSidedge fl clearfix">
+    <!-- 上 -->
+    <div class="sidEdge">
+        <h3>全国水利工程统计 <img src="assets/image/hangbian_lan.png" alt=""></h3>
+        <ul class="sidEdge_list">
+            <li>
+                <img src="assets/image/daba.png" alt="">
+                <p>大坝总量: <span class="span_yellow">120</span></p>
+                <p>到期未检: <span class="span_blue">14</span></p>
+            </li>
+            <li>
+                <img src="assets/image/difang.png" alt="">
+                <p>堤坝总量: <span class="span_yellow">120</span></p>
+                <p>到期未检: <span class="span_blue">12</span></p>
+            </li>
+            <li>
+                <img src="assets/image/shuizha.png" alt="">
+                <p>水闸总量: <span class="span_yellow">{{lockTotal.projectsCount}}</span></p>
+                <p>到期未检: <span class="span_blue">{{lockTotal.countByOverdue}}</span></p>
+            </li>
+            <li>
+                <img src="assets/image/suidong.png" alt="">
+                <p>隧洞总量: <span class="span_yellow">159</span></p>
+                <p>到期未检: <span class="span_blue">50</span></p>
+            </li>
+            <li>
+                <img src="assets/image/bengzhan.png" alt="">
+                <p>泵站总量: <span class="span_yellow">124</span></p>
+                <p>到期未检: <span class="span_blue">14</span></p>
+            </li>
+            <li>
+                <img src="assets/image/qita.png" alt="">
+                <p>其他总量: <span class="span_yellow">150</span></p>
+                <p>到期未检: <span class="span_blue">30</span></p>
+            </li>
+        </ul>
+    </div>
+    <!-- 中 -->
+    <div class="sidEdge">
+        <h3>大坝 <img src="assets/image/hangbian_lan.png" alt=""></h3>
+        <ul class="sidEge_category">
+            <li><i class="list_i_47"></i>一类大坝</li>
+            <li><i class="list_i_6A"></i>二类大坝</li>
+            <li><i class="list_i_F8"></i>三类大坝</li>
+        </ul>
+        <ul class="fl proportion_list">
+            <li *ngFor="let item of otherData.damThe">
+                <nz-progress class="fl" [nzPercent]="item.data" nzType="circle" [nzWidth]="50"
+                    [nzStrokeColor]="{ '0%': '#47C978', '100%': '#47C978' }"></nz-progress>
+                <h3>{{item.name}} <span>{{item.data * 3}}</span></h3>
+                <p>同比率增长{{item.data / 100}}</p>
+            </li>
+        </ul>
+        <div class="fl propor_box">
+            <div class="propor_id" id="proporTotal"></div>
+            <h3 class="propor_text">到期未检<br><i>{{otherData.damThe[0]['data'] * 3}}</i></h3>
+        </div>
+    </div>
+    <!-- 下 -->
+    <div class="sidEdge">
+        <h3>堤坝 <img src="assets/image/hangbian_lan.png" alt=""></h3>
+        <ul class="sidEge_category">
+            <li><i class="list_i_47"></i>一类堤坝</li>
+            <li><i class="list_i_6A"></i>二类堤坝</li>
+            <li><i class="list_i_F8"></i>三类堤坝</li>
+        </ul>
+        <ul class="fl proportion_list">
+            <li *ngFor="let item of otherData.leveeThe">
+                <nz-progress class="fl" [nzPercent]="item.data" nzType="circle" [nzWidth]="50"
+                    [nzStrokeColor]="{ '0%': '#47C978', '100%': '#47C978' }"></nz-progress>
+                <h3>{{item.name}} <span>{{item.data * 3}}</span></h3>
+                <p>同比率增长{{item.data / 100}}</p>
+            </li>
+        </ul>
+        <div class="fl propor_box">
+            <div class="propor_id" id="proporTotals"></div>
+            <h3 class="propor_text">到期未检<br><i>{{otherData.leveeThe[0]['data'] * 3}}</i></h3>
+        </div>
+    </div>
+</div>
+<!-- 中间 -->
+<div class="contentMiddle fl clearfix">
+    <!-- 上半部 -->
+    <div class="conMiddle_top">
+        <app-map-box (checked)="checkedBack($event)" (getCountby)='getCountByProvince($event)' (getCountWater)='getCountByWater($event)'></app-map-box>
+    </div>
+    <!-- 下半部 -->
+    <div class="conMiddle_bottom">
+        <h3>{{title}}</h3>
+        <div class="conMiddle_box" id="conMiddle"></div>
+    </div>
+</div>
+<!-- 右边 -->
+<div class="contentSidedge fl clearfix">
+    <!-- 上 -->
+    <div class="sidEdge">
+        <h3>水闸 <img src="assets/image/hangbian_lan.png" alt=""></h3>
+        <ul class="sidEge_category_left">
+            <li><i class="list_i_47"></i>一类大坝</li>
+            <li><i class="list_i_6A"></i>二类大坝</li>
+            <li><i class="list_i_F8"></i>三类大坝</li>
+            <li><i class="list_i_D9"></i>四类大坝</li>
+        </ul>
+        <div class="fl propor_box">
+            <div class="propor_id" id="proporTotaltions"></div>
+            <h3 class="propor_text">到期未检<br><i>{{lockTotal.countByOverdue}}</i></h3>
+        </div>
+        <ul class="fl proportion_list">
+            <li *ngFor="let item of lockTotal['typePro']">
+                <nz-progress class="fl" [nzPercent]="item.proportion" nzType="circle" [nzWidth]="50"
+                    [nzStrokeColor]="item.color"></nz-progress>
+                <h3>{{item.type + '水闸'}} <span>{{item.count}}</span></h3>
+                <p>同比率增长{{item.perCount}}</p>
+            </li>
+        </ul>
+    </div>
+    <!-- 中 -->
+    <div class="sidEdge">
+        <h3>隧洞 <img src="assets/image/hangbian_lan.png" alt=""></h3>
+        <ul class="sidEge_category">
+            <li><i class="list_i_47"></i>一类隧洞</li>
+            <li><i class="list_i_6A"></i>二类隧洞</li>
+            <li><i class="list_i_F8"></i>三类隧洞</li>
+        </ul>
+        <ul class="fl proportion_list">
+            <li *ngFor="let item of otherData.tunnel">
+                <nz-progress class="fl" [nzPercent]="item.data" nzType="circle" [nzWidth]="50"
+                    [nzStrokeColor]="{ '0%': '#47C978', '100%': '#47C978' }"></nz-progress>
+                <h3>{{item.name}} <span>{{item.data * 3}}</span></h3>
+                <p>同比率增长{{item.data / 100}}</p>
+            </li>
+        </ul>
+        <div class="fl propor_box">
+            <div class="propor_id" id="proporTotalIng"></div>
+            <h3 class="propor_text">到期未检<br><i>{{otherData.tunnel[0]['data'] * 3}}</i></h3>
+        </div>
+    </div>
+    <!-- 下 -->
+    <div class="sidEdge">
+        <h3>泵站 <img src="assets/image/hangbian_lan.png" alt=""></h3>
+        <ul class="sidEge_category">
+            <li><i class="list_i_47"></i>一类泵站</li>
+            <li><i class="list_i_6A"></i>二类泵站</li>
+            <li><i class="list_i_F8"></i>三类泵站</li>
+        </ul>
+        <ul class="fl proportion_list">
+            <li *ngFor="let item of otherData.stoodJoan">
+                <nz-progress class="fl" [nzPercent]="item.data" nzType="circle" [nzWidth]="50"
+                    [nzStrokeColor]="{ '0%': '#47C978', '100%': '#47C978' }"></nz-progress>
+                <h3>{{item.name}} <span>{{item.data * 3}}</span></h3>
+                <p>同比率增长{{item.data / 100}}</p>
+            </li>
+        </ul>
+        <div class="fl propor_box">
+            <div class="propor_id" id="proporTotaltion"></div>
+            <h3 class="propor_text">到期未检<br><i>{{otherData.stoodJoan[0]['data'] * 3}}</i></h3>
+        </div>
+    </div>
+</div>

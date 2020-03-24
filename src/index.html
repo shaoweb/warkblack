@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SlgcWeb</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body class="scrollbar">
+  <app-root></app-root>
+</body>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=d47b3280d63b7ff32f70fd9cc4f0ac84&plugin=AMap.DistrictSearch"></script>
+<script src="https://webapi.amap.com/ui/1.0/main.js"></script>
+<script>
+  /** 得到屏幕的宽度*/
+  let htmlWidth = document.documentElement.clientHeight || document.body.clientHeight;
+  /** 得到html的Dom元素*/
+  let htmlDom = document.getElementsByTagName('html')[0];
+  /** 设置根元素字体大小 */
+  htmlDom.style.fontSize =  htmlWidth / 100 + 'px';
+</script>
+</html>

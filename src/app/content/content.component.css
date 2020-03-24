@@ -1,0 +1,37 @@
+
+.menu {
+    height: 8%;
+    margin-top: -1.5%;
+    text-align: center;
+    overflow: hidden;
+  }
+  
+  .menu>.list_menu {
+    margin: .7% auto;
+    width: 24%;
+    height: 59%;
+    color: #27A6C2;
+    padding: .4% 0;
+    cursor: pointer;
+    font-size: 1.8rem;
+    text-align: center;
+    background: url("/forwcp/assets/image/mianbaoxiedaohang.png")no-repeat center/100%;
+  }
+  
+  .menu>.list_menu>.select {
+    color: #00ECFC;
+  }
+  
+  .menu>.list_menu>i {
+    display: inline-block;
+    margin: 0 .5rem -.1rem;
+    width: 1rem;
+    height: 1rem;
+    background: url("/forwcp/assets/image/suangbiao_hui.png")no-repeat center/100%;
+  }
+  
+  .content {
+    margin: -1% 2rem 0;
+    height: 88%;
+  }
+  

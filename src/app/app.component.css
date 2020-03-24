@@ -1,0 +1,23 @@
+.heaader {
+  position: relative;
+  height: 8%;
+  background: url("/forwcp/assets/image/dingbudaohangditu.png")no-repeat center/100% 100%;
+  overflow: hidden;
+}
+
+.heaader>.back {
+  width: 100%;
+}
+
+.heaader>h3 {
+  position: absolute;
+  top: 10%;
+  width: 100%;
+  height: 72%;
+  font-size: 3.5rem;
+  text-align: center;
+  background: linear-gradient(to right, red, blue);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}

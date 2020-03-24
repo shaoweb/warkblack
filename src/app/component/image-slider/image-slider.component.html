@@ -1,0 +1,9 @@
+<div class="container" [ngStyle]="{ height: sliderHeight }">
+    <div class="image-slider" #imageSlider>
+        <img *ngFor="let item of sliders" [src]="item.imgUrl" [alt]="item.caption" />
+    </div>
+    <div class="nav-section">
+        <img class="fl nav_img" (click)="leftMobile()" src="assets/image/zuo_on.png" alt="">
+        <img class="fr nav_img" (click)="rightMobile()" src="assets/image/you_on.png" alt="">
+    </div>
+</div>
