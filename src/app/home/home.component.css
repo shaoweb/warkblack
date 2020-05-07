@@ -45,14 +45,14 @@
 
 .listmenu>li>.img{
     display: block;
-    width: 29%;
-    height: 5rem;
+    width: 3rem;
+    height: 3rem;
     margin: 0 auto 6%
 }
 
 .listmenu>li>p{
     color: #41EFF9;
-    font-size: .6rem;
+    font-size: 1.6rem;
     text-align: center;
 }
 
@@ -89,7 +89,6 @@
 }
 
 .listmenu>li>.fenxi_jianbian{
-    width: 24%;
     background: url("/forwcp/assets/image/fenxi_jianbian@2x.png")no-repeat center/100% 100%;
 }
 
@@ -98,7 +97,6 @@
 }
 
 .listmenu>li>.guanli_jianbian{
-    width: 24%;
     background: url("/forwcp/assets/image/guanli_jianbian@2x.png")no-repeat center/100% 100%;
 }
 
@@ -115,7 +113,6 @@
 }
 
 .listmenu>li>.tixing_jianbian{
-    width: 24%;
     background: url("/forwcp/assets/image/tixing_jianbian@2x.png")no-repeat center/100% 100%;
 }
 
@@ -132,7 +129,7 @@
 }
 
 .listmenu>li>.yauncheng_jianbian{
-    width: 24%;
+    width: 4rem;
     background: url("/forwcp/assets/image/yauncheng_jianbian@2x.png")no-repeat center/100% 100%;
 }
 
@@ -141,7 +138,7 @@
 }
 
 .listmenu>li>.huishang_zanwu{
-    width: 24%;
+    width: 4rem;
     background: url("/forwcp/assets/image/huishang_zanwu@2x.png")no-repeat center/100% 100%;
 }
 .listmenu>.dis,

@@ -1,15 +1,27 @@
+<div class="cinMiddle_box">
+  <h3>
+    <span class="main">全国流域水利工程</span>
+    <i class="vice" >切换行政区地图</i>
+    <select class="fr one" [(ngModel)]="sizeOfthe" (change)="changeSelect()">
+      <option value="">工程规模</option>
+      <option *ngIf="levnl" value="大（1）型">大(1)型</option>
+      <option *ngIf="levnl" value="大（2）型">大(2)型</option>
+      <option *ngIf="levnl" value="中型">中型</option>
+      <option *ngIf="levnl" value="小（1）型">小(1)型</option>
+      <option *ngIf="levnl" value="小（2）型">小(2)型</option>
+    </select>
+    <select class="fr two" [(ngModel)]="levnl" (change)="changeSelect()">
+      <option value="">工程等别</option>
+      <option value="Ⅰ">Ⅰ</option>
+      <option value="Ⅱ">Ⅱ</option>
+      <option value="Ⅲ">Ⅲ</option>
+      <option value="Ⅳ">Ⅳ</option>
+      <option value="Ⅴ">Ⅴ</option>
+    </select>
+  </h3>
+</div>
 <div id="chart-panel">
-  <div class="map_tips">
-    <div v-cloak class="map_tips_city"></div>
-    <div class="map_tips_group">
-      <div class="map_tips_lol"></div>
-      <div class="map_tips_king"></div>
-      <div class="map_tips_cf"></div>
-      <div class="map_tips_car"></div>
-    </div>
-  </div>
   <div id="container"></div>
-  <div class="back">返回</div>
   <div class="input-card">
     <div class="input-item">
       <select id='province' style="width:100px"></select>

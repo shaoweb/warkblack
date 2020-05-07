@@ -1,16 +1,14 @@
 .cinMiddle_box {
   height: 6%;
   margin: 2% 0 1%;
+  position: relative;
 }
 
 .cinMiddle_box>h3 {
-  color: #00ECFC;
+  color: #52F1FA;
   text-align: center;
-  font-size: 2rem;
-}
-
-.cinMiddle_box>h3>.main {
-  cursor: pointer;
+  font-size: 1.8rem;
+  font-weight: bold;
 }
 
 .cinMiddle_box>h3>.vice {
@@ -22,11 +20,19 @@
 }
 
 .cinMiddle_box>h3>select {
-  margin-right: 1.5rem;
+  position: absolute;
   height: 2rem;
   font-size: 1.2rem;
   border: none;
   background-color: #030B29;
+}
+
+.cinMiddle_box>h3>.one{
+  right: 1.5rem;
+}
+
+.cinMiddle_box>h3>.two{
+  right: 8rem;
 }
 
 .map_box {
@@ -40,6 +46,7 @@
 }
 
 #chart {
+  width: 100%;
   height: 100%;
 }
 
@@ -62,11 +69,13 @@
   height: 100%;
 }
 
-.input-card{
+.input-card {
   display: none;
 }
 
-#province, #city, #district {
+#province,
+#city,
+#district {
   display: inline-block;
   padding: .375rem 1.75rem .375rem .75rem;
   line-height: 1.5;

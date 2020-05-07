@@ -1,24 +1,20 @@
 <div class="cinMiddle_box">
-  <h3>{{ currentCity[currentCity.length-1].name }}水利工程
-    <select class="fr" [(ngModel)]="sizeOfthe" (change)="changeSelect()">
+  <h3>{{ currentCity[currentCity.length-1].name }}水闸工程
+    <select class="fr one" [(ngModel)]="sizeOfthe" (change)="changeSelect()">
       <option value="">工程规模</option>
-      <option value="大（1）型">大(I)型</option>
-      <option value="大（2）型">大(II)型</option>
-      <option value="大（3）型">大(III)型</option>
-      <option value="中（1）型">中(I)型</option>
-      <option value="中（2）型">中(II)型</option>
-      <option value="中（3）型">中(III)型</option>
-      <option value="小（1）型">小(I)型</option>
-      <option value="小（2）型">小(II)型</option>
-      <option value="小（3）型">小(III)型</option>
+      <option *ngIf="levnl" value="大（1）型">大(1)型</option>
+      <option *ngIf="levnl" value="中（1）型">中(1)型</option>
+      <option *ngIf="levnl" value="小（1）型">小(1)型</option>
+      <option *ngIf="levnl" value="大（2）型">大(2)型</option>
+      <option *ngIf="levnl" value="中（2）型">中(2)型</option>
     </select>
-    <select class="fr" [(ngModel)]="levnl" (change)="changeSelect()">
-      <option value="">工程等级</option>
-      <option value="I">I</option>
-      <option value="II">II</option>
-      <option value="III">III</option>
-      <option value="IV">IV</option>
-      <option value="V">V</option>
+    <select class="fr two" [(ngModel)]="levnl" (change)="changeSelect()">
+      <option value="">工程等别</option>
+      <option value="Ⅰ">Ⅰ</option>
+      <option value="Ⅱ">Ⅱ</option>
+      <option value="Ⅲ">Ⅲ</option>
+      <option value="Ⅳ">Ⅳ</option>
+      <option value="Ⅴ">Ⅴ</option>
     </select>
   </h3>
 </div>

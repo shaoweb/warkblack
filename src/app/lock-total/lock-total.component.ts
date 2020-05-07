@@ -14,6 +14,9 @@ import * as echarts from 'echarts';
 export class LockTotalComponent implements OnInit {
 
   constructor(private req: RequestService, private message: NzMessageService) { }
+  
+  // 由父级获取
+  routItem: any = { name:'全国水闸工程', link:'/content/lockTotal' }
 
   // 指定进度条的数据格式
   format = (percent: number) => `${percent}`;
@@ -36,19 +39,8 @@ export class LockTotalComponent implements OnInit {
   // 接收安全检测根据条件搜索到的数据
   safeSearch: any = {};
 
-  
   // 标题
-  title: any = '全国各行政区水利工程';
-
-  // tab栏
-  menuList: any = [
-    { name: '现状调查', status: 1 },
-    { name: '安全监测', status: 2 },
-    { name: '安全复核', status: 3 },
-  ];
-
-  // 默认tab栏的第一项
-  currentStatus: any = this.menuList[0];
+  title: any = '全国水闸工程';
 
   // 接收水闸的数据
   lockTotal: any = {};
@@ -71,13 +63,24 @@ export class LockTotalComponent implements OnInit {
         data.push({ 'name': res['data']['typeListOverdue'][item]['type'], 'value': res['data']['typeListOverdue'][item]['typeCount'], 'color': this.returnColor(res['data']['typeListOverdue'][item]['type']) })
       }
       for (let item in res['data']['typePro']) {
-        typeData.push({ 'color': this.returnColor(res['data']['typePro'][item]['type']), 'accounted': Math.ceil((res['data']['typePro'][item]['count'] / res['data']['projectsCount']) * 100), 'remaining': (100 - Math.ceil((res['data']['typePro'][item]['count'] / res['data']['projectsCount']) * 100)) });
-        res['data']['typePro'][item]['imgUrl'] = this.returnImg(res['data']['typePro'][item]['type'])['imgUrl'];
-        res['data']['typePro'][item]['borderColor'] = this.returnImg(res['data']['typePro'][item]['type'])['border'];
-      }
+        res['data']['typePro'][item]['proportion'] = Math.ceil((res['data']['typePro'][item]['count'] / res['data']['projectsCount']) * 100);
+        switch (res['data']['typePro'][item]['type']) {
+          case "一类":
+            res['data']['typePro'][item]['color'] = { '0%': '#47C978', '100%': '#47C978' };
+            break;
+          case "二类":
+            res['data']['typePro'][item]['color'] = { '0%': '#006AE8', '100%': '#006AE8' };
+            break;
+          case "三类":
+            res['data']['typePro'][item]['color'] = { '0%': '#F8B62D', '100%': '#F8B62D' };
+            break;
+          case "四类":
+            res['data']['typePro'][item]['color'] = { '0%': '#D92A5C', '100%': '#D92A5C' };
+            break;
+        }
+      };
       this.lockTotal = res['data'];
-      echarts.init(document.getElementById("sidePie")).setOption(this.stackParameter(typeData), true);
-      echarts.init(document.getElementById("sideTotal")).setOption(this.sideTotal(data, res['data']['countByOverdue']), true);
+      echarts.init(document.getElementById("sideTotal")).setOption(this.sideTotal('标签', data), true);
     }, error => {
       this.message.create('error', `${error}`);
     })
@@ -98,7 +101,7 @@ export class LockTotalComponent implements OnInit {
 
     // 水闸历年(历省)的数据
     this.req.getData(this.routerApi.getCountByProvince).subscribe(res => {
-      let xArr = [], yArr = [{ name: '一类水闸', type: 'line', data: [] }, { name: '二类水闸', type: 'line', data: [] }, { name: '三类水闸', type: 'line', data: [] }, { name: '四类水闸', type: 'line', data: [] }];
+      let xArr = [], yArr = [{ name: '一类水闸', type: 'bar', data: [] }, { name: '二类水闸', type: 'bar', data: [] }, { name: '三类水闸', type: 'bar', data: [] }, { name: '四类水闸', type: 'bar', data: [] }];
       for (let item in res['data']['fourist']) {
         xArr.push(res['data']['fourist'][item]['pro']);
         yArr[0]['data'].push(res['data']['fourist'][item]['count']);
@@ -118,8 +121,27 @@ export class LockTotalComponent implements OnInit {
       this.message.create('error', `${error}`)
     })
 
-    // 默认回调tab栏第一个
-    this.testFun(this.currentStatus);
+    // 安全复核查询
+    this.req.getData(this.routerApi.getConCountByValue).subscribe(res => {
+      for (let item in res['data']) {
+        for (let any in res['data'][item]['typeList']) {
+          switch (res['data'][item]['typeList'][any]['value']) {
+            case 'A类':
+              res['data'][item]['typeList'][any]['strokeColor'] = { '0%': '#2D70F8', '100%': '#92B4FB' };
+              break;
+            case 'B类':
+              res['data'][item]['typeList'][any]['strokeColor'] = { '0%': '#F8B62D', '100%': '#F8D282' };
+              break;
+            case 'C类':
+              res['data'][item]['typeList'][any]['strokeColor'] = { '0%': '#E80042', '100%': '#FF9AB7' };
+              break;
+          }
+        }
+      }
+      this.checkSecurity = res['data'];
+    },error=>{
+      this.message.create('error',error);
+    })
   }
 
   // 根据类别返回色值
@@ -147,21 +169,6 @@ export class LockTotalComponent implements OnInit {
         return { border: 'bor_F8', imgUrl: "assets/image/shuizha_huang.png" };
       case '四类':
         return { border: 'bor_D9', imgUrl: "assets/image/shuizha_hong.png" };
-    }
-  }
-
-  // 选择tab栏
-  selectFunstatus(item: any): void {
-    this.currentStatus = item;
-    switch (item.status) {
-      case 1:
-        this.testFun(item);
-        break;
-      case 2:
-        this.getExamineByid();
-        break;
-      case 3:
-        this.security();
     }
   }
 
@@ -406,108 +413,39 @@ export class LockTotalComponent implements OnInit {
   }
 
   // 综合评价-圆的参数配置
-  sideTotal(scaleData: any, total: any): object {
-    let rich = {
-      white: {
-        color: '#ddd',
-        align: 'center',
-        padding: [5, 0]
-      }
-    };
-    let placeHolderStyle = {
-      normal: {
-        label: {
-          show: false
-        },
-        labelLine: {
-          show: false
-        },
-        color: 'rgba(0, 0, 0, 0)',
-        borderColor: 'rgba(0, 0, 0, 0)',
-        borderWidth: 0
-      }
-    };
-    let data = [];
-    for (let i = 0; i < scaleData.length; i++) {
-      data.push({
-        value: scaleData[i].value,
-        name: scaleData[i].name,
-        itemStyle: {
-          normal: {
-            borderWidth: 5,
-            shadowBlur: 20,
-            borderColor: scaleData[i].color,
-            shadowColor: scaleData[i].color
-          }
-        }
-      }, {
-        value: scaleData.length,
-        name: '',
-        itemStyle: placeHolderStyle
-      });
-    }
-    let seriesObj = [{
-      name: '',
-      type: 'pie',
-      clockWise: false,
-      radius: [50, 55],
-      hoverAnimation: false,
-      itemStyle: {
-        normal: {
+  sideTotal(title: string, data: any): object {
+    let option = {
+      series: [
+        {
+          name: title,
+          type: 'pie',
+          radius: ['30%', '40%'],
           label: {
-            show: true,
             position: 'outside',
-            color: '#ddd',
-            formatter: function (params) {
-              let percent = '0';
-              let total = 0;
-              for (let i = 0; i < scaleData.length; i++) {
-                total += scaleData[i].value;
-              }
-              percent = ((params.value / total) * 100).toFixed(0);
-              if (params.name !== '') {
-                return params.name + ':{white|' + '占比' + percent + '%}';
-              } else {
-                return '';
-              }
-            },
-            rich: rich
+            formatter: '{b}\n{@2012} ({d}%)'
           },
           labelLine: {
-            show: false
-          }
+            show: true,
+          },
+          itemStyle: {
+            color: function (params) {
+              switch (params.name) {
+                case '一类':
+                  return '#47C978';
+                case '二类':
+                  return '#006AE8';
+                case '三类':
+                  return '#F8B62D';
+                case '四类':
+                  return '#D92A5C';
+              }
+            }
+          },
+          data: data
         }
-      },
-      data: data
-    }];
-    let option = {
-      title: {
-        text: '到期未检',
-        subtext: total,
-        x: 'center',
-        y: 'center',
-        textStyle: {
-          fontSize: 16,
-          fontWeight: 'normal',
-          color: '#FFF'
-        },
-        subtextStyle: {
-          color: '#FFF',
-          fontSize: 12
-        },
-      },
-      tooltip: {
-        show: false
-      },
-      legend: {
-        show: false
-      },
-      toolbox: {
-        show: false
-      },
-      series: seriesObj
-    }
-    return option
+      ]
+    };
+    return option;
   }
 
   // 工程规模-圆的参数配置
@@ -631,14 +569,14 @@ export class LockTotalComponent implements OnInit {
       legend: {
         show: true,
         icon: "circle",
-        right: '10%',
-        bottom: '10%',
+        top: '15%',
+        right: '5%',
         data: arrName,
         width: '50',
         padding: [0, 5],
         itemGap: 10,
         formatter: function (name) {
-          return "{title|" + name + "}{value|" + (objData[name].value) + "}{title|项}"
+          return "{title|" + name + "}{value| " + (objData[name].value) + "}{title| 项}"
         },
         textStyle: {
           rich: {
@@ -741,9 +679,9 @@ export class LockTotalComponent implements OnInit {
       },
       grid: {
         borderWidth: 0,
-        top: '10%',
+        top: '0',
         left: '5%',
-        right: '15%',
+        right: '5%',
         bottom: '3%'
       },
       color: color,
@@ -808,16 +746,16 @@ export class LockTotalComponent implements OnInit {
         name: '',
         type: 'bar',
         zlevel: 2,
-        barWidth: '10px',
+        barWidth: '12px',
         data: lineY,
         animationDuration: 1500,
         label: {
           normal: {
             color: '#b3ccf8',
             show: true,
-            position: [0, 0],
+            position: [8, 2],
             textStyle: {
-              fontSize: 12
+              fontSize: 10
             },
             formatter: function (a, b) {
               return a.name
@@ -828,50 +766,6 @@ export class LockTotalComponent implements OnInit {
       animationEasing: 'cubicOut'
     }
     return option;
-  }
-
-  // 现状调查
-  testFun(item: any): void {
-    this.req.postData(this.routerApi.getSurvey, { "id": "6b4b1fd1-0f51-11ea-9582-68f728d62cad", 'type': item.name }).subscribe(res => {
-      this.satuSurvey = res['data'];
-    }, error => {
-      this.message.create('error', `${error}`)
-    })
-  }
-
-  // 安全复核查询
-  security(): void {
-    this.req.getData(this.routerApi.getConCountByValue).subscribe(res => {
-      for (let item in res['data']) {
-        for (let any in res['data'][item]['typeList']) {
-          switch (res['data'][item]['typeList'][any]['value']) {
-            case 'A类':
-              res['data'][item]['typeList'][any]['strokeColor'] = { '0%': '#2D70F8', '100%': '#92B4FB' };
-              break;
-            case 'B类':
-              res['data'][item]['typeList'][any]['strokeColor'] = { '0%': '#F8B62D', '100%': '#F8D282' };
-              break;
-            case 'C类':
-              res['data'][item]['typeList'][any]['strokeColor'] = { '0%': '#E80042', '100%': '#FF9AB7' };
-              break;
-          }
-        }
-      }
-      console.log(res);
-      this.checkSecurity = res['data'];
-    }, error => {
-      this.message.create('error', `${error}`);
-    })
-  }
-
-  // 安全检测的搜索参数查询
-  getExamineByid(): void {
-    this.req.getData(this.routerApi.getExamineByid, { "id": "6b4b1fd1-0f51-11ea-9582-68f728d62cad" }).subscribe(res => {
-      this.safetyInspection = res['data'];
-      this.getExamine(res['data'][0], res['data'][0]['siteList'][0])
-    }, error => {
-      this.message.create('error', `${error}`)
-    })
   }
 
   // 安全检测的查询
@@ -887,7 +781,7 @@ export class LockTotalComponent implements OnInit {
   // 选择省份
   selectProvinces(selectId: any): void {
     this.req.getData(this.routerApi.getYearCountByCode, { 'id': selectId }).subscribe(res => {
-      let xArr = [], yArr = [{ name: '一类水闸', type: 'line', data: [] }, { name: '二类水闸', type: 'line', data: [] }, { name: '三类水闸', type: 'line', data: [] }, { name: '四类水闸', type: 'line', data: [] }];
+      let xArr = [], yArr = [{ name: '一类水闸', type: 'bar', smooth: true, data: [] }, { name: '二类水闸', type: 'bar', smooth: true, data: [] }, { name: '三类水闸', type: 'bar', smooth: true, data: [] }, { name: '四类水闸', type: 'bar', smooth: true, data: [] }];
       for (let item in res['data']['fourist']) {
         xArr.push(res['data']['fourist'][item]['year']);
         yArr[0]['data'].push(res['data']['fourist'][item]['count']);
@@ -901,10 +795,24 @@ export class LockTotalComponent implements OnInit {
     })
   }
 
-  // 条状图的参数配置
+  // 线状图的参数配置
   columnParameter(xArr: any, data: any): object {
     let option = {
       color: ['#47C978', '#006AE8', '#F8B62D', '#D92A5C'],
+      toolbox: {
+        feature: {
+          magicType: {
+            type: ['line', 'bar', 'stack', 'tiled']
+          },
+          dataZoom: {
+            xAxisIndex: [0]
+          }
+        }
+      },
+      dataZoom:[{
+        type:'inside',
+        xAxisIndex: [0]
+      }],
       tooltip: {
         trigger: 'axis',
         axisPointer: {            // 坐标轴指示器，坐标轴触发有效
@@ -912,16 +820,10 @@ export class LockTotalComponent implements OnInit {
         }
       },
       grid: {
-        top: '3%',
         left: '3%',
         right: '4%',
+        bottom: '8%',
         containLabel: true
-      },
-      dataZoom: {
-        show: true,
-        realtime: true,
-        start: 0,
-        end: 100
       },
       xAxis: {
         type: 'category',
@@ -946,8 +848,8 @@ export class LockTotalComponent implements OnInit {
   }
 
   // 这个方法由子页面调用
-  checkedBack(event:any) {
-    this.title = event.name + '水利工程'
+  checkedBack(event: any) {
+    this.title = event.name + '水闸工程'
     this.selectProvinces(event.cityCode);
   }
 

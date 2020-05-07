@@ -12,4 +12,9 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
   }
 
+  // 打开新链接
+  openLink(): void{
+    window.open('http://58.246.211.154:14200/forwcps/#/login')
+  };
+
 }

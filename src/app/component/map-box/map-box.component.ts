@@ -20,7 +20,7 @@ export class MapBoxComponent implements OnInit {
   // 定义输出：
   @Output('checked') checkedBack = new EventEmitter<any>();
   @Output('getCountby') getCountByProvince = new EventEmitter<any>();
-  @Output('getCountWater') getCountByWater = new EventEmitter<any>();
+  @Output('switchType') switchTitle = new EventEmitter<any>();
 
   // 判断当前是按照省份查询还是流域查询
   testing: boolean = false;
@@ -28,17 +28,14 @@ export class MapBoxComponent implements OnInit {
   // 接口
   routerApi: any = APIROUTER;
 
-  // 工程等级
+  // 工程等别
   levnl: any = '';
 
   // 工程规模
   sizeOfthe: any = '';
 
   // 当前查看的省市区的id和名字
-  currentCity: any = [{ 'name': '全国行政区', 'cityCode': '' }];
-
-  // 当前名字
-
+  currentCity: any = [{ 'name': '全国行政区', 'cityCode': '', 'rank': this.levnl, 'size': this.sizeOfthe }];
 
   // 地图到数据
   myChart; map; district; polygons: any = [];
@@ -57,23 +54,19 @@ export class MapBoxComponent implements OnInit {
     code: 100000
   }];
 
-  geoCoordMap: { [key: string]: string } = {};
-
   // 数据
   person: any;
+  riverBasion: any;
 
   ngOnInit() {
-
-    this.start();
-
     // 默认回调
     this.distribution();
-
+    // 地图初始化
+    this.start();
   }
 
-  // 获取水闸地图分布的数据--省份
+  // 获取水闸地图分布的数据
   distribution(areasId?: any): void {
-    this.testing = false;
     let data = { 'rank': this.levnl, 'size': this.sizeOfthe };
     if (areasId) {
       data['areasId'] = areasId;
@@ -83,23 +76,39 @@ export class MapBoxComponent implements OnInit {
     }, error => {
       this.message.create('error', `${error}`);
     })
-  }
+  };
 
-  // 获取水闸地图分布的数据--流域
-  basinbution(areasId?: any): void {
-    this.testing = true;
-    let data = { 'rank': this.levnl, 'size': this.sizeOfthe };
-    if (areasId) {
-      data['areasId'] = areasId;
+  // 条件查询
+  administrativeSelect(areasId: any, type?: any): void {
+    if (type == '1') {
+      this.sizeOfthe = '';
+    };
+    let that = this;
+    let data = {};
+    data['name'] = this.currentCity[this.currentCity.length - 1]['name'];
+    data['cityCode'] = this.currentCity[this.currentCity.length - 1]['cityCode'];
+    data['rank'] = this.levnl;
+    data['size'] = this.sizeOfthe;
+    this.distribution(this.currentCity[this.currentCity.length - 1]['cityCode']);// 回调查询数据
+    this.checkedCallback(data); // 回调父级方法
+    // 判断是否处于第一阶级
+    if (this.deepTree.length > 1) {
+      this.mapData = this.deepTree[this.deepTree.length - 1].mapData;
+      this.deepTree.pop();
+      this.loadMapData(this.deepTree[this.deepTree.length - 1].code);
+      this.currentCity.pop();
+      this.checkedCallback(this.currentCity[this.currentCity.length - 1]);
+    } else {
+      // 地图数据更新
+      this.district.search('中国', function (status, result) {
+        if (status == 'complete') {
+          that.getTotal(result.districtList[0], '', 100000);
+        }
+      });
     }
-    this.req.getData(this.routerApi.getCountWater, data).subscribe(res => {
-      this.person = res['data'];
-    }, error => {
-      this.message.create('error', `${error}`);
-    })
-  }
+  };
 
-  // // 页面初始化
+  // 页面初始化
   start(): void {
     var that = this;
     this.map = new AMap.Map('container', {
@@ -107,6 +116,7 @@ export class MapBoxComponent implements OnInit {
       center: [116.30946, 39.937629],
       zoom: 3
     });
+
     //行政区划查询
     var opts = {
       subdistrict: 1, //返回下一级行政区
@@ -117,35 +127,22 @@ export class MapBoxComponent implements OnInit {
 
     this.district.search('中国', function (status, result) {
       if (status == 'complete') {
-        that.getData(result.districtList[0], '', 100000);
+        that.getTotal(result.districtList[0], '', 100000);
       }
     });
 
     this.myChart = echarts.init(document.getElementById('chart'));
 
-    // 判断流域的不需要点击事件
-    if(this.testing == false){
-      this.myChart.on('click', function (params) {
-        that.echartsMapClick(params)
-      });
-    }else{
-      this.myChart.off('click')
-    }
-
+    // 点击
+    this.myChart.on('click', function (params) {
+      that.echartsMapClick(params);
+    });
   }
 
   // 切换
-  switchTitle(status: any): void {
-    let data = { 'rank': this.levnl, 'size': this.sizeOfthe };
-    if (status == 'true') {
-      this.basinbution(this.currentCity[this.currentCity.length - 1]['cityCode']) //流域
-      this.getCountByWater.emit(data);
-    } else {
-      this.distribution(this.currentCity[this.currentCity.length - 1]['cityCode']) //区域
-      this.getCountByProvince.emit(data);
-    }
-    this.start();
-  }
+  switch(status: any): void {
+    this.switchTitle.emit(status);
+  };
 
   // 返回
   getBack(): void {
@@ -155,12 +152,63 @@ export class MapBoxComponent implements OnInit {
       this.loadMapData(this.deepTree[this.deepTree.length - 1].code);
       this.currentCity.pop();
       this.checkedCallback(this.currentCity[this.currentCity.length - 1]);
-      if (!this.testing) {
-        let data = { 'rank': this.levnl, 'size': this.sizeOfthe, 'areasId': this.currentCity[this.currentCity.length - 1]['cityCode'] };
-        this.getCountByProvince.emit(data);
-      }
+      let data = { 'rank': this.levnl, 'size': this.sizeOfthe, 'areasId': this.currentCity[this.currentCity.length - 1]['cityCode'] };
+      this.getCountByProvince.emit(data);
+      this.distribution(this.currentCity[this.currentCity.length - 1]['cityCode']);
     }
-  }
+  };
+
+  //地图点击事件
+  echartsMapClick(parement): void {
+    // 判断当前地图是否有值
+    if(parement.data.data.data){
+      let params = parement.data;
+      if (!params.data || params.data.level == 'district') return;
+      this.checkedCallback(params.data);
+      let data = { 'name': params.name, 'cityCode': params.data.cityCode }
+      this.currentCity.push(data);
+      this.distribution(params.data.cityCode)
+      this.cityName = params.data.name;
+      this.cityCode = params.data.cityCode;
+      this.district.setLevel(params.data.level); //行政区级别
+      this.district.setExtensions('all');
+      //行政区查询
+      //按照adcode进行查询可以保证数据返回的唯一性
+      this.district.search(params.data.cityCode, (status, result) => {
+        if (status === 'complete') {
+          this.deepTree.push({
+            mapData: this.mapData,
+            code: params.data.cityCode
+          });
+          this.getTotal(result.districtList[0], params.data.level, params.data.cityCode);
+        }
+      });
+      this.setSearchOption(params.data, params.data.level, params.data.cityCode);
+    }
+  };
+
+  // 地图初始化
+  loadMapData(areaCode): void {
+    var that = this;
+    AMapUI.loadUI(['geo/DistrictExplorer'], DistrictExplorer => {
+
+      //创建一个实例
+      var districtExplorer = new DistrictExplorer({
+        eventSupport: true, //打开事件支持
+        map: that.map
+      });
+
+      districtExplorer.loadAreaNode(areaCode, (error, areaNode) => {
+        if (error) {
+          return;
+        }
+        let mapJson = {};
+        mapJson['features'] = areaNode.getSubFeatures();
+        that.loadMap(that.cityName, mapJson);
+        that.geoJsonData = mapJson;
+      });
+    });
+  };
 
   // 选择省市，数据插入
   setSearchOption(data, level, adcode): void {
@@ -188,8 +236,8 @@ export class MapBoxComponent implements OnInit {
       }
 
       this.mapData = [];
-      for (var i = 0, l = subList.length; i < l; i++) {
-        var listData = this.formatterHover(subList[i].name);
+      for (var i = 0; i < subList.length; i++) {
+        var listData = this.formatterHover(subList[i].name, this.person);
         var name = subList[i].name;
         var citycode = subList[i].adcode;
         this.mapData.push({
@@ -208,94 +256,122 @@ export class MapBoxComponent implements OnInit {
       }
       this.loadMapData(adcode);
     }
-  }
+  };
 
-  // 地图初始化，参数配置
+  // 地图参数配置
   loadMap(mapName, data): void {
-    var that = this;
     if (data) {
       echarts.registerMap(mapName, data);
+      // echarts 参数配置
+      var max = 480, min = 9; // todo 
+      var maxSize4Pin = 100, minSize4Pin = 20;
       var option = {
         tooltip: {
-          show: true,
-          formatter: function (params) {
-            var toolTiphtml = params.name + ':<br>';
-            if (params.data.data.length > 0) {
-              if (params.data.data[0]['sname'] == undefined) {
-                for (var i = 0; i < params.data.data.length; i++) {
-                  if (typeof params.data.data[i]['name'] == 'undefined') {
-                    toolTiphtml += '暂未数据'
-                  } else {
-                    toolTiphtml += params.data.data[i]['name'] + ':' + params.data.data[i]['count'] + "<br>"
-                  }
-                }
+          trigger: 'item',
+          formatter: function (params, ticket) {
+            var parament = params.data;
+            if (parament != undefined) {
+              var toolTiphtml = parament.name + ':<br>';
+              if (parament.data.data) {
+                for (var i = 0; i < parament.data.data.length; i++) {
+                  toolTiphtml += parament.data.data[i]['name'] + ':' + parament.data.data[i]['count'] + "<br>"
+                };
+                return toolTiphtml;
               } else {
-                for (var i = 0; i < params.data.data.length; i++) {
-                  toolTiphtml += params.data.data[i]['sname'] + '( ' + params.data.data[i]['wname'] + ') :' + params.data.data[i]['count'] + "<br>"
-                }
+                toolTiphtml += '暂无数据';
+                return toolTiphtml;
               }
-            } else {
-              toolTiphtml += '暂未数据';
             }
-            return toolTiphtml;
+          }
+        },
+        geo: {
+          show: true,
+          roam: false,
+          map: mapName,
+          label: {
+            normal: {
+              show: false
+            },
+            emphasis: {
+              show: true,
+              textStyle: {
+                color: '#fff'
+              }
+            }
+          },
+          itemStyle: {
+            normal: {
+              areaColor: '#051640',
+              borderColor: '#ffb43a'
+            },
+            emphasis: {
+              areaColor: '#2B91B7',
+            }
           }
         },
         series: [
           {
-            name: '数据名称',
             type: 'map',
-            roam: false,
-            mapType: mapName,
-            selectedMode: 'single',
-            showLegendSymbol: false,
-            visibility: 'off',
-            top: '5%',
-            bottom: '5%',
-            itemStyle: {
+            map: mapName,
+            top: '0',
+            geoIndex: 0,
+            aspectScale: 0.9, //长宽比
+            showLegendSymbol: false, // 存在legend时显示
+            label: {
               normal: {
-                color: '#ccc',
-                borderColor: '#feaf3d',
-                borderWidth: 1,
-                shadowColor: 'rgba(128, 217, 248, 1)',
-                // shadowColor: 'rgba(255, 255, 255, 1)',
-                shadowOffsetX: -2,
-                shadowOffsetY: 2,
-                shadowBlur: 10,
-                label: {
-                  show: true,
-                  textStyle: {
-                    color: "rgb(249, 249, 249)"
-                  }
-                },
-                areaColor: {
-                  type: 'radial',
-                  x: 0.5,
-                  y: 0.5,
-                  r: 0.8,
-                  colorStops: [{
-                    offset: 0,
-                    color: 'rgba(147, 235, 248, 0)' // 0% 处的颜色
-                  }, {
-                    offset: 1,
-                    color: 'rgba(147, 235, 248, .2)' // 100% 处的颜色
-                  }]
-                },
+                show: false
               },
               emphasis: {
-                areaColor: false,
-                borderColor: '#fff',
-                areaStyle: {
+                show: false,
+                textStyle: {
                   color: '#fff'
-                },
-                label: {
-                  show: true,
-                  textStyle: {
-                    color: "rgb(249, 249, 249)"
-                  }
                 }
               }
             },
-            data: this.mapData,
+            itemStyle: {
+              normal: {
+                areaColor: '#051640',
+                borderColor: '#ffb43a'
+              },
+              emphasis: {
+                color: '#FFF',
+                areaColor: '#2B91B7',
+              }
+            },
+            animation: true,
+            data: this.convertData(data)
+          },
+          {
+            name: '点',
+            type: 'scatter',
+            symbol: 'pin',
+            coordinateSystem: 'geo',
+            symbolSize: function (val, params) {
+              if (params.data.data.data) {
+                var a = (maxSize4Pin - minSize4Pin) / (max - min);
+                var b = minSize4Pin - a * min;
+                b = maxSize4Pin - a * max;
+                return a * val[2] + b;
+              } else {
+                return 0
+              }
+            },
+            label: {
+              normal: {
+                formatter: '{b}',
+                position: 'right',
+                show: false
+              },
+              emphasis: {
+                show: true
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: '#41EFF9'
+              }
+            },
+            data: this.convertData(data),
           }
         ]
       };
@@ -303,60 +379,7 @@ export class MapBoxComponent implements OnInit {
     }
   };
 
-  // 地图初始化
-  loadMapData(areaCode): void {
-    AMapUI.loadUI(['geo/DistrictExplorer'], DistrictExplorer => {
-
-      //创建一个实例
-      var districtExplorer = new DistrictExplorer({
-        eventSupport: true, //打开事件支持
-        map: this.map
-      });
-
-      districtExplorer.loadAreaNode(areaCode, (error, areaNode) => {
-        if (error) {
-          return;
-        }
-        let mapJson = {};
-        mapJson['features'] = areaNode.getSubFeatures();
-        this.loadMap(this.cityName, mapJson);
-        this.geoJsonData = mapJson;
-      });
-    });
-  };
-
-  //地图点击事件
-  echartsMapClick(params): void {
-    this.checkedCallback(params.data);
-    let data = { 'name': params.name, 'cityCode': params.data.cityCode }
-    this.currentCity.push(data);
-    if (this.testing) {
-      this.basinbution(params.data.cityCode)
-    } else {
-      this.distribution(params.data.cityCode)
-    }
-    if (!params.data || params.data.level == 'street') return;
-    this.cityName = params.data.name;
-    this.cityCode = params.data.cityCode;
-    this.district.setLevel(params.data.level); //行政区级别
-    this.district.setExtensions('all');
-    //行政区查询
-    //按照adcode进行查询可以保证数据返回的唯一性
-    this.district.search(params.data.cityCode, (status, result) => {
-      if (status === 'complete') {
-        this.deepTree.push({
-          mapData: this.mapData,
-          code: params.data.cityCode
-        });
-        this.getData(result.districtList[0], params.data.level, params.data.cityCode);
-      }
-    });
-
-    this.setSearchOption(params.data, params.data.level, params.data.cityCode);
-
-  };
-
-  getData(data, level, adcode): void {
+  getTotal(data, level, adcode): void {
     var bounds = data.boundaries;
     if (bounds) {
       for (var i = 0, l = bounds.length; i < l; i++) {
@@ -375,32 +398,44 @@ export class MapBoxComponent implements OnInit {
 
     this.setSearchOption(data, level, adcode);
 
-  }
+  };
 
   // 选中回调
   checkedCallback(data: any) {
     this.checkedBack.emit(data);
-  }
+  };
 
   // 数据对比
-  formatterHover(name: any): object {
-    if (this.testing) {
-      for (let item in this.person) {
-        if (this.person[item]['pro'].indexOf(name) != -1) {
-          return this.person[item]['waterList'];
-        }
-      }
-    } else {
-      for (let item in this.person) {
-        if (this.person[item]['pro'].indexOf(name) != -1) {
-          return this.person[item]['data'];
-        }
+  formatterHover(name: any, data: any): object {
+    for (let item in data) {
+      if (data[item]['pro'] == name) {
+        let obj = [];
+        obj = data[item]['data']
+        return obj;
       }
     }
+  };
 
-  }
-
-
-
+  // 坐标点数据处理
+  convertData(data): object {
+    var res = [], geoCoordMap = {};
+    data['features'].forEach(element => {
+      // 地区名
+      var name = element.properties.name;
+      // 地区经度
+      geoCoordMap[name] = element.properties.center;
+    });
+    for (let item in this.mapData) {
+      var geoCoord = geoCoordMap[this.mapData[item]['name']];
+      if (geoCoord) {
+        res.push({
+          name: this.mapData[item]['name'],
+          value: geoCoord.concat(Math.ceil(this.mapData[item]['value'])),
+          data: this.mapData[item]
+        });
+      }
+    };
+    return res;
+  };
 
 }

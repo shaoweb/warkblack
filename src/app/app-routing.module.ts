@@ -6,12 +6,13 @@ import { BasinComponent } from './basin/basin.component';
 import { HomeComponent } from './home/home.component';
 import { ContentComponent } from './content/content.component';
 import { LockTotalComponent } from './lock-total/lock-total.component';
-import { ProgressComponent } from './component';
+import { ProgressComponent, RiverBasionComponent } from './component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home',component: HomeComponent},
   { path: 'progress',component: ProgressComponent},
+  { path: 'riverbasion',component: RiverBasionComponent},
   { path: 'content', component: ContentComponent, children: [
     { path: '', redirectTo: '/content/basin', pathMatch: 'full'},
     { path: 'waterGate',component: WaterGateComponent},

@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { WaterGateComponent } from './water-gate/water-gate.component';
 import { RequestService } from "./request.service";
 
-import { ImageSliderComponent, ProgressComponent, MapBoxComponent, CategoryComponent } from './component';
+import { ImageSliderComponent, ProgressComponent, MapBoxComponent, CategoryComponent, RiverBasionComponent } from './component';
 import { BasinComponent } from './basin/basin.component';
 import { HomeComponent } from './home/home.component';
 import { ContentComponent } from './content/content.component';
@@ -33,6 +33,7 @@ registerLocaleData(zh);
     ContentComponent,
     LockTotalComponent,
     CategoryComponent,
+    RiverBasionComponent,
   ],
   imports: [
     FormsModule,

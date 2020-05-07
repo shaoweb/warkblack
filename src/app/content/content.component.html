@@ -1,13 +1,12 @@
 <!-- 面包屑 -->
 <div class="menu clearfix">
-    <h3 class="list_menu">
-        <span [routerLink]="['/home']">首页</span><i></i>
-        <span [routerLink]="['/content/basin']" [ngClass]="{'select': routerUrl.url == '/content/basin'}">大数据统计</span><i></i>
-        <span [routerLink]="['/content/lockTotal']" [ngClass]="{'select': routerUrl.url == '/content/lockTotal'}">全国水闸统计</span><i></i>
-        <span [routerLink]="['/content/waterGate']" [ngClass]="{'select': routerUrl.url == '/content/waterGate'}">地方水闸信息</span>
-    </h3>
+    <p class="list_menu">
+        <ng-container  *ngFor="let item of routerList; let i = index">
+            <span [routerLink]="item.link" [ngClass]="{'select': (i+1) == routerList.length}">{{item.name}}</span><i *ngIf="routerList.length > (i + 1)"></i>
+        </ng-container>
+    </p>
 </div>
 <!-- 内容 -->
 <div class="content">
-    <router-outlet></router-outlet>
+    <router-outlet (activate)='onActivate($event)'></router-outlet>
 </div>

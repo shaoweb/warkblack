@@ -2,37 +2,28 @@
 <div class="clearfix fl lock_side">
     <div class="side_list">
         <h3>综合评价 <img src="assets/image/hangbian_lan.png" alt=""></h3>
-        <div class="sidelist_box">
-            <ul class="sidecolor_list">
-                <li class="fl"><i class="list_i_47"></i>一类水闸</li>
-                <li class="fl"><i class="list_i_6A"></i>二类水闸</li>
-                <li class="fl"><i class="list_i_F8"></i>三类水闸</li>
-                <li class="fl"><i class="list_i_D9"></i>四类水闸</li>
-            </ul>
-            <div class="side_pie" id="sidePie"></div>
-            <div class="side_pies" id="sideTotal"></div>
-            <ul class="side_img clearfix">
-                <li *ngFor="let item of lockTotal['typePro']">
-                    <span class="fl" [ngClass]="item.borderColor">
-                        <img [src]="item.imgUrl" alt="">
-                    </span>
-                    <h3>{{item.type + '水闸'}}</h3>
-                    <p>{{item.count + '个'}}</p>
-                </li>
-            </ul>
+        <ul class="sidEge_category_left">
+            <li><i class="list_i_47"></i>一类水闸</li>
+            <li><i class="list_i_6A"></i>二类水闸</li>
+            <li><i class="list_i_F8"></i>三类水闸</li>
+            <li><i class="list_i_D9"></i>四类水闸</li>
+        </ul>
+        <ul class="fl proportion_list three">
+            <li *ngFor="let item of lockTotal['typePro']">
+                <nz-progress class="fl" [nzPercent]="item.proportion" nzType="circle" [nzWidth]="50"
+                    [nzStrokeColor]="item.color"></nz-progress>
+                <h3>{{item.type + '水闸'}} <span>{{item.count}}</span></h3>
+                <p>同比率增长{{item.perCount}}</p>
+            </li>
+        </ul>
+        <div class="fl propor_box">
+            <div class="propor_id" id="sideTotal"></div>
+            <h3 class="propor_text">到期未检<br><i>{{lockTotal.countByOverdue}}</i></h3>
         </div>
     </div>
     <div class="side_list">
         <h3>工程规模 <img src="assets/image/hangbian_lan.png" alt=""></h3>
         <div class="sidelist_box">
-            <!-- <ul class="side_progress clearfix">
-                <li *ngFor="let item of engineering">
-                    <span class="fl"><i></i>{{item.size}}</span>
-                    <p class="fl">
-                        <nz-progress [nzPercent]="item.count"></nz-progress>
-                    </p>
-                </li>
-            </ul> -->
             <div class="side_pietion" id="sidePietion"></div>
             <div class="side_bartion" id="sideBartion"></div>
         </div>
@@ -52,71 +43,9 @@
 </div>
 <!-- 右边 -->
 <div class="clearfix fl lock_side">
-    <ul class="lockRight_menu">
-        <li class="fl" [ngClass]="{'select': currentStatus == item}" *ngFor="let item of menuList"
-            (click)="selectFunstatus(item)"><i>{{item.name}}</i></li>
-    </ul>
-    <div class="lockRight_list">
-        <ul class="lockRight_box" *ngIf="currentStatus.status == 1">
-            <li class="fl" *ngFor="let item of satuSurvey">
-                <span class="name fl">{{item.name}}:</span>
-                <span class="fl" *ngIf="item.goal">{{'总指标：' + item.goal}}</span>
-                <ul class="name_list" *ngIf="item.list2">
-                    <li *ngFor="let any of item.list2">
-                        <span class="fl">{{any.can}}:</span>
-                        <em class="fl" *ngFor="let menu of any.descList"
-                            [ngClass]="{'select': menu == any.value}">{{menu}}</em>
-                    </li>
-                </ul>
-                <div class="fr list_menu" *ngIf="item.list">
-                    <ng-container *ngFor="let any of item.list">
-                        <em *ngIf="any.can" [ngClass]="{'select': any.value == 'true'}">{{any.can}}</em>
-                    </ng-container>
-                </div>
-            </li>
-        </ul>
-        <div class="lockRight_box" *ngIf="currentStatus.status == 2">
-            <ul class="search_key">
-                <li *ngFor="let item of safetyInspection">
-                    <span class="fl">{{item.name}}:</span>
-                    <em class="fl safe_list">
-                        <i *ngFor="let any of item.siteList" [ngClass]="{'select': safeselect === any}"
-                        (click)="getExamine(item, any)">{{any}}</i>
-                    </em>
-                </li>
-            </ul>
-            <div class="onRight_item_list">
-                <span class="name fl">总指标:</span>
-                <div class="fr list_menu">
-                    <em>A类</em>
-                </div>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>检测参数</th>
-                        <th>极大值</th>
-                        <th>极小值</th>
-                        <th>平均值</th>
-                        <th>规范/设计要求值</th>
-                        <th>是否满足</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of safeSearch['nowData']">
-                        <td>{{item.name}}</td>
-                        <td><span class="selct_red">{{item.max}}</span></td>
-                        <td><span class="selct_eff">{{item.min}}</span></td>
-                        <td><span>{{item.avg}}</span></td>
-                        <td><span>{{item.value}}</span></td>
-                        <td><span
-                                [ngClass]="{'selct_red': item.state == '不满足', 'selct_eff': item.state == '满足'}">{{item.state}}</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="lockRight_box" *ngIf="currentStatus.status == 3">
+    <div class="side_list lockRight_list">
+        <h3>安全复核 <img src="assets/image/hangbian_lan.png" alt=""></h3>
+        <div class="lockRight_box">
             <ul class="progress_list">
                 <li class="fl progres_list_a"><span></span>A类</li>
                 <li class="fl progres_list_b"><span></span>B类</li>

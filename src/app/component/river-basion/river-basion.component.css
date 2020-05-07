@@ -1,0 +1,56 @@
+.map {
+  width: 100%;
+  height: 500px;
+}
+
+.amap-marker-label {
+  border: 0 !important;
+  background-color: transparent;
+}
+
+.custom-content-marker img {
+  width: 100%;
+  height: 100%;
+}
+
+.cinMiddle_box {
+  height: 6%;
+  margin: 2% 0 1%;
+  position: relative;
+}
+
+.cinMiddle_box>h3 {
+  color: #52F1FA;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.cinMiddle_box>h3>.vice {
+  color: #0D9098;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bolder;
+  border-bottom: 1px solid #0D9098;
+}
+
+.cinMiddle_box>h3>select {
+  position: absolute;
+  height: 2rem;
+  font-size: 1.2rem;
+  border: none;
+  background-color: #030B29;
+}
+
+.cinMiddle_box>h3>.one {
+  right: 1.5rem;
+}
+
+.cinMiddle_box>h3>.two {
+  right: 8rem;
+}
+
+.map_box {
+  height: 90%;
+  overflow: hidden;
+}

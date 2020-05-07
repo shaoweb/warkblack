@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestService } from "../request.service";
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ImageSliderComponent } from '../component';
+import { ActivatedRoute } from '@angular/router';
 
 import { APIROUTER } from "../router.api"
 
@@ -15,7 +15,20 @@ import * as echarts from 'echarts';
 })
 export class WaterGateComponent implements OnInit {
 
-  constructor(private req: RequestService, private message: NzMessageService) { }
+  // 获取URL上的参数
+  parementUrl: any = {};
+  // 选中的水闸
+  selectWater: any = {};
+  // 由父级获取
+  routItem: any = { link: "/content/waterGate" };
+
+  constructor(private req: RequestService, private activatedRoute: ActivatedRoute, private message: NzMessageService) {
+    // 根据url的参数，查询该项目详情
+    this.activatedRoute.queryParams.subscribe(queryParam => {
+      this.parementUrl['id'] = queryParam.id;
+      this.parementUrl['name'] = queryParam.name;
+    })
+  };
 
   // 测试
   testTop: any = {};
@@ -63,24 +76,41 @@ export class WaterGateComponent implements OnInit {
   safeselect: any;
 
   // 测试数据
-  imageSliders: any = []
+  imageSliders: any = [];
+
+  // 所有的水闸
+  totalWater: any;
+
 
   ngOnInit() {
-    // 回调
-    this.testFun(this.currentStatus);
+    
+    this.req.getData(this.routerApi.getProjectsByArea, { 'areasId': this.parementUrl.id }).subscribe(res => {
+      this.totalWater = res['data'];
+      // 默认选中第一个
+      this.selectWater = this.totalWater[0];
+      this.routItem['name'] = this.selectWater.name + '信息';
+      // 查询综合评价
+      this.comprehensive(this.selectWater.id);
+      // 默认回调现状调查，安全复核查询
+      this.testFun(this.currentStatus);
+    }, error => {
+      this.message.create('error', error);
+    })
 
-    // 综合评价的查询
-    this.req.postData(this.routerApi.getProject, { "id": "6b4b1fd1-0f51-11ea-9582-68f728d62cad" }).subscribe(res => {
-      for(let item in res['data']['imgs']){
-        let obj = {imgUrl: res['data']['imgs'][item],link: '',caption: ''}
+  }
+
+  // 综合评价的查询
+  comprehensive(id: any): void {
+    this.req.postData(this.routerApi.getProject, { 'id': id }).subscribe(res => {
+      for (let item in res['data']['imgs']) {
+        let obj = { imgUrl: res['data']['imgs'][item], link: '', caption: '' }
         this.imageSliders.push(obj)
       }
       this.totalData = res['data'];
     }, error => {
       this.message.create('error', `${error}`)
     })
-
-  }
+  };
 
   // 选择菜单--（1:现状，安全，复核，2:工程概况,历史评价,历史险情）
   selectFunstatus(item: any, code: any): void {
@@ -104,11 +134,11 @@ export class WaterGateComponent implements OnInit {
         }
         break;
     }
-  }
+  };
 
   // 现状调查，安全复核查询
   testFun(item: any): void {
-    this.req.postData(this.routerApi.getSurvey, { "id": "6b4b1fd1-0f51-11ea-9582-68f728d62cad", 'type': item.name }).subscribe(res => {
+    this.req.postData(this.routerApi.getSurvey, { "id": this.selectWater.id, 'type': item.name }).subscribe(res => {
       switch (item.status) {
         case 1:
           this.satuSurvey = res['data'];
@@ -121,11 +151,11 @@ export class WaterGateComponent implements OnInit {
     }, error => {
       this.message.create('error', `${error}`)
     })
-  }
+  };
 
   // 现状逐次分析,安全复核逐次分析
   statusUp(item: any): void {
-    this.req.postData(this.routerApi.getSurveyValues, { "id": "6b4b1fd1-0f51-11ea-9582-68f728d62cad", 'type': item.name }).subscribe(res => {
+    this.req.postData(this.routerApi.getSurveyValues, { "id": this.selectWater.id, 'type': item.name }).subscribe(res => {
       switch (item.status) {
         case 1:
           this.thestatusUp = res['data'];
@@ -137,31 +167,31 @@ export class WaterGateComponent implements OnInit {
     }, error => {
       this.message.create('error', `${error}`)
     })
-  }
+  };
 
   // 安全检测的搜索参数查询
   getExamineByid(): void {
-    this.req.getData(this.routerApi.getExamineByid, { "id": "6b4b1fd1-0f51-11ea-9582-68f728d62cad" }).subscribe(res => {
+    this.req.getData(this.routerApi.getExamineByid, { "id": this.selectWater.id }).subscribe(res => {
       this.safetyInspection = res['data'];
       this.getExamine(res['data'][0], res['data'][0]['siteList'][0])
     }, error => {
       this.message.create('error', `${error}`)
     })
-  }
+  };
 
   // 安全检测的查询
   getExamine(item: any, child: any): void {
     this.safeselect = child;
-    this.req.getData(this.routerApi.getExamine, { "id": "6b4b1fd1-0f51-11ea-9582-68f728d62cad", 'part': item.name, 'site': child }).subscribe(res => {
+    this.req.getData(this.routerApi.getExamine, { "id": this.selectWater.id, 'part': item.name, 'site': child }).subscribe(res => {
       this.safeSearch = res['data']
     }, error => {
       this.message.create('error', `${error}`)
     })
-  }
+  };
 
   // 历史评价的查询
   getAssesss(): void {
-    this.req.postData(this.routerApi.getAssesss, { "proid": "6b4b1fd1-0f51-11ea-9582-68f728d62cad" }).subscribe(res => {
+    this.req.postData(this.routerApi.getAssesss, { "proid": this.selectWater.id }).subscribe(res => {
       let xshaft = [], yshaft = [];
       for (let item in res['data']) {
         xshaft.push(res['data'][item].year);
@@ -185,7 +215,7 @@ export class WaterGateComponent implements OnInit {
     }, error => {
       this.message.create('error', `${error}`)
     })
-  }
+  };
 
   // 历史评价的统计参数配置
   historyParameters(xshaft: any, yshaft: any): object {
@@ -251,7 +281,7 @@ export class WaterGateComponent implements OnInit {
       }]
     };
     return option
-  }
+  };
 
   // 安全复核的统计参数配置
   auditSecurityParameters(): object {
@@ -319,19 +349,19 @@ export class WaterGateComponent implements OnInit {
       }]
     };
     return option
-  }
+  };
 
   // 查询历史险情
   querygetDangers(): void {
-    this.req.postData(this.routerApi.getDangers, { "proid": "6b4b1fd1-0f51-11ea-9582-68f728d62cad" }).subscribe(res => {
+    this.req.postData(this.routerApi.getDangers, { "proid": this.selectWater.id }).subscribe(res => {
       this.dangersOfhistory = res['data'];
     }, error => {
       this.message.create('error', `${error}`)
     })
-  }
+  };
 
   // 滚动事件
-  topSrcoll($event): void{
+  topSrcoll($event): void {
     // this.testTop = {'position': 'fixed', 'background': 'red','z-index': '99'}
     console.log($event);
   }

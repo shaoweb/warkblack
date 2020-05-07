@@ -1,10 +1,10 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { RequestService } from "../../request.service";
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { Router } from '@angular/router';
 
 import { APIROUTER } from "../../router.api"
 import * as echarts from 'echarts';
-import * as $ from 'jquery';
 declare let AMap: any;
 declare let AMapUI: any;
 
@@ -15,7 +15,7 @@ declare let AMapUI: any;
 })
 export class CategoryComponent implements OnInit {
 
-  constructor(private req: RequestService, private message: NzMessageService) { }
+  constructor(private req: RequestService, private message: NzMessageService, private router: Router) { }
 
   // 定义输出：
   @Output('checked') checkedBack = new EventEmitter<any>();
@@ -23,14 +23,14 @@ export class CategoryComponent implements OnInit {
   // 接口
   routerApi: any = APIROUTER;
 
-  // 工程等级
+  // 工程等别
   levnl: any = '';
 
   // 工程规模
   sizeOfthe: any = '';
 
   // 当前查看的省市区的id和名字
-  currentCity: any = [{ 'name': '全国行政区', 'cityCode': '' }];
+  currentCity: any = [{ 'name': '全国', 'cityCode': '' }];
 
   // 地图到数据
   myChart; map; district; polygons: any = [];
@@ -56,22 +56,22 @@ export class CategoryComponent implements OnInit {
 
   ngOnInit() {
 
-    // 地图初始化
-    this.start();
-
     // 默认回调
     this.distribution(this.levnl, this.sizeOfthe);
 
+    // 地图初始化
+    this.start();
+
   }
 
-  // 选择工程规模，工程等级调用
-  changeSelect():void{
-    this.start();
+  // 选择工程规模，工程等别调用
+  changeSelect(): void {
     this.distribution(this.levnl, this.sizeOfthe);
+    this.start();
   }
 
   // 初始化
-  start():void{
+  start(): void {
     // 地图初始化
     var that = this;
     this.map = new AMap.Map('container', {
@@ -100,7 +100,6 @@ export class CategoryComponent implements OnInit {
     });
   }
 
-
   // 返回
   getBack(): void {
     if (this.deepTree.length > 1) {
@@ -111,6 +110,67 @@ export class CategoryComponent implements OnInit {
       this.loadMapData(this.deepTree[this.deepTree.length - 1].code)
     }
   }
+
+  // 地图初始化
+  loadMapData(areaCode): void {
+    AMapUI.loadUI(['geo/DistrictExplorer'], DistrictExplorer => {
+
+      //创建一个实例
+      var districtExplorer = new DistrictExplorer({
+        eventSupport: true, //打开事件支持
+        map: this.map
+      });
+
+      districtExplorer.loadAreaNode(areaCode, (error, areaNode) => {
+        if (error) {
+          return;
+        }
+        let mapJson = {};
+        mapJson['features'] = areaNode.getSubFeatures();
+        this.loadMap(this.cityName, mapJson);
+        this.geoJsonData = mapJson;
+      });
+    });
+  };
+
+  //地图点击事件
+  echartsMapClick(parement): void {
+    // 判断当前地图是否有值
+    if (parement.data.data.data) {
+      let params = parement.data;
+      this.distribution(this.levnl, this.sizeOfthe, params.data.cityCode);
+      // 延时0.5秒，执行判断下一级是否存在返回值
+      setTimeout(() => {
+        if (this.person.length > 0) {
+          this.checkedCallback(params);
+          let data = { 'name': params.name, 'cityCode': params.data.cityCode }
+          this.currentCity.push(data);
+          if (!params.data || params.data.level == 'district') return;
+          this.cityName = params.data.name;
+          this.cityCode = params.data.cityCode;
+          this.district.setLevel(params.data.level); //行政区级别
+          this.district.setExtensions('all');
+          //行政区查询
+          //按照adcode进行查询可以保证数据返回的唯一性
+          this.district.search(params.data.cityCode, (status, result) => {
+            if (status === 'complete') {
+              this.deepTree.push({
+                mapData: this.mapData,
+                code: params.data.cityCode
+              });
+              this.getData(result.districtList[0], params.data.level, params.data.cityCode);
+            }
+          });
+
+          this.setSearchOption(params.data, params.data.level, params.data.cityCode);
+        } else {
+          this.router.navigate(['/content/waterGate'], {
+            queryParams: { 'id': params.data.cityCode, 'name': params.name }
+          });
+        }
+      }, 500)
+    }
+  };
 
   // 获取水闸类别地图分布的数据
   distribution(levenlOne: any, levenlTwo: any, areasId?: any): void {
@@ -175,134 +235,127 @@ export class CategoryComponent implements OnInit {
 
   // 地图初始化，参数配置
   loadMap(mapName, data): void {
-    var that = this;
     if (data) {
+      var max = 480,
+        min = 9; // todo 
+      var maxSize4Pin = 100,
+        minSize4Pin = 20;
       echarts.registerMap(mapName, data);
+      // echarts 参数配置
       var option = {
         tooltip: {
-          show: true,
+          trigger: 'item',
           formatter: function (params) {
-            var toolTiphtml = params.name + ':<br>';
-            if (params.data.data == undefined) {
-              toolTiphtml += '暂未数据'
+            var parament = params.data;
+            if (parament != undefined) {
+              var toolTiphtml = parament.name + ':<br>';
+              if (parament.data.data != undefined) {
+                for (var i = 0; i < parament.data.data.length; i++) {
+                  toolTiphtml += parament.data.data[i]['level'] + '水闸:' + parament.data.data[i]['count'] + "<br>"
+                }
+              } else {
+                toolTiphtml += '暂无数据'
+              }
+              return toolTiphtml;
             } else {
-              for (var i = 0; i < params.data.data.length; i++) {
-                toolTiphtml += params.data.data[i]['level'] + ':' + params.data.data[i]['count'] + "<br>"
+              toolTiphtml += '暂无数据';
+              return toolTiphtml;
+            }
+          }
+        },
+        geo: {
+          show: true,
+          roam: false,
+          map: mapName,
+          label: {
+            normal: {
+              show: false
+            },
+            emphasis: {
+              show: true,
+              textStyle: {
+                color: '#fff'
               }
             }
-
-            return toolTiphtml;
+          },
+          itemStyle: {
+            normal: {
+              areaColor: '#051640',
+              borderColor: '#ffb43a'
+            },
+            emphasis: {
+              areaColor: '#2B91B7',
+            }
           }
         },
         series: [
           {
-            name: '数据名称',
             type: 'map',
-            roam: false,
-            mapType: mapName,
-            selectedMode: 'single',
-            showLegendSymbol: false,
-            visibility: 'off',
-            top: '5%',
-            bottom: '5%',
-            itemStyle: {
+            map: mapName,
+            top:'0',
+            geoIndex: 0,
+            aspectScale: 0.9, //长宽比
+            showLegendSymbol: false, // 存在legend时显示
+            label: {
               normal: {
-                color: '#ccc',
-                borderColor: '#feaf3d',
-                borderWidth: 1,
-                shadowColor: 'rgba(128, 217, 248, 1)',
-                shadowOffsetX: -2,
-                shadowOffsetY: 2,
-                shadowBlur: 10,
-                label: {
-                  show: true,
-                  textStyle: {
-                    color: "rgb(249, 249, 249)"
-                  }
-                },
-                areaColor: {
-                  type: 'radial',
-                  x: 0.5,
-                  y: 0.5,
-                  r: 0.8,
-                  colorStops: [{
-                    offset: 0,
-                    color: 'rgba(147, 235, 248, 0)' // 0% 处的颜色
-                  }, {
-                    offset: 1,
-                    color: 'rgba(147, 235, 248, .2)' // 100% 处的颜色
-                  }]
-                },
+                show: false
               },
               emphasis: {
-                areaColor: false,
-                borderColor: '#fff',
-                areaStyle: {
+                show: false,
+                textStyle: {
                   color: '#fff'
-                },
-                label: {
-                  show: true,
-                  textStyle: {
-                    color: "rgb(249, 249, 249)"
-                  }
                 }
               }
             },
-            data: this.mapData,
+            itemStyle: {
+              normal: {
+                areaColor: '#051640',
+                borderColor: '#ffb43a'
+              },
+              emphasis: {
+                areaColor: '#2B91B7',
+              }
+            },
+            animation: true,
+            data: this.convertData(data)
+          },
+          {
+            name: '点',
+            type: 'scatter',
+            symbol: 'pin',
+            coordinateSystem: 'geo',
+            symbolSize: function (val, params) {
+              if (params.data.data.data) {
+                var a = (maxSize4Pin - minSize4Pin) / (max - min);
+                var b = minSize4Pin - a * min;
+                b = maxSize4Pin - a * max;
+                return a * val[2] + b;
+              } else {
+                return 0
+              }
+            },
+            label: {
+              normal: {
+                formatter: '{b}',
+                position: 'right',
+                show: false
+              },
+              emphasis: {
+                show: true
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: '#41EFF9'
+              }
+            },
+            zlevel: 6,
+            data: this.convertData(data),
           }
         ]
       };
       this.myChart.setOption(option);
     }
-  };
-
-  // 地图初始化
-  loadMapData(areaCode): void {
-    AMapUI.loadUI(['geo/DistrictExplorer'], DistrictExplorer => {
-
-      //创建一个实例
-      var districtExplorer = new DistrictExplorer({
-        eventSupport: true, //打开事件支持
-        map: this.map
-      });
-
-      districtExplorer.loadAreaNode(areaCode, (error, areaNode) => {
-        if (error) {
-          return;
-        }
-        let mapJson = {};
-        mapJson['features'] = areaNode.getSubFeatures();
-        this.loadMap(this.cityName, mapJson);
-        this.geoJsonData = mapJson;
-      });
-    });
-  };
-
-  //地图点击事件
-  echartsMapClick(params): void {
-    this.checkedCallback(params);
-    let data = { 'name': params.name, 'cityCode': params.data.cityCode }
-    this.currentCity.push(data);
-    this.distribution(this.levnl, this.sizeOfthe, params.data.cityCode)
-    if (!params.data || params.data.level == 'street') return;
-    this.cityName = params.data.name;
-    this.cityCode = params.data.cityCode;
-    this.district.setLevel(params.data.level); //行政区级别
-    this.district.setExtensions('all');
-    //行政区查询
-    //按照adcode进行查询可以保证数据返回的唯一性
-    this.district.search(params.data.cityCode, (status, result) => {
-      if (status === 'complete') {
-        this.deepTree.push({
-          mapData: this.mapData,
-          code: params.data.cityCode
-        });
-        this.getData(result.districtList[0], params.data.level, params.data.cityCode);
-      }
-    });
-
-    this.setSearchOption(params.data, params.data.level, params.data.cityCode);
-
   };
 
   getData(data, level, adcode): void {
@@ -338,7 +391,28 @@ export class CategoryComponent implements OnInit {
         return this.person[item]['typeList'];
       }
     }
-
   }
+
+  // 坐标点数据处理
+  convertData(data): object {
+    var geoCoordMap = {}, res = [];
+    data['features'].forEach(element => {
+      // 地区名
+      var name = element.properties.name;
+      // 地区经度
+      geoCoordMap[name] = element.properties.center;
+    });
+    for (let item in this.mapData) {
+      var geoCoord = geoCoordMap[this.mapData[item]['name']];
+      if (geoCoord) {
+        res.push({
+          name: this.mapData[item]['name'],
+          value: geoCoord.concat(Math.ceil(this.mapData[item]['value'])),
+          data: this.mapData[item]
+        });
+      }
+    };
+    return res;
+  };
 
 }

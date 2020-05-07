@@ -1,53 +1,64 @@
+.cinMiddle_box {
+  height: 6%;
+  margin: 2% 0 1%;
+  position: relative;
+}
+
+.cinMiddle_box>h3 {
+  color: #52F1FA;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.cinMiddle_box>h3>.vice {
+  color: #0D9098;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bolder;
+  border-bottom: 1px solid #0D9098;
+}
+
+.cinMiddle_box>h3>select {
+  position: absolute;
+  height: 2rem;
+  font-size: 1.2rem;
+  border: none;
+  background-color: #030B29;
+}
+
+.cinMiddle_box>h3>.one{
+  right: 1.5rem;
+}
+
+.cinMiddle_box>h3>.two{
+  right: 8rem;
+}
+
+.map_box {
+  height: 90%;
+  overflow: hidden;
+}
+
 #chart-panel {
   width: 100%;
-  height: 0;
+  height: 100%;
 }
 
 #chart {
-  width: 40%;
-  height: 500px;
+  width: 100%;
+  height: 100%;
 }
 
 .back {
   position: absolute;
-  width: 100px;
-  padding: 10px 0;
-  top: 30px;
-  right: 50px;
-  background: #1c71fb;
-  color: #fff;
+  padding: 6px 16px;
+  background: #030B29;
+  color: #00ECFC;
   text-align: center;
   border-radius: 5px;
   cursor: pointer;
   z-index: 100
-}
-
-.map_tips {
-  position: absolute;
-  width: 273px;
-  height: 218px;
-  color: #fff;
-  font-size: 14px;
-  background-repeat: no-repeat;
-  background-image: url("https://s2.ax1x.com/2019/04/26/EmXmcj.png");
-  background-size: 100% 100%;
-  z-index: 9;
-  pointer-events: none;
-  display: none
-}
-
-.map_tips_city {
-  margin-top: 35px;
-  margin-left: 32px
-}
-
-.map_tips_group {
-  margin-top: 29px;
-  margin-left: 82px
-}
-
-.map_tips_group div {
-  margin-top: 10px
 }
 
 #container {
@@ -58,7 +69,13 @@
   height: 100%;
 }
 
-select {
+.input-card {
+  display: none;
+}
+
+#province,
+#city,
+#district {
   display: inline-block;
   padding: .375rem 1.75rem .375rem .75rem;
   line-height: 1.5;

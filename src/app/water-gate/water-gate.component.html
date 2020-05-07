@@ -28,7 +28,7 @@
                     <p>{{totalData.name}}</p>
                 </li>
                 <li class="fl">
-                    <h3>工程等级</h3>
+                    <h3>工程等别</h3>
                     <p>{{totalData.rank + '级别'}}</p>
                 </li>
                 <li class="fl">
@@ -56,9 +56,13 @@
     </div>
     <!-- 中间 -->
     <div class="onthe_middle fl clearfix">
-        <h3>南京市三汊河河口闸</h3>
+        <h3>{{selectWater.name + '信息'}}</h3>
         <div class="onthe_image">
-            <app-image-slider [sliders]="imageSliders"></app-image-slider>
+            <nz-carousel nzAutoPlay>
+                <div nz-carousel-content *ngFor="let item of imageSliders">
+                    <img class="img_list" [src]="item.imgUrl" alt="">
+                </div>
+            </nz-carousel>
         </div>
     </div>
     <!-- 右边 -->
@@ -92,7 +96,7 @@
                         <span class="fl">{{item.name}}:</span>
                         <em class="fl safe_list">
                             <i *ngFor="let any of item.siteList" [ngClass]="{'select': safeselect === any}"
-                            (click)="getExamine(item, any)">{{any}}</i>
+                                (click)="getExamine(item, any)">{{any}}</i>
                         </em>
                     </li>
                 </ul>
@@ -250,7 +254,8 @@
                     <thead>
                         <tr>
                             <th><span class="table_span">参数</span></th>
-                            <th *ngFor="let item of checkSecuritys['years']"><span class="table_span">{{item + '年'}}</span>
+                            <th *ngFor="let item of checkSecuritys['years']"><span
+                                    class="table_span">{{item + '年'}}</span>
                             </th>
                         </tr>
                     </thead>

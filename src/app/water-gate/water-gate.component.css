@@ -2,6 +2,16 @@
   height: 55%;
 }
 
+[nz-carousel-content] {
+  height: 100%;
+  overflow: hidden;
+}
+
+.img_list{
+  width: 100%;
+  height:100%;
+}
+
 .onthepart>.onthe_left {
   width: 30%;
   height: 100%;
@@ -143,8 +153,10 @@
   color: #00ECFC;
   text-align: center;
   font-size: 2.5rem;
+  font-weight: border;
   height: 6%;
-  margin: 1.5% 0;
+  margin: 1% 0 1.5%;
+  letter-spacing: 2px;
 }
 
 .onthepart>.onthe_middle>.onthe_image{
@@ -316,6 +328,7 @@
 }
 
 .onthepart>.onthe_right>.onRight_list>.onRightTable>.search_key>li>.safe_list {
+  margin: .5rem .4rem;
   display: inline-block;
   overflow: hidden;
 }
@@ -387,9 +400,9 @@
   display: inline-block;
   width: 25%;
   color: #FFF;
-  font-size: .8rem;
+  font-size: 1.2rem;
   text-align: center;
-  padding: .5rem 0;
+  padding: .7rem 0;
   background: url("/forwcp/assets/image/box_little.png")no-repeat center/100% 100%;
 }
 

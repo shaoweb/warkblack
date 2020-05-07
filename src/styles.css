@@ -102,3 +102,7 @@
   .list_i_D9 {
     background-color: #D92A5C;
   }
+
+  .amap-logo{
+    display: none !important;
+  }
