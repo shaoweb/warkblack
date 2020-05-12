@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { RequestService } from "../request.service";
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
+
+import { RequestService } from "../request.service";
 import { MapBoxComponent, RiverBasionComponent } from '../component';
 
 import { APIROUTER } from "../router.api"
@@ -13,10 +14,15 @@ import * as echarts from 'echarts';
 })
 export class BasinComponent implements OnInit {
 
-  constructor(private req: RequestService, private message: NzMessageService) { }
+  messages:string;
 
-  // 由父级获取
-  routItem: any = { name: '全国水利工程', link: '/content/basin' }
+  constructor(
+    private req: RequestService, 
+    private message: NzMessageService
+  ) { }
+
+  @ViewChild(MapBoxComponent, { static: false }) mapbox: MapBoxComponent;
+  @ViewChild(RiverBasionComponent, { static: true }) riverbasion: RiverBasionComponent;
 
   // 接口
   routerApi: any = APIROUTER;
@@ -32,13 +38,13 @@ export class BasinComponent implements OnInit {
 
   // 标题
   title: any = '全国行政区水利工程';
+  routerList: any = [];
 
   // 其他类的数据
   otherData: any = {};
   testing: boolean = false;
 
   ngOnInit() {
-
     // 随机数的生成
     this.randomData();
 
@@ -209,6 +215,7 @@ export class BasinComponent implements OnInit {
       },
       yAxis: {
         type: 'value',
+        minInterval: 1,
         axisLine: {
           lineStyle: {
             color: '#657CA8'
@@ -238,22 +245,25 @@ export class BasinComponent implements OnInit {
   }
 
   // 这个方法由子页面调用
-  checkedBack(event: any) {
-    this.title = event.name + '水利工程';
+  checkedBack(data: any) {
+    var event = data[data.length - 1];
+    this.title = event.name;
     this.currentProvinces = event.cityCode;
     this.getTypeCount(event.cityCode);
     this.randomData();
-    if (event.cityCode != '') {
+    if (event.cityCode != 100000) {
       this.selectProvinces(event.cityCode)
     } else {
       this.getCountByProvince(event);
     }
+    this.routerList = data;
   }
 
   // 这个方法由子页面调用-切换页面
   switchTitle(status: any): void {
     this.testing = status;
-    this.title = status == false ? '全国行政区水利工程':'全国流域水利工程'
+    this.title = status == false ? '全国行政区水利工程':'全国流域水利工程';
+    this.routerList[0]['name'] = this.title;
   };
 
   // 随机生成数据
@@ -280,6 +290,11 @@ export class BasinComponent implements OnInit {
         { name: '三类泵站', data: Math.floor(Math.random() * 100), 'color': { '0%': '#F8B62D', '100%': '#F8B62D' } }
       ]
     };
-  }
+  };
+
+  // 菜单栏点击事件
+  menuClick(data: any): void{
+    this.mapbox.getBack(data);
+  };
 
 }

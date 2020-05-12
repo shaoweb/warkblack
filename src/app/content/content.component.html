@@ -1,12 +1,2 @@
-<!-- 面包屑 -->
-<div class="menu clearfix">
-    <p class="list_menu">
-        <ng-container  *ngFor="let item of routerList; let i = index">
-            <span [routerLink]="item.link" [ngClass]="{'select': (i+1) == routerList.length}">{{item.name}}</span><i *ngIf="routerList.length > (i + 1)"></i>
-        </ng-container>
-    </p>
-</div>
 <!-- 内容 -->
-<div class="content">
-    <router-outlet (activate)='onActivate($event)'></router-outlet>
-</div>
+<router-outlet></router-outlet>

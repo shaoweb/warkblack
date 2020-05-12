@@ -10,12 +10,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { WaterGateComponent } from './water-gate/water-gate.component';
 import { RequestService } from "./request.service";
+import { MenuService } from "./meun.service";
 
 import { ImageSliderComponent, ProgressComponent, MapBoxComponent, CategoryComponent, RiverBasionComponent } from './component';
 import { BasinComponent } from './basin/basin.component';
 import { HomeComponent } from './home/home.component';
 import { ContentComponent } from './content/content.component';
 import { LockTotalComponent } from './lock-total/lock-total.component';
+import { RegulatoryComponent } from './regulatory/regulatory.component';
 
 /** 配置 angular i18n **/
 import zh from '@angular/common/locales/zh';
@@ -34,6 +36,7 @@ registerLocaleData(zh);
     LockTotalComponent,
     CategoryComponent,
     RiverBasionComponent,
+    RegulatoryComponent,
   ],
   imports: [
     FormsModule,
@@ -44,8 +47,9 @@ registerLocaleData(zh);
     NgZorroAntdModule
   ],
   providers: [
-    {provide: LocationStrategy, useClass: HashLocationStrategy},
     RequestService,
+    MenuService,
+    {provide: LocationStrategy, useClass: HashLocationStrategy},
     { provide: NZ_I18N, useValue: zh_CN }
   ],
   bootstrap: [AppComponent]

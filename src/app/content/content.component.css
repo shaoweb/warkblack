@@ -1,37 +1,3 @@
-.menu {
-  height: 8%;
-  margin-top: -1.5%;
-  overflow: hidden;
-}
 
-.menu>.list_menu {
-  margin: 1.3% 2rem;
-  height: 52%;
-  color: #27A6C2;
-  cursor: pointer;
-}
 
-.menu>.list_menu>span {
-  display: inline-block;
-  padding: .2rem 2rem;
-  font-size: 1.6rem;
-  background: url("/forwcp/assets/image/xiekaung_weizhong.png")no-repeat center/100% 100%;
-}
 
-.menu>.list_menu>.select {
-  color: #00ECFC;
-  background: url("/forwcp/assets/image/xiekuang_xuanzhong.png")no-repeat center/100% 100%;
-}
-
-.menu>.list_menu>i {
-  display: inline-block;
-  margin: 0 1.2rem -.1rem;
-  width: 1rem;
-  height: 1rem;
-  background: url("/forwcp/assets/image/suangbiao_hui.png")no-repeat center/100%;
-}
-
-.content {
-  margin: -1% 2rem 0;
-  height: 88%;
-}

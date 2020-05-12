@@ -121,7 +121,7 @@
   margin: 8% 0 0px 8%;
 }
 
-.contentSidedge>.sidEdge>.proportion_list.three{
+.contentSidedge>.sidEdge>.proportion_list.three {
   margin: 7% 0 0px 4%;
 }
 
@@ -130,7 +130,7 @@
   overflow: hidden;
 }
 
-.contentSidedge>.sidEdge>.proportion_list.three>li{
+.contentSidedge>.sidEdge>.proportion_list.three>li {
   margin-bottom: 6%;
 }
 
@@ -227,7 +227,7 @@
 }
 
 .contentMiddle>.conMiddle_top>.cinMiddle_box>h3>select,
-.contentMiddle>.conMiddle_bottom>h3>select{
+.contentMiddle>.conMiddle_bottom>h3>select {
   position: absolute;
   right: 0;
   margin-right: 1.5rem;
@@ -237,9 +237,7 @@
   background-color: #030B29;
 }
 
-.contentMiddle>.conMiddle_top>.map_box{
+.contentMiddle>.conMiddle_top>.map_box {
   height: 90%;
   overflow: hidden;
 }
-
-

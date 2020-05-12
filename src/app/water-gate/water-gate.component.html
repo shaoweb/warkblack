@@ -1,276 +1,295 @@
-<!-- 上部分 -->
-<div class="onthepart clearfix">
-    <!-- 左边 -->
-    <div class="onthe_left fl clearfix">
-        <img class="back_img" src="assets/image/dikaung.png" alt="">
-        <p class="title">当前综合评价 <img src="assets/image/hangbian_lan.png" alt=""></p>
-        <div class="onthe_left_content">
-            <div class="onthe_show fl">
-                <h3>{{totalData.ass}}</h3>
-                <p>当前综合评价</p>
+<!-- 面包屑 -->
+<div class="menu clearfix">
+    <p class="list_menu">
+        <span routerLink="/home">导航地图</span><i></i>
+        <ng-container *ngFor="let item of routerList; let i = index">
+            <span [routerLink]="item.link" [ngClass]="{'select': (i+1) == routerList.length}">{{item.name}}</span><i
+                *ngIf="routerList.length > (i + 1)"></i>
+        </ng-container>
+    </p>
+</div>
+<div class="content">
+    <!-- 左部分 -->
+    <div class="contentSidedge fl clearfix">
+        <!-- 上 -->
+        <div class="onthe_left clearfix">
+            <img class="back_img" src="assets/image/dikaung.png" alt="">
+            <p class="title">当前综合评价 <img src="assets/image/hangbian_lan.png" alt=""></p>
+            <div class="onthe_left_content">
+                <div class="onthe_show fl">
+                    <h3>{{totalData.ass}}</h3>
+                    <p>当前综合评价</p>
+                </div>
+                <div class="onthe_introduce fl">
+                    <p><img src="assets/image/yaunxing_lan.png" alt=""><span>检测时间:</span><em
+                            class="yellow fr">{{totalData.year}}</em></p>
+                    <p><img src="assets/image/yaunxing_lan.png" alt=""><span>是否到期未检:</span><em class="red fr"
+                            [ngClass]="{'red': totalData.state == '否', 'yellow': totalData.state == '是'}">{{totalData.state}}</em>
+                    </p>
+                    <p><img src="assets/image/yaunxing_lan.png" alt=""><span>下次检测时间:</span><em
+                            class="yellow fr">{{totalData.next}}</em>
+                    </p>
+                    <p><img src="assets/image/yaunxing_lan.png" alt=""><span>检测单位:</span><em
+                            class="yellow fr">{{totalData.unit}}</em>
+                    </p>
+                </div>
+                <ul class="onthe_list fl">
+                    <li class="fl">
+                        <h3>工程名称</h3>
+                        <p>{{totalData.name}}</p>
+                    </li>
+                    <li class="fl">
+                        <h3>工程等别</h3>
+                        <p>{{totalData.rank + '级别'}}</p>
+                    </li>
+                    <li class="fl">
+                        <h3>工程规模</h3>
+                        <p>{{totalData.size}}</p>
+                    </li>
+                    <li class="fl">
+                        <h3>设计流量</h3>
+                        <p>{{totalData.flow}}</p>
+                    </li>
+                    <li class="fl">
+                        <h3>建造时间</h3>
+                        <p>{{totalData.buildTime}}</p>
+                    </li>
+                    <li class="fl">
+                        <h3>维修加固时间</h3>
+                        <p>{{totalData.mtime}}</p>
+                    </li>
+                    <li class="fl">
+                        <h3>出现险情时间</h3>
+                        <p>{{totalData.dtime}}</p>
+                    </li>
+                </ul>
             </div>
-            <div class="onthe_introduce fl">
-                <p><img src="assets/image/yaunxing_lan.png" alt=""><span>检测时间:</span><em
-                        class="yellow fr">{{totalData.year}}</em></p>
-                <p><img src="assets/image/yaunxing_lan.png" alt=""><span>是否到期未检:</span><em class="red fr"
-                        [ngClass]="{'red': totalData.state == '否', 'yellow': totalData.state == '是'}">{{totalData.state}}</em>
-                </p>
-                <p><img src="assets/image/yaunxing_lan.png" alt=""><span>下次检测时间:</span><em
-                        class="yellow fr">{{totalData.next}}</em>
-                </p>
-                <p><img src="assets/image/yaunxing_lan.png" alt=""><span>检测单位:</span><em
-                        class="yellow fr">{{totalData.unit}}</em>
-                </p>
-            </div>
-            <ul class="onthe_list fl">
-                <li class="fl">
-                    <h3>工程名称</h3>
-                    <p>{{totalData.name}}</p>
-                </li>
-                <li class="fl">
-                    <h3>工程等别</h3>
-                    <p>{{totalData.rank + '级别'}}</p>
-                </li>
-                <li class="fl">
-                    <h3>工程规模</h3>
-                    <p>{{totalData.size}}</p>
-                </li>
-                <li class="fl">
-                    <h3>设计流量</h3>
-                    <p>{{totalData.flow}}</p>
-                </li>
-                <li class="fl">
-                    <h3>建造时间</h3>
-                    <p>{{totalData.buildTime}}</p>
-                </li>
-                <li class="fl">
-                    <h3>维修加固时间</h3>
-                    <p>{{totalData.mtime}}</p>
-                </li>
-                <li class="fl">
-                    <h3>出现险情时间</h3>
-                    <p>{{totalData.dtime}}</p>
-                </li>
+        </div>
+        <!-- 下 -->
+        <div class="under_left ">
+            <ul class="under_introduce">
+                <li class="fl" *ngFor="let item of menuList.introduce" [ngClass]="{'select': currentIntroduce == item}"
+                    (click)="selectFunstatus(item,2)"><i>{{item.name}}</i></li>
             </ul>
+            <div class="under_content" [ngClass]="{'select': currentIntroduce.status == 1}">
+                <div class="header_img fl">
+                    <img src="assets/image/yonghu_lan.png" alt="">
+                    <h3>测试数据</h3>
+                </div>
+                <div class="header_text fl">
+                    <p class="header_cotent">{{totalData.overview}}</p>
+                    <p class="header_time">录入时间： {{totalData.createTime}}</p>
+                </div>
+            </div>
+            <div class="under_content" [ngClass]="{'select': currentIntroduce.status == 2}">
+                <div id="underConSimple"></div>
+            </div>
+            <div class="under_content underCon_thead" [ngClass]="{'select': currentIntroduce.status == 3}">
+                <ul class="underCon_table">
+                    <li class="fl">日期</li>
+                    <li class="fl">险情描述</li>
+                </ul>
+                <ul class="underCon_tbody">
+                    <li *ngFor="let item of dangersOfhistory">
+                        <span class="fl time">{{item.year}}</span>
+                        <span class="fl text">{{item.content}}</span>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
     <!-- 中间 -->
-    <div class="onthe_middle fl clearfix">
-        <h3>{{selectWater.name + '信息'}}</h3>
-        <div class="onthe_image">
-            <nz-carousel nzAutoPlay>
-                <div nz-carousel-content *ngFor="let item of imageSliders">
-                    <img class="img_list" [src]="item.imgUrl" alt="">
+    <div class="contentMiddle fl clearfix">
+        <!-- 上 -->
+        <div class="onthe_middle">
+            <h3>{{selectWater.name + '信息'}}</h3>
+            <div class="onthe_image">
+                <nz-carousel nzAutoPlay>
+                    <div nz-carousel-content *ngFor="let item of imageSliders">
+                        <img class="img_list" [src]="item.imgUrl" alt="">
+                    </div>
+                </nz-carousel>
+            </div>
+        </div>
+        <!-- 下 -->
+        <div class="under_right ">
+            <h3> {{currentStatus.name + '逐次分析'}} <img src="assets/image/hangbian_lan.png" alt=""></h3>
+            <div class="underRight_content" [ngClass]="{'select': currentStatus.status == 1}">
+                <div class="underTable" (scroll)="topSrcoll($event)">
+                    <table [ngStyle]="testTop">
+                        <thead>
+                            <tr>
+                                <th><span class="table_span">类别</span></th>
+                                <th><span class="table_span">参数</span></th>
+                                <th *ngFor="let item of thestatusUp['years']"><span
+                                        class="table_span">{{item + '年'}}</span>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <table>
+                        <tbody>
+                            <tr *ngFor="let item of thestatusUp['dataList']">
+                                <td [attr.rowspan]="item.show2" *ngIf="item.con">
+                                    <h3>{{item.con}}</h3> <i class="table_bor"></i>
+                                </td>
+                                <td class="td_back"><span>{{item.can}}</span></td>
+                                <ng-container *ngIf="item.pvs">
+                                    <td class="td_back" *ngFor="let any of item.pvs"><i class="table_i"
+                                            [ngClass]="{'table_are': any.value == 'true', 'table_none': any.value == 'false'}"></i>{{any.value == 'true' ? '有':'无'}}
+                                    </td>
+                                </ng-container>
+                                <ng-container *ngIf="item.pvs2">
+                                    <td class="td_back" *ngFor="let any of item.pvs2">
+                                        <i class="table_i"
+                                            [ngClass]="{'table_success': any.value == '规范', 'table_warning': any.value == '较规范', 'table_error': any.value == '不规范'}"></i>{{any.value}}
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-            </nz-carousel>
+            </div>
+            <div class="underRight_content" [ngClass]="{'select': currentStatus.status == 2}">
+                <div class="underTable">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><span class="table_span">参数</span></th>
+                                <th *ngFor="let item of safeSearch['years']"><span
+                                        class="table_span">{{item + '年'}}</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of safeSearch['dataByYear']">
+                                <td>
+                                    <h3>{{item.name}}</h3><i class="table_bor"></i>
+                                </td>
+                                <td class="td_back" *ngFor="let any of item.list">
+                                    <i class="table_i"
+                                        [ngClass]="{'table_success': any.state == '满足', 'table_error': any.state == '不满足'}"></i>{{any.state}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="underRight_content" [ngClass]="{'select': currentStatus.status == 3}">
+                <div class="underTable">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><span class="table_span">参数</span></th>
+                                <th *ngFor="let item of checkSecuritys['years']"><span
+                                        class="table_span">{{item + '年'}}</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of checkSecuritys['dataList']">
+                                <td>
+                                    <h3>{{item.con}}</h3><i class="table_bor"></i>
+                                </td>
+                                <td class="td_back" *ngFor="let any of item.pvs">
+                                    <i class="table_i"
+                                        [ngClass]="{'table_success': any.value == 'A类','table_warning': any.value == 'B类','table_error': any.value == 'C类'}"></i>{{any.value}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-    <!-- 右边 -->
-    <div class="onthe_right fl clearfix">
-        <ul class="onRight_menu">
-            <li class="fl" [ngClass]="{'select': currentStatus == item}" *ngFor="let item of menuList.status"
-                (click)="selectFunstatus(item,1)"><i>{{item.name}}</i></li>
-        </ul>
-        <div class="onRight_list" *ngIf="currentStatus.status == 1">
-            <ul class="onRihgt_content">
-                <li class="fl" *ngFor="let item of satuSurvey">
-                    <span class="name fl">{{item.name}}:</span>
-                    <span class="fl" *ngIf="item.goal">{{'总指标：' + item.goal}}</span>
-                    <ul class="name_list" *ngIf="item.list2">
-                        <li *ngFor="let any of item.list2">
-                            <span class="fl">{{any.can}}:</span>
-                            <em class="fl" *ngFor="let menu of any.descList"
-                                [ngClass]="{'select': menu == any.value}">{{menu}}</em>
-                        </li>
-                    </ul>
-                    <div class="fr list_menu" *ngIf="item.list">
-                        <em *ngFor="let any of item.list" [ngClass]="{'select': any.value == 'true'}">{{any.can}}</em>
-                    </div>
-                </li>
+    <!-- 右部 -->
+    <div class="contentSidedge fl clearfix">
+        <div class="onthe_right clearfix">
+            <ul class="onRight_menu">
+                <li class="fl" [ngClass]="{'select': currentStatus == item}" *ngFor="let item of menuList.status"
+                    (click)="selectFunstatus(item,1)"><i>{{item.name}}</i></li>
             </ul>
-        </div>
-        <div class="onRight_list" *ngIf="currentStatus.status == 2">
-            <div class="onRightTable">
-                <ul class="search_key">
-                    <li *ngFor="let item of safetyInspection">
-                        <span class="fl">{{item.name}}:</span>
-                        <em class="fl safe_list">
-                            <i *ngFor="let any of item.siteList" [ngClass]="{'select': safeselect === any}"
-                                (click)="getExamine(item, any)">{{any}}</i>
-                        </em>
+            <div class="onRight_list" *ngIf="currentStatus.status == 1">
+                <ul class="onRihgt_content">
+                    <li class="fl" *ngFor="let item of satuSurvey">
+                        <span class="name fl" *ngIf="item.name">{{item.name}}:</span>
+                        <span class="fl" *ngIf="item.goal">{{'总指标：' + item.goal}}</span>
+                        <ul class="name_list" *ngIf="item.list2">
+                            <li *ngFor="let any of item.list2">
+                                <span class="fl" *ngIf="any.can">{{any.can}}:</span>
+                                <ng-container *ngFor="let menu of any.descList">
+                                    <em class="fl" *ngIf="menu" [ngClass]="{'select': menu == any.value}">{{menu}}</em>
+                                </ng-container>
+                            </li>
+                        </ul>
+                        <div class="fr list_menu" *ngIf="item.list">
+                            <ng-container *ngFor="let any of item.list">
+                                <em *ngIf="any.can" [ngClass]="{'select': any.value == 'true'}">{{any.can}}</em>
+                            </ng-container>
+                        </div>
                     </li>
                 </ul>
-                <div class="onRight_item_list">
-                    <span class="name fl">总指标:</span>
-                    <div class="fr list_menu">
-                        <em>A类</em>
+            </div>
+            <div class="onRight_list" *ngIf="currentStatus.status == 2">
+                <div class="onRightTable">
+                    <ul class="search_key">
+                        <li *ngFor="let item of safetyInspection">
+                            <span class="fl">{{item.name}}:</span>
+                            <em class="fl safe_list">
+                                <i *ngFor="let any of item.siteList" [ngClass]="{'select': safeselect === any}"
+                                    (click)="getExamine(item, any)">{{any}}</i>
+                            </em>
+                        </li>
+                    </ul>
+                    <div class="onRight_item_list">
+                        <span class="name fl">总指标:</span>
+                        <div class="fr list_menu">
+                            <em>A类</em>
+                        </div>
                     </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>检测参数</th>
+                                <th>极大值</th>
+                                <th>极小值</th>
+                                <th>平均值</th>
+                                <th>规范/设计要求值</th>
+                                <th>是否满足</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of safeSearch['nowData']">
+                                <td>{{item.name}}</td>
+                                <td><span class="selct_red">{{item.max}}</span></td>
+                                <td><span class="selct_eff">{{item.min}}</span></td>
+                                <td><span>{{item.avg}}</span></td>
+                                <td><span>{{item.value}}</span></td>
+                                <td><span
+                                        [ngClass]="{'selct_red': item.state == '不满足', 'selct_eff': item.state == '满足'}">{{item.state}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>检测参数</th>
-                            <th>极大值</th>
-                            <th>极小值</th>
-                            <th>平均值</th>
-                            <th>规范/设计要求值</th>
-                            <th>是否满足</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of safeSearch['nowData']">
-                            <td>{{item.name}}</td>
-                            <td><span class="selct_red">{{item.max}}</span></td>
-                            <td><span class="selct_eff">{{item.min}}</span></td>
-                            <td><span>{{item.avg}}</span></td>
-                            <td><span>{{item.value}}</span></td>
-                            <td><span
-                                    [ngClass]="{'selct_red': item.state == '不满足', 'selct_eff': item.state == '满足'}">{{item.state}}</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
-        </div>
-        <div class="onRight_list" *ngIf="currentStatus.status == 3">
-            <ul class="progress_list">
-                <li class="fl progres_list_a"><span></span>A类</li>
-                <li class="fl progres_list_b"><span></span>B类</li>
-                <li class="fl progres_list_c"><span></span>C类</li>
-            </ul>
-            <ul class="progress_bar">
-                <li class="clearfix" *ngFor="let item of checkSecurity">
-                    <span class="fl">{{item.name}}</span>
-                    <p class="fl" *ngFor="let any of item.list">
-                        <i
-                            [ngClass]="{'progress_a': any.value == 'A类','progress_b':any.value == 'B类','progress_c':any.value == 'C类'}">
-                            <em>{{any.value}}</em>
-                        </i>
-                    </p>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
-<!-- 下部 -->
-<div class="undersection clearfix">
-    <!-- 左边 -->
-    <div class="under_left fl">
-        <ul class="under_introduce">
-            <li class="fl" *ngFor="let item of menuList.introduce" [ngClass]="{'select': currentIntroduce == item}"
-                (click)="selectFunstatus(item,2)"><i>{{item.name}}</i></li>
-        </ul>
-        <div class="under_content" [ngClass]="{'select': currentIntroduce.status == 1}">
-            <div class="header_img fl">
-                <img src="assets/image/yonghu_lan.png" alt="">
-                <h3>测试数据</h3>
-            </div>
-            <div class="header_text fl">
-                <p class="header_cotent">{{totalData.overview}}</p>
-                <p class="header_time">录入时间： {{totalData.createTime}}</p>
-            </div>
-        </div>
-        <div class="under_content" [ngClass]="{'select': currentIntroduce.status == 2}">
-            <div id="underConSimple"></div>
-        </div>
-        <div class="under_content underCon_thead" [ngClass]="{'select': currentIntroduce.status == 3}">
-            <ul class="underCon_table">
-                <li class="fl">日期</li>
-                <li class="fl">险情描述</li>
-            </ul>
-            <ul class="underCon_tbody">
-                <li *ngFor="let item of dangersOfhistory">
-                    <span class="fl time">{{item.year}}</span>
-                    <span class="fl text">{{item.content}}</span>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <!-- 右边 -->
-    <div class="under_right fl">
-        <h3> {{currentStatus.name + '逐次分析'}} <img src="assets/image/hangbian_lan.png" alt=""></h3>
-        <div class="underRight_content" [ngClass]="{'select': currentStatus.status == 1}">
-            <div class="underTable" (scroll)="topSrcoll($event)">
-                <table [ngStyle]="testTop">
-                    <thead>
-                        <tr>
-                            <th><span class="table_span">类别</span></th>
-                            <th><span class="table_span">参数</span></th>
-                            <th *ngFor="let item of thestatusUp['years']"><span class="table_span">{{item + '年'}}</span>
-                            </th>
-                        </tr>
-                    </thead>
-                </table>
-                <table>
-                    <tbody>
-                        <tr *ngFor="let item of thestatusUp['dataList']">
-                            <td [attr.rowspan]="item.show2" *ngIf="item.con">
-                                <h3>{{item.con}}</h3> <i class="table_bor"></i>
-                            </td>
-                            <td class="td_back"><span>{{item.can}}</span></td>
-                            <ng-container *ngIf="item.pvs">
-                                <td class="td_back" *ngFor="let any of item.pvs"><i class="table_i"
-                                        [ngClass]="{'table_are': any.value == 'true', 'table_none': any.value == 'false'}"></i>{{any.value == 'true' ? '有':'无'}}
-                                </td>
-                            </ng-container>
-                            <ng-container *ngIf="item.pvs2">
-                                <td class="td_back" *ngFor="let any of item.pvs2">
-                                    <i class="table_i"
-                                        [ngClass]="{'table_success': any.value == '规范', 'table_warning': any.value == '较规范', 'table_error': any.value == '不规范'}"></i>{{any.value}}
-                                </td>
-                            </ng-container>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="underRight_content" [ngClass]="{'select': currentStatus.status == 2}">
-            <div class="underTable">
-                <table>
-                    <thead>
-                        <tr>
-                            <th><span class="table_span">参数</span></th>
-                            <th *ngFor="let item of safeSearch['years']"><span class="table_span">{{item + '年'}}</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of safeSearch['dataByYear']">
-                            <td>
-                                <h3>{{item.name}}</h3><i class="table_bor"></i>
-                            </td>
-                            <td class="td_back" *ngFor="let any of item.list">
-                                <i class="table_i"
-                                    [ngClass]="{'table_success': any.state == '满足', 'table_error': any.state == '不满足'}"></i>{{any.state}}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="underRight_content" [ngClass]="{'select': currentStatus.status == 3}">
-            <div class="underTable">
-                <table>
-                    <thead>
-                        <tr>
-                            <th><span class="table_span">参数</span></th>
-                            <th *ngFor="let item of checkSecuritys['years']"><span
-                                    class="table_span">{{item + '年'}}</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of checkSecuritys['dataList']">
-                            <td>
-                                <h3>{{item.con}}</h3><i class="table_bor"></i>
-                            </td>
-                            <td class="td_back" *ngFor="let any of item.pvs">
-                                <i class="table_i"
-                                    [ngClass]="{'table_success': any.value == 'A类','table_warning': any.value == 'B类','table_error': any.value == 'C类'}"></i>{{any.value}}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="onRight_list" *ngIf="currentStatus.status == 3">
+                <ul class="progress_list">
+                    <li class="fl progres_list_a"><span></span>A类</li>
+                    <li class="fl progres_list_b"><span></span>B类</li>
+                    <li class="fl progres_list_c"><span></span>C类</li>
+                </ul>
+                <ul class="progress_bar">
+                    <li class="clearfix" *ngFor="let item of checkSecurity">
+                        <span class="fl">{{item.name}}</span>
+                        <p class="fl" *ngFor="let any of item.list">
+                            <i
+                                [ngClass]="{'progress_a': any.value == 'A类','progress_b':any.value == 'B类','progress_c':any.value == 'C类'}">
+                                {{any.value}}
+                            </i>
+                        </p>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

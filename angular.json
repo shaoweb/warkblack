@@ -33,7 +33,7 @@
               "node_modules/ng-zorro-antd/ng-zorro-antd.min.css"
             ],
             "scripts": [
-              "./node_modules/echarts/dist/echarts.min.js"
+              "./node_modules/echarts/dist/echarts.js"
             ]
           },
           "configurations": {
@@ -106,7 +106,7 @@
               "node_modules/ng-zorro-antd/ng-zorro-antd.min.css"
             ],
             "scripts": [
-              "./node_modules/echarts/dist/echarts.min.js"
+              "./node_modules/echarts/dist/echarts.js"
             ]
           }
         },

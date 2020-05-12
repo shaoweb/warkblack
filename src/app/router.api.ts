@@ -1,4 +1,4 @@
-// http://192.168.1.130:8080/wcp http://58.246.211.154:14200/wcp/
+// http://192.168.1.130:8080/wcp/ http://58.246.211.154:14200/wcp/
 const API = 'http://58.246.211.154:14200/wcp/';
 
 // 接口配置
@@ -21,4 +21,5 @@ export const APIROUTER = {
     getProTypeCount: API + 'data/getProTypeCount', //获取全国水闸的类别分布信息
     getCountWater: API + 'water/getCount', //获取全国水闸的类别分布信息--流域分布
     getCountByWater: API + 'water/getCountByWater', //获取全国水闸的类别分布信息--流域分布
+    getOrderProByArea: API + 'pro/getOrderProByArea', // 根据地图ID，获取水闸信息
 }

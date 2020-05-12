@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { RequestService } from "../request.service";
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { CategoryComponent } from '../component';
+import { RegulatoryComponent } from '../regulatory/regulatory.component';
 
 import { APIROUTER } from "../router.api"
 import * as echarts from 'echarts';
@@ -13,10 +16,16 @@ import * as echarts from 'echarts';
 })
 export class LockTotalComponent implements OnInit {
 
-  constructor(private req: RequestService, private message: NzMessageService) { }
-  
+  constructor(
+    private router: Router,
+    private req: RequestService,
+    private message: NzMessageService
+  ) { }
+
+  @ViewChild(RegulatoryComponent, { static: false }) category: RegulatoryComponent;
+
   // 由父级获取
-  routItem: any = { name:'全国水闸工程', link:'/content/lockTotal' }
+  routItem: any = { name: '全国水闸工程', link: '/content/lockTotal' }
 
   // 指定进度条的数据格式
   format = (percent: number) => `${percent}`;
@@ -51,7 +60,15 @@ export class LockTotalComponent implements OnInit {
   // 当前省份
   currentProvinces: any = '';
 
-  // 接收
+  // 菜单栏
+  routerList: any = JSON.parse(localStorage.getItem("currentCity")) == null ? [{'name':'全国行政区水利工程', 'link': '/content/basin', 'cityCode': 100000}] : JSON.parse(localStorage.getItem("currentCity"));
+
+  // 水闸列表
+  locklistAll: any;
+  
+  // 字母列表，选中字母
+  testMenu: any = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','#'];
+  currentIndex: any;
 
   ngOnInit() {
 
@@ -99,20 +116,13 @@ export class LockTotalComponent implements OnInit {
       this.message.create('error', `${error}`)
     })
 
-    // 水闸历年(历省)的数据
-    this.req.getData(this.routerApi.getCountByProvince).subscribe(res => {
-      let xArr = [], yArr = [{ name: '一类水闸', type: 'bar', data: [] }, { name: '二类水闸', type: 'bar', data: [] }, { name: '三类水闸', type: 'bar', data: [] }, { name: '四类水闸', type: 'bar', data: [] }];
-      for (let item in res['data']['fourist']) {
-        xArr.push(res['data']['fourist'][item]['pro']);
-        yArr[0]['data'].push(res['data']['fourist'][item]['count']);
-        yArr[1]['data'].push(res['data']['oneList'][item]['count']);
-        yArr[2]['data'].push(res['data']['threeList'][item]['count']);
-        yArr[3]['data'].push(res['data']['twoList'][item]['count']);
-      }
-      echarts.init(document.getElementById("lockBar")).setOption(this.columnParameter(xArr, yArr), true);
-    }, error => {
-      this.message.create('error', `${error}`);
-    })
+    // 根据省市区查询
+    if (this.routerList.length > 1) {
+      this.title = this.routerList[this.routerList.length - 1]['name'] + '水闸工程';
+      this.selectProvinces(this.routerList[this.routerList.length - 1]['cityCode']);
+    } else {
+      this.getCountByProvince()
+    }
 
     // 获取全国省份的数据
     this.req.getData(this.routerApi.getArea, { 'levelType': 1 }).subscribe(res => {
@@ -139,10 +149,39 @@ export class LockTotalComponent implements OnInit {
         }
       }
       this.checkSecurity = res['data'];
-    },error=>{
-      this.message.create('error',error);
+    }, error => {
+      this.message.create('error', error);
     })
-  }
+
+    // 根据省市ID，查询数据
+    this.alldata(this.routerList[this.routerList.length - 1]['cityCode'])
+  };
+
+  // 根据省市ID，查询数据
+  alldata(areaId: any): void {
+    this.req.getData(this.routerApi.getOrderProByArea, {'areaId': areaId}).subscribe(res=>{
+      this.locklistAll = res['data'];
+    }, error=>{
+      this.message.create('error', error)
+    })
+  };
+
+  // 查询水闸历年(历省)的数据
+  getCountByProvince(areaId?: any): void {
+    this.req.getData(this.routerApi.getCountByProvince).subscribe(res => {
+      let xArr = [], yArr = [{ name: '一类水闸', type: 'bar', data: [] }, { name: '二类水闸', type: 'bar', data: [] }, { name: '三类水闸', type: 'bar', data: [] }, { name: '四类水闸', type: 'bar', data: [] }];
+      for (let item in res['data']['fourist']) {
+        xArr.push(res['data']['fourist'][item]['pro']);
+        yArr[0]['data'].push(res['data']['fourist'][item]['count']);
+        yArr[1]['data'].push(res['data']['oneList'][item]['count']);
+        yArr[2]['data'].push(res['data']['threeList'][item]['count']);
+        yArr[3]['data'].push(res['data']['twoList'][item]['count']);
+      }
+      echarts.init(document.getElementById("lockBar")).setOption(this.columnParameter(xArr, yArr), true);
+    }, error => {
+      this.message.create('error', `${error}`);
+    })
+  };
 
   // 根据类别返回色值
   returnColor(data: any): String {
@@ -809,8 +848,8 @@ export class LockTotalComponent implements OnInit {
           }
         }
       },
-      dataZoom:[{
-        type:'inside',
+      dataZoom: [{
+        type: 'inside',
         xAxisIndex: [0]
       }],
       tooltip: {
@@ -848,10 +887,53 @@ export class LockTotalComponent implements OnInit {
   }
 
   // 这个方法由子页面调用
-  checkedBack(event: any) {
-    this.title = event.name + '水闸工程'
+  checkedBack(data: any) {
+    var event = data[data.length - 1];
+    this.title = event.name + '水闸工程';
+    this.currentProvinces = event.cityCode;
     this.selectProvinces(event.cityCode);
-  }
+    this.alldata(event.cityCode);
+    this.routerList = data;
+  };
+
+  // 菜单栏点击事件
+  menuClick(data: any): void {
+    if (data.link == '/content/lockTotal') {
+      this.category.getBack(data);
+    } else {
+      if (data.cityCode == 100000) {
+        this.routerList.splice(1, this.routerList.length - 1);
+      } else {
+        for (let item in this.routerList) {
+          if (data.cityCode == this.routerList[item]['cityCode']) {
+            this.routerList.splice(Number(item) + 1, this.routerList.length - 1);
+            break;
+          }
+        };
+      }
+      // 本地存储-菜单栏
+      localStorage.setItem("currentCity", JSON.stringify(this.routerList))
+      // 跳转页面
+      this.router.navigateByUrl(data.link);
+    }
+  };
+
+  // 选择水闸
+  selectLocak(data: any): void{
+    this.router.navigate(['/content/waterGate'], {
+      queryParams: { 'id': data.areasId, 'name': data.name }
+    });
+  };
+
+  // 索引选择
+  selectIndex(data: any): void{
+    this.currentIndex = data;
+    var currentDiv = document.getElementById(data);
+    var lockboxMenu = document.getElementById('lockboxMenu');
+    if(currentDiv){
+      lockboxMenu.scrollTo(0, currentDiv.getBoundingClientRect().top)
+    }
+  };
 
 
 }

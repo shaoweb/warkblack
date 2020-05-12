@@ -1,8 +1,8 @@
 <div class="cinMiddle_box">
   <h3>
-    {{ currentCity[currentCity.length-1].name }}水利工程
+    {{ currentCity[currentCity.length-1].name == '全国行政区水利工程' ? currentCity[currentCity.length-1].name : currentCity[currentCity.length-1].name + '水利工程' }}
     <i class="vice" [hidden]="currentCity.length > 1" (click)='switch(true)'>切换流域地图</i>
-    <select class="fr one" [(ngModel)]="sizeOfthe" (change)="administrativeSelect(currentCity[currentCity.length - 1]['cityCode'])">
+    <select class="fr one" [(ngModel)]="sizeOfthe" (change)="administrativeSelect()">
       <option value="">工程规模</option>
       <option *ngIf="levnl" value="大（1）型">大(1)型</option>
       <option *ngIf="levnl" value="大（2）型">大(2)型</option>
@@ -10,7 +10,7 @@
       <option *ngIf="levnl" value="小（1）型">小(1)型</option>
       <option *ngIf="levnl" value="小（2）型">小(2)型</option>
     </select>
-    <select class="fr two" [(ngModel)]="levnl" (change)="administrativeSelect(currentCity[currentCity.length - 1]['cityCode'],1)">
+    <select class="fr two" [(ngModel)]="levnl" (change)="administrativeSelect()">
       <option value="">工程等别</option>
       <option value="Ⅰ">Ⅰ</option>
       <option value="Ⅱ">Ⅱ</option>
@@ -22,7 +22,7 @@
 </div>
 <div id="chart-panel">
   <div id="container"></div>
-  <div class="back" [hidden]="currentCity.length == 1" (click)="getBack()">返回</div>
+  <!-- <div class="back" [hidden]="currentCity.length == 1" (click)="getBack()">返回</div> -->
   <div class="input-card">
     <div class="input-item">
       <select id='province' style="width:100px"></select>

@@ -1,0 +1,36 @@
+<div class="cinMiddle_box">
+    <h3>{{ currentCity[currentCity.length-1].name == '全国行政区水利工程' ? '全国': currentCity[currentCity.length-1].name }}水闸工程
+        <select class="fr one" [(ngModel)]="sizeOfthe" (change)="changeSelect()">
+            <option value="">工程规模</option>
+            <option *ngIf="levnl" value="大（1）型">大(1)型</option>
+            <option *ngIf="levnl" value="中（1）型">中(1)型</option>
+            <option *ngIf="levnl" value="小（1）型">小(1)型</option>
+            <option *ngIf="levnl" value="大（2）型">大(2)型</option>
+            <option *ngIf="levnl" value="中（2）型">中(2)型</option>
+        </select>
+        <select class="fr two" [(ngModel)]="levnl" (change)="changeSelect()">
+            <option value="">工程等别</option>
+            <option value="Ⅰ">Ⅰ</option>
+            <option value="Ⅱ">Ⅱ</option>
+            <option value="Ⅲ">Ⅲ</option>
+            <option value="Ⅳ">Ⅳ</option>
+            <option value="Ⅴ">Ⅴ</option>
+        </select>
+    </h3>
+</div>
+<div id="chart-panel">
+    <div id="container"></div>
+    <!-- <div class="back" [hidden]="currentCity.length == 1" (click)="getBack()">返回</div> -->
+    <div class="input-card">
+        <div class="input-item">
+            <select id='province' style="width:100px"></select>
+        </div>
+        <div class="input-item">
+            <select id='city' style="width:100px"></select>
+        </div>
+        <div class="input-item">
+            <select id='district' style="width:100px"></select>
+        </div>
+    </div>
+    <div id="chart"></div>
+</div>

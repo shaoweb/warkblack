@@ -1,25 +1,24 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { RequestService } from "../../request.service";
+import { RequestService } from "../request.service";
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router } from '@angular/router';
 
-import { APIROUTER } from "../../router.api"
+import { APIROUTER } from "../router.api"
 import * as echarts from 'echarts';
 declare let AMap: any;
 declare let AMapUI: any;
 
 @Component({
-  selector: 'app-category',
-  templateUrl: './category.component.html',
-  styleUrls: ['./category.component.css']
+  selector: 'app-regulatory',
+  templateUrl: './regulatory.component.html',
+  styleUrls: ['./regulatory.component.css']
 })
-export class CategoryComponent implements OnInit {
+export class RegulatoryComponent implements OnInit {
 
   constructor(private req: RequestService, private message: NzMessageService, private router: Router) { }
 
   // 定义输出：
   @Output('checked') checkedBack = new EventEmitter<any>();
-
   // 接口
   routerApi: any = APIROUTER;
 
@@ -126,40 +125,31 @@ export class CategoryComponent implements OnInit {
   }
 
   // 选择省市
-  getBack(code: any): void {
-    var data;
-    if (this.deepTree.length > 1) {
-      if (code == 100000) {
-        this.mapData = this.deepTree[1].mapData;
-        this.deepTree.splice(1, this.deepTree.length - 1);
-        this.currentCity.splice(1, this.currentCity.length - 1);
+  getBack(data: any): void {
+    for (let item in this.currentCity) {
+      if (data.cityCode == this.currentCity[item]['cityCode']) {
+        this.currentCity.splice(Number(item) + 1, this.currentCity.length - 1);
         this.checkedCallback(this.currentCity);
-        this.loadMapData(code);
-      } else {
-        for (let item in this.deepTree) {
-          if (code == this.deepTree[item]['code']) {
-            data = this.currentCity[item];
-            this.mapData = this.deepTree[Number(item) + 1].mapData;
-            this.deepTree.splice(Number(item) + 1, this.deepTree.length - 1);
-            this.currentCity.splice(Number(item) + 1, this.currentCity.length - 1);
-            this.checkedCallback(this.currentCity);
-            break;
-          }
-        };
-        this.district.setLevel(data.level); //行政区级别
-        this.district.setExtensions('all');
-        //按照adcode进行查询可以保证数据返回的唯一性
-        this.district.search(code, (status, result) => {
-          if (status === 'complete') {
-            this.deepTree.push({
-              mapData: this.mapData,
-              code: code
-            });
-            this.getData(result.districtList[0], data.level, code);
-          }
-        });
+        break
       }
-    }
+    };
+    this.cityName = data.name;
+    this.cityCode = data.cityCode;
+    this.district.setLevel(data.level); //行政区级别
+    this.district.setExtensions('all');
+    this.distribution(data.cityCode);
+    //行政区查询
+    //按照adcode进行查询可以保证数据返回的唯一性
+    this.district.search(data.cityCode, (status, result) => {
+      if (status === 'complete') {
+        this.deepTree.push({
+          mapData: this.mapData,
+          code: data.cityCode
+        });
+        this.getData(result.districtList[0], data.level, data.cityCode);
+      }
+    });
+    this.setSearchOption(data, data.level, data.cityCode);
   }
 
   // 地图初始化
@@ -481,5 +471,6 @@ export class CategoryComponent implements OnInit {
     }
     return res
   };
+
 
 }

@@ -20,7 +20,7 @@ export class WaterGateComponent implements OnInit {
   // 选中的水闸
   selectWater: any = {};
   // 由父级获取
-  routItem: any = { link: "/content/waterGate" };
+  routerList: any = JSON.parse(localStorage.getItem("currentCity"));
 
   constructor(private req: RequestService, private activatedRoute: ActivatedRoute, private message: NzMessageService) {
     // 根据url的参数，查询该项目详情
@@ -88,7 +88,7 @@ export class WaterGateComponent implements OnInit {
       this.totalWater = res['data'];
       // 默认选中第一个
       this.selectWater = this.totalWater[0];
-      this.routItem['name'] = this.selectWater.name + '信息';
+      this.routerList.push({'name': this.selectWater.name + '信息', link: null})
       // 查询综合评价
       this.comprehensive(this.selectWater.id);
       // 默认回调现状调查，安全复核查询
@@ -223,18 +223,23 @@ export class WaterGateComponent implements OnInit {
       color: ['#5CEEFA'],
       grid: {
         show: true,
-        top: "6%",
+        bottom: '20',
         borderColor: '#657CA8'
       },
       tooltip: {
         show: true
       },
-      dataZoom: {
-        show: true,
-        realtime: true,
-        start: 0,
-        end: 100
+      toolbox: {
+        feature: {
+          dataZoom: {
+            xAxisIndex: [0]
+          }
+        }
       },
+      dataZoom: [{
+        type: 'inside',
+        xAxisIndex: [0]
+      }],
       xAxis: {
         type: 'category',
         axisLine: {
@@ -363,7 +368,7 @@ export class WaterGateComponent implements OnInit {
   // 滚动事件
   topSrcoll($event): void {
     // this.testTop = {'position': 'fixed', 'background': 'red','z-index': '99'}
-    console.log($event);
+    // console.log($event);
   }
 
 }

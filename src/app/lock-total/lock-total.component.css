@@ -173,7 +173,7 @@
   height: 65%;
 }
 
-.lock_side>.side_list>.sidelist_box>.side_bartion{
+.lock_side>.side_list>.sidelist_box>.side_bartion {
   height: 35%;
 }
 
@@ -212,251 +212,14 @@
   background: url("/forwcp/assets/image/qiehuankuagn_on.png")no-repeat center/100% 100%;
 }
 
-.lock_side>.lockRight_list {
+.lock_side>.lockRight_box {
+  margin: 0 auto;
   height: 100%;
-  background: url("/forwcp/assets/image/dikuang_three.png")no-repeat center/100% 100%;
   overflow: hidden;
 }
-
-.lock_side>.lockRight_list>h3{
-  left: 18%;
-}
-
-.lock_side>.lockRight_list>.lockRight_box {
-  margin: 5% auto 0;
-  width: 87%;
-  height: 94%;
-  overflow: auto;
-}
-
-.lock_side>.lockRight_list>ul {
-  border: 1px solid rgba(16, 106, 162, 1);
-}
-
-.lock_side>.lockRight_list>.lockRight_box>li {
-  width: 100%;
-  border-bottom: 1px solid rgba(16, 106, 162, 1);
-}
-
-.lock_side>.lockRight_list>.lockRight_box>li>span,
-.lock_side>.lockRight_list>.lockRight_box>.onRight_item_list>span {
-  display: inline-block;
-  width: 24%;
-  font-size: 1.6rem;
-  color: #41EFF9;
-  margin: 1.25rem 0 1.25rem;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>li>.name,
-.lock_side>.lockRight_list>.lockRight_box>.onRight_item_list>.name {
-  margin: 1.25rem 0 1.25rem 1.25rem;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>li>.name_list,
-.lock_side>.lockRight_list>.lockRight_box>li>.name_list>li {
-  width: 100%;
-  overflow: hidden;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>li>.name_list>li>span {
-  display: inline-block;
-  width: 24%;
-  color: #fff;
-  font-size: 1.6rem;
-  margin: .5rem 0 .5rem 1.25rem;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>li>.name_list>li>em,
-.lock_side>.lockRight_list>.lockRight_box>li>.list_menu>em,
-.lock_side>.lockRight_list>.lockRight_box>.onRight_item_list>.list_menu>em {
-  display: inline-block;
-  color: #fff;
-  cursor: pointer;
-  padding: .5rem 1.6rem;
-  font-size: 1.4rem;
-  margin-bottom: .4rem;
-  background: url("/forwcp/assets/image/xiaokuan_off.png")no-repeat center/100% 100%;
-  margin-right: 1.2rem;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>li>.name_list>li>.select {
-  background: url("/forwcp/assets/image/canshukaugn_xuanzhong.png")no-repeat center/100% 100%;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>li>.list_menu,
-.lock_side>.lockRight_list>.lockRight_box>.onRight_item_list>.list_menu {
-  margin-top: .8rem;
-  width: 70%;
-  overflow: hidden;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.search_key {
-  border: none;
-  height: auto;
-  padding: .3rem .6rem;
-  background-color: #106AA2;
-  border-radius: .3rem;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.search_key>li {
-  width: 100%;
-  margin-bottom: .4rem;
-  overflow: hidden;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.search_key>li>span {
-  display: inline-block;
-  color: #fff;
-  font-size: .6rem;
-  padding: .8rem .4rem;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.search_key>li>.safe_list {
-  display: inline-block;
-  overflow: hidden;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.search_key>li>.safe_list>i {
-  display: inline-block;
-  color: #FFF;
-  margin: 0 .4rem;
-  font-size: .6rem;
-  cursor: pointer;
-  padding: .2rem .4rem;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.search_key>li>.safe_list>i[class="select"] {
-  background-color: #2591B0;
-  border-radius: .2rem;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.onRight_item_list {
-  margin: 3% 0 1%;
-  border: 1px solid rgba(16, 106, 162, 1);
-  overflow: hidden;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>table {
-  width: 100%;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>table>thead>tr>th {
-  color: #fff;
-  padding: .4rem 0;
-  font-size: .6rem;
-  font-weight: bold;
-  text-align: center;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>table>tbody>tr>td {
-  color: #FFF;
-  font-size: 1.2rem;
-  text-align: center;
-  font-weight: bolder;
-  border: 1px solid #106AA2;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>table>tbody>tr>td>span {
-  display: inline-block;
-  padding: .2rem 1.3rem;
-  font-size: .6rem;
-  font-weight: bold;
-  margin: .5rem 0;
-  background: url("/forwcp/assets/image/xiaokuan_off.png")no-repeat center/100% 100%;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>table>tbody>tr>td>.selct_red {
-  color: #E80042;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>table>tbody>tr>td>.selct_eff {
-  color: #41EFF9;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.progress_list {
-  overflow: hidden;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.progress_list>li {
-  margin-right: 2rem;
-  font-size: 1.2rem;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.progress_list>li>span {
-  display: inline-block;
-  width: 1rem;
-  height: 1rem;
-  margin: 0 .6rem 0 0;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.progress_list>.progres_list_a {
-  color: #2D70F8;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.progress_list>.progres_list_a>span{
-  background-color: #2D70F8;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.progress_list>.progres_list_b {
-  color: #F8B62D;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.progress_list>.progres_list_b>span{
-  background-color: #F8B62D;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.progress_list>.progres_list_c {
-  color: #E80042;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.progress_list>.progres_list_c>span{
-  background-color: #E80042;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.progress_bar{
-  overflow: hidden;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.progress_bar>li{
-  position: relative;
-  overflow: hidden;
-  margin: 4% 4% 8%;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.progress_bar>li>span{
-  position: absolute;
-  top: 50%;
-  width: 26%;
-  color: #FFF;
-  font-size: 1.4rem;
-  text-align: right;
-  margin-top: -.7rem;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.progress_bar>li>.progresing{
-  width: 70%;
-  padding-left: 4%;
-  position: relative;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.progress_bar>li>.progresing::before{
-  content: "";
-  position: absolute;
-  top: 2%;
-  left: 0;
-  width: 4%;
-  height: 92%;
-  background: url("/forwcp/assets/image/gaikuo_lan.png")no-repeat center/100% 100%;
-  overflow: hidden;
-}
-
-.lock_side>.lockRight_list>.lockRight_box>.progress_bar>li>.progresing>p{
-  margin-bottom: .4rem;
-}
-
 
 .lock_box>.conMiddle_top {
-  height: 80%;
+  height: 65%;
   overflow: hidden;
 }
 
@@ -464,7 +227,7 @@
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 30%;
+  height: 35%;
 }
 
 .lock_box>.conMiddle_bottom>h3 {
@@ -486,7 +249,7 @@
   height: 88%;
 }
 
-.lock_box>.conMiddle_bottom>h3>select{
+.lock_box>.conMiddle_bottom>h3>select {
   margin-right: 1.5rem;
   height: 2rem;
   font-size: 1.2rem;
@@ -494,7 +257,7 @@
   background-color: #030B29;
 }
 
-.lock_box>.conMiddle_top>.map_box{
+.lock_box>.conMiddle_top>.map_box {
   height: 90%;
   overflow: hidden;
 }
@@ -536,11 +299,11 @@
   margin: 8% 0 0px 8%;
 }
 
-.side_list>.proportion_list.three{
+.side_list>.proportion_list.three {
   margin: 15% 0 0px 7%;
 }
 
-.side_list>.proportion_list.three>li{
+.side_list>.proportion_list.three>li {
   margin-bottom: 14%;
   overflow: hidden;
 }
@@ -589,4 +352,79 @@
 .side_list>.propor_box>.propor_text>i {
   display: block;
   text-align: center;
+}
+
+.lockbox_menu {
+  width: 90%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.lockserial {
+  width: 10%;
+  height: 100%;
+  margin: 0;
+}
+
+.lockbox_menu>li {
+  margin-top: 1rem;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.lockbox_menu>li:nth-child(1) {
+  margin-top: 0;
+}
+
+.lockbox_menu>li>span {
+  display: inline-block;
+  width: 100%;
+  color: #22959E;
+  font-size: .6rem;
+  padding: .5rem 1rem;
+  background-image: linear-gradient(to bottom right, rgba(40, 222, 237, .2), rgba(40, 222, 237, 0));
+}
+
+.lockserial>li {
+  height: 3.7%;
+  cursor: pointer;
+  color: #FFF;
+  text-align: center;
+  font-size: .6rem;
+}
+
+.lockserial>li>span{
+  display: inline-block;
+  color: #FFF;
+  width: 2rem;
+  height: 2rem;
+  line-height: 2rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.lockserial>li>.select{
+  color: #000;
+  background-color: #28DEED;
+}
+
+.lockmenu_list {
+  overflow: hidden;
+}
+
+.lockmenu_list>li {
+  cursor: pointer;
+  color: #FFF;
+  padding: .8rem 2rem;
+  font-size: 1rem;
+  margin: .8rem 0;
+  background-color: rgba(15, 207, 247, .1);
+  transition: all .3s initial;
+}
+
+.lockmenu_list>li:hover {
+  background-repeat: no-repeat;
+  background-image: url('/forwcp/assets/image/xuanzhong_sijiao.png');
+  background-position: center;
+  background-size: 100% 100%;
 }

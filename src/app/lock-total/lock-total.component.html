@@ -1,64 +1,77 @@
-<!-- 左边 -->
-<div class="clearfix fl lock_side">
-    <div class="side_list">
-        <h3>综合评价 <img src="assets/image/hangbian_lan.png" alt=""></h3>
-        <ul class="sidEge_category_left">
-            <li><i class="list_i_47"></i>一类水闸</li>
-            <li><i class="list_i_6A"></i>二类水闸</li>
-            <li><i class="list_i_F8"></i>三类水闸</li>
-            <li><i class="list_i_D9"></i>四类水闸</li>
-        </ul>
-        <ul class="fl proportion_list three">
-            <li *ngFor="let item of lockTotal['typePro']">
-                <nz-progress class="fl" [nzPercent]="item.proportion" nzType="circle" [nzWidth]="50"
-                    [nzStrokeColor]="item.color"></nz-progress>
-                <h3>{{item.type + '水闸'}} <span>{{item.count}}</span></h3>
-                <p>同比率增长{{item.perCount}}</p>
-            </li>
-        </ul>
-        <div class="fl propor_box">
-            <div class="propor_id" id="sideTotal"></div>
-            <h3 class="propor_text">到期未检<br><i>{{lockTotal.countByOverdue}}</i></h3>
-        </div>
-    </div>
-    <div class="side_list">
-        <h3>工程规模 <img src="assets/image/hangbian_lan.png" alt=""></h3>
-        <div class="sidelist_box">
-            <div class="side_pietion" id="sidePietion"></div>
-            <div class="side_bartion" id="sideBartion"></div>
-        </div>
-    </div>
+<!-- 面包屑 -->
+<div class="menu clearfix">
+    <p class="list_menu">
+        <span routerLink="/home">导航地图</span><i></i>
+        <span routerLink="/content/basin" *ngIf="routerList.length == 1">全国行政区水利工程</span><i *ngIf="routerList.length == 1"></i>
+        <span routerLink="/content/lockTotal" *ngIf="routerList.length == 1">水闸工程</span>
+        <ng-container  *ngFor="let item of routerList; let i = index">
+            <span *ngIf="routerList.length != 1" [ngClass]="{'select': (i+1) == routerList.length}" (click)="menuClick(item)">{{item.name}}</span><i
+                *ngIf="routerList.length > (i + 1) && routerList.length != 1"></i>
+        </ng-container>
+    </p>
 </div>
-<!-- 中间 -->
-<div class="clearfix fl lock_box">
-    <!-- 上半部 -->
-    <div class="conMiddle_top">
-       <app-category (checked)="checkedBack($event)"></app-category>
-    </div>
-    <!-- 下半部 -->
-    <div class="conMiddle_bottom">
-        <h3>{{title}}</h3>
-        <div class="conMiddle_box" id="lockBar"></div>
-    </div>
-</div>
-<!-- 右边 -->
-<div class="clearfix fl lock_side">
-    <div class="side_list lockRight_list">
-        <h3>安全复核 <img src="assets/image/hangbian_lan.png" alt=""></h3>
-        <div class="lockRight_box">
-            <ul class="progress_list">
-                <li class="fl progres_list_a"><span></span>A类</li>
-                <li class="fl progres_list_b"><span></span>B类</li>
-                <li class="fl progres_list_c"><span></span>C类</li>
+<!-- 内容 -->
+<div class="content">
+    <!-- 左边 -->
+    <div class="clearfix fl lock_side">
+        <div class="side_list">
+            <h3>综合评价 <img src="assets/image/hangbian_lan.png" alt=""></h3>
+            <ul class="sidEge_category_left">
+                <li><i class="list_i_47"></i>一类水闸</li>
+                <li><i class="list_i_6A"></i>二类水闸</li>
+                <li><i class="list_i_F8"></i>三类水闸</li>
+                <li><i class="list_i_D9"></i>四类水闸</li>
             </ul>
-            <ul class="progress_bar">
-                <li class="clearfix" *ngFor="let item of checkSecurity">
-                    <span class="fl">{{item.con}}</span>
-                    <div class="fr progresing">
-                        <p *ngFor="let any of item.typeList"><nz-progress [nzPercent]="any.count" [nzFormat]="format" [nzStrokeColor]="any.strokeColor"></nz-progress></p>
-                    </div>
+            <ul class="fl proportion_list three">
+                <li *ngFor="let item of lockTotal['typePro']">
+                    <nz-progress class="fl" [nzPercent]="item.proportion" nzType="circle" [nzWidth]="50"
+                        [nzStrokeColor]="item.color"></nz-progress>
+                    <h3>{{item.type + '水闸'}} <span>{{item.count}}</span></h3>
+                    <p>同比率增长{{item.perCount}}</p>
                 </li>
             </ul>
+            <div class="fl propor_box">
+                <div class="propor_id" id="sideTotal"></div>
+                <h3 class="propor_text">到期未检<br><i>{{lockTotal.countByOverdue}}</i></h3>
+            </div>
         </div>
+        <div class="side_list">
+            <h3>工程规模 <img src="assets/image/hangbian_lan.png" alt=""></h3>
+            <div class="sidelist_box">
+                <div class="side_pietion" id="sidePietion"></div>
+                <div class="side_bartion" id="sideBartion"></div>
+            </div>
+        </div>
+    </div>
+    <!-- 中间 -->
+    <div class="clearfix fl lock_box">
+        <!-- 上半部 -->
+        <div class="conMiddle_top">
+           <!-- <app-category (checked)="checkedBack($event)"></app-category> -->
+           <app-regulatory (checked)="checkedBack($event)"></app-regulatory>
+        </div>
+        <!-- 下半部 -->
+        <div class="conMiddle_bottom">
+            <h3>{{title == '全国行政区水利工程水闸工程' ? '全国水闸工程': title}}</h3>
+            <div class="conMiddle_box" id="lockBar"></div>
+        </div>
+    </div>
+    <!-- 右边 -->
+    <div class="clearfix fl lock_side">
+        <div class="lockRight_box clearfix">
+            <ul class="lockbox_menu fl" id="lockboxMenu">
+                <li *ngFor="let item of locklistAll">
+                    <span id="{{item.index}}">{{item.index}}</span>
+                    <ul class="lockmenu_list">
+                        <li *ngFor="let data of item.pros" (click)="selectLocak(data)">{{data.name}}</li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="lockserial fl">
+                <li *ngFor="let any of testMenu">
+                    <span [ngClass]="{'select': currentIndex == any}" (click)="selectIndex(any)">{{any}}</span>
+                </li>
+            </ul>
+         </div>
     </div>
 </div>

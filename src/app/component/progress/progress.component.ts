@@ -325,7 +325,7 @@ export class ProgressComponent implements OnInit {
         return this.person[item]['waterList'];
       }
     }
-  }
+  };
 
   // 坐标点数据处理
   convertData(data): object {

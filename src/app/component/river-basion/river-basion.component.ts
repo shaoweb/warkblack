@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { RequestService } from "../../request.service";
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { Router } from '@angular/router';
 
 import { APIROUTER } from "../../router.api"
 declare let AMap: any;
@@ -13,7 +14,7 @@ declare let AMapUI: any;
 })
 export class RiverBasionComponent implements OnInit {
 
-  constructor(private req: RequestService, private message: NzMessageService) { }
+  constructor(private req: RequestService, private message: NzMessageService, private router: Router) { }
 
   // 定于输出
   @Output('switchType') switchTitle = new EventEmitter<any>();
@@ -31,11 +32,12 @@ export class RiverBasionComponent implements OnInit {
   // 工程规模,工程等别
   sizeOfthe: any = '';
   levnl: any = '';
+  icon: any = 'assets/image/dingwei_shuizha.png'
 
   // 点标记显示内容，HTML要素字符串
   markerContent = '' +
     '<div class="custom-content-marker" style="width: 25px;height: 34px">' +
-    '   <img style="width:100%" src="//a.amap.com/jsapi_demos/static/demo-center/icons/dir-via-marker.png">' +
+    '   <img style="width:100%" src="'+ this.icon +'">' +
     '</div>';
 
   ngOnInit() {
@@ -68,7 +70,8 @@ export class RiverBasionComponent implements OnInit {
         data.push({
           name: res['data'][item]['name'],
           levenl: res['data'][item]['level'],
-          position: [res['data'][item]['lng'], res['data'][item]['lat']]
+          position: [res['data'][item]['lng'], res['data'][item]['lat']],
+          areasId: res['data'][item]['areasId']
         });
       };
       if (this.marker) { this.map.remove(this.marker)};// 清空标记
@@ -95,8 +98,15 @@ export class RiverBasionComponent implements OnInit {
           offset: new AMap.Pixel(-13, -30)
         });
         // 标记文本
-        markerion.setTitle(event.name + ":" + event.levenl)
+        markerion.setTitle(event.name + ":" + event.levenl);
         that.marker.push(markerion);
+        // 点击事件
+        markerion.on('click', (e)=>{
+          console.log(event);
+          that.router.navigate(['/content/waterGate'], {
+            queryParams: { 'id': event.areasId, 'name': event.name }
+          })
+        })
       })
     });
   };
