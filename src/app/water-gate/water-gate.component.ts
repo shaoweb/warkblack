@@ -4,6 +4,8 @@ import { RequestService } from "../request.service";
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ActivatedRoute } from '@angular/router';
 
+import { Router } from '@angular/router';
+
 import { APIROUTER } from "../router.api"
 
 import * as echarts from 'echarts';
@@ -22,7 +24,12 @@ export class WaterGateComponent implements OnInit {
   // 由父级获取
   routerList: any = JSON.parse(localStorage.getItem("currentCity"));
 
-  constructor(private req: RequestService, private activatedRoute: ActivatedRoute, private message: NzMessageService) {
+  constructor(
+    private router: Router,
+    private req: RequestService,
+    private activatedRoute: ActivatedRoute,
+    private message: NzMessageService
+  ) {
     // 根据url的参数，查询该项目详情
     this.activatedRoute.queryParams.subscribe(queryParam => {
       this.parementUrl['id'] = queryParam.id;
@@ -83,12 +90,12 @@ export class WaterGateComponent implements OnInit {
 
 
   ngOnInit() {
-    
+
     this.req.getData(this.routerApi.getProjectsByArea, { 'areasId': this.parementUrl.id }).subscribe(res => {
       this.totalWater = res['data'];
       // 默认选中第一个
       this.selectWater = this.totalWater[0];
-      this.routerList.push({'name': this.selectWater.name + '信息', link: null})
+      this.routerList.push({ 'name': this.selectWater.name + '信息', link: null })
       // 查询综合评价
       this.comprehensive(this.selectWater.id);
       // 默认回调现状调查，安全复核查询
@@ -365,10 +372,28 @@ export class WaterGateComponent implements OnInit {
     })
   };
 
+  // 菜单栏点击事件
+  menuClick(data: any): void {
+    if (data.cityCode == 100000) {
+      this.routerList.splice(1, this.routerList.length - 1);
+    } else {
+      for (let item in this.routerList) {
+        if (data.cityCode == this.routerList[item]['cityCode']) {
+          this.routerList.splice(Number(item) + 1, this.routerList.length - 1);
+          break;
+        }
+      };
+    }
+    // 本地存储-菜单栏
+    localStorage.setItem("currentCity", JSON.stringify(this.routerList))
+    // 跳转页面
+    this.router.navigateByUrl(data.link);
+  };
+
   // 滚动事件
   topSrcoll($event): void {
     // this.testTop = {'position': 'fixed', 'background': 'red','z-index': '99'}
     // console.log($event);
-  }
+  };
 
 }

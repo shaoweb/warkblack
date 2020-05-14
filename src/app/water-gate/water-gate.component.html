@@ -3,7 +3,7 @@
     <p class="list_menu">
         <span routerLink="/home">导航地图</span><i></i>
         <ng-container *ngFor="let item of routerList; let i = index">
-            <span [routerLink]="item.link" [ngClass]="{'select': (i+1) == routerList.length}">{{item.name}}</span><i
+            <span [ngClass]="{'select': (i+1) == routerList.length}" (click)="menuClick(item)">{{item.name}}</span><i
                 *ngIf="routerList.length > (i + 1)"></i>
         </ng-container>
     </p>
@@ -24,7 +24,7 @@
                     <p><img src="assets/image/yaunxing_lan.png" alt=""><span>检测时间:</span><em
                             class="yellow fr">{{totalData.year}}</em></p>
                     <p><img src="assets/image/yaunxing_lan.png" alt=""><span>是否到期未检:</span><em class="red fr"
-                            [ngClass]="{'red': totalData.state == '否', 'yellow': totalData.state == '是'}">{{totalData.state}}</em>
+                            [ngClass]="{'red': totalData.state == '是', 'yellow': totalData.state == '否'}">{{totalData.state}}</em>
                     </p>
                     <p><img src="assets/image/yaunxing_lan.png" alt=""><span>下次检测时间:</span><em
                             class="yellow fr">{{totalData.next}}</em>

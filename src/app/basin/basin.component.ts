@@ -14,10 +14,10 @@ import * as echarts from 'echarts';
 })
 export class BasinComponent implements OnInit {
 
-  messages:string;
+  messages: string;
 
   constructor(
-    private req: RequestService, 
+    private req: RequestService,
     private message: NzMessageService
   ) { }
 
@@ -190,6 +190,8 @@ export class BasinComponent implements OnInit {
       },
       dataZoom: [{
         type: 'inside',
+        start: this.testing == false ? 15:100,
+        end: this.testing == false ? 75:0,
         xAxisIndex: [0]
       }],
       tooltip: {
@@ -262,7 +264,7 @@ export class BasinComponent implements OnInit {
   // 这个方法由子页面调用-切换页面
   switchTitle(status: any): void {
     this.testing = status;
-    this.title = status == false ? '全国行政区水利工程':'全国流域水利工程';
+    this.title = status == false ? '全国行政区水利工程' : '全国流域水利工程';
     this.routerList[0]['name'] = this.title;
   };
 
@@ -293,7 +295,7 @@ export class BasinComponent implements OnInit {
   };
 
   // 菜单栏点击事件
-  menuClick(data: any): void{
+  menuClick(data: any): void {
     this.mapbox.getBack(data);
   };
 

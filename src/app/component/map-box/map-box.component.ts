@@ -103,8 +103,21 @@ export class MapBoxComponent implements OnInit {
   // 条件查询
   administrativeSelect(): void {
     this.checkedCallback(this.currentCity);
-    let data = { 'rank': this.levnl, 'size': this.sizeOfthe, 'areasId': this.currentCity[this.currentCity.length - 1]['cityCode'] };
-    this.getCountByProvince.emit(data);
+    this.distribution(this.currentCity[this.currentCity.length - 1]['cityCode']);
+    setTimeout(() => {
+      //刷新数据
+      var option = this.myChart.getOption();
+      option.series[0].data = this.searchRefresh(this.person);
+      option.series[1].data = this.searchRefresh(this.person);
+      this.myChart.setOption(option);
+    }, 500)
+  };
+
+  // 条件清空
+  emptyAll(): void{
+    this.levnl = '';
+    this.sizeOfthe = '';
+    this.checkedCallback(this.currentCity);
     this.distribution(this.currentCity[this.currentCity.length - 1]['cityCode']);
     setTimeout(() => {
       //刷新数据

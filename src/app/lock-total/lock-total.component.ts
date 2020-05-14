@@ -834,7 +834,7 @@ export class LockTotalComponent implements OnInit {
     })
   }
 
-  // 线状图的参数配置
+  // 柱状图的参数配置
   columnParameter(xArr: any, data: any): object {
     let option = {
       color: ['#47C978', '#006AE8', '#F8B62D', '#D92A5C'],
@@ -850,6 +850,8 @@ export class LockTotalComponent implements OnInit {
       },
       dataZoom: [{
         type: 'inside',
+        start: 15,
+        end: 75,
         xAxisIndex: [0]
       }],
       tooltip: {
