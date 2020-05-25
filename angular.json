@@ -30,10 +30,13 @@
             ],
             "styles": [
               "src/styles.css",
-              "node_modules/ng-zorro-antd/ng-zorro-antd.min.css"
+              "node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
+              "node_modules/video.js/dist/video-js.min.css"
             ],
             "scripts": [
-              "./node_modules/echarts/dist/echarts.js"
+              "./node_modules/echarts/dist/echarts.js",
+              "./node_modules/video.js/dist/video.min.js",
+              "./node_modules/videojs-flash/dist/videojs-flash.min.js"
             ]
           },
           "configurations": {
@@ -103,10 +106,13 @@
             ],
             "styles": [
               "src/styles.css",
-              "node_modules/ng-zorro-antd/ng-zorro-antd.min.css"
+              "node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
+              "node_modules/video.js/dist/video-js.min.css"
             ],
             "scripts": [
-              "./node_modules/echarts/dist/echarts.js"
+              "./node_modules/echarts/dist/echarts.js",
+              "./node_modules/video.js/dist/video.min.js",
+              "./node_modules/videojs-flash/dist/videojs-flash.min.js"
             ]
           }
         },

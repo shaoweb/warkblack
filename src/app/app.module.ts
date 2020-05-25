@@ -12,7 +12,7 @@ import { WaterGateComponent } from './water-gate/water-gate.component';
 import { RequestService } from "./request.service";
 import { MenuService } from "./meun.service";
 
-import { ImageSliderComponent, ProgressComponent, MapBoxComponent, CategoryComponent, RiverBasionComponent } from './component';
+import { ImageSliderComponent, ProgressComponent, MapBoxComponent, CategoryComponent, RiverBasionComponent, VideoComponent, FigureComponent, TimelineComponent } from './component';
 import { BasinComponent } from './basin/basin.component';
 import { HomeComponent } from './home/home.component';
 import { ContentComponent } from './content/content.component';
@@ -37,6 +37,9 @@ registerLocaleData(zh);
     CategoryComponent,
     RiverBasionComponent,
     RegulatoryComponent,
+    VideoComponent,
+    TimelineComponent,
+    FigureComponent,
   ],
   imports: [
     FormsModule,

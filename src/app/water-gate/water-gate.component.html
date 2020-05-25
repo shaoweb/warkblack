@@ -96,6 +96,9 @@
                     </li>
                 </ul>
             </div>
+            <div class="under_content underCon_thead" [ngClass]="{'select': currentIntroduce.status == 4}">
+                <p>工程档案</p>
+            </div>
         </div>
     </div>
     <!-- 中间 -->
@@ -109,6 +112,7 @@
                         <img class="img_list" [src]="item.imgUrl" alt="">
                     </div>
                 </nz-carousel>
+                <span class="buton_span" (click)="isVisible=true">相关视频</span>
             </div>
         </div>
         <!-- 下 -->
@@ -294,3 +298,7 @@
         </div>
     </div>
 </div>
+<!-- 视频 -->
+<nz-modal [(nzVisible)]="isVisible" nzTitle="相关视频" nzFooter="null" (nzOnCancel)="isVisible=false" (nzOnOk)="isVisible=false">
+    <app-video></app-video>
+  </nz-modal>

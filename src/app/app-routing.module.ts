@@ -6,7 +6,7 @@ import { BasinComponent } from './basin/basin.component';
 import { HomeComponent } from './home/home.component';
 import { ContentComponent } from './content/content.component';
 import { LockTotalComponent } from './lock-total/lock-total.component';
-import { ProgressComponent, RiverBasionComponent } from './component';
+import { ProgressComponent, RiverBasionComponent, FigureComponent, TimelineComponent } from './component';
 import { RegulatoryComponent } from './regulatory/regulatory.component';
 
 const routes: Routes = [
@@ -20,6 +20,8 @@ const routes: Routes = [
     { path: 'waterGate',component: WaterGateComponent},
     { path: 'basin',component: BasinComponent},
     { path: 'lockTotal',component: LockTotalComponent},
+    { path: 'figure',component: FigureComponent},
+    { path: 'timeline',component: TimelineComponent}
   ]}
   
 ];

@@ -60,18 +60,8 @@ export class RequestService {
         let thisData: any = data;  // 需要处理的值
         let res: any;  // 最终值
         // 当code为0时
-        if (thisData['code'] == 0 || thisData['UTF8Encoding'] == true) {
+        if (thisData['code'] == 0 || thisData['UTF8Encoding'] == true || thisData['type'] == 'FeatureCollection') {
             res = thisData; // 给最终值赋值
-        } else if(thisData['code'] === 501){
-            // 清除本地缓存
-            localStorage.removeItem('uid');
-            localStorage.removeItem('acount');
-            localStorage.removeItem('information');
-            localStorage.removeItem('routerIndex');
-            // 跳转登录页面
-            this.router.navigateByUrl('/login');
-            let err = thisData['message'];  // 错误信息
-            throw new Error(err);  // 抛出错误
         } else {
             // 当status不为200时
             let err = thisData['message'];  // 错误信息

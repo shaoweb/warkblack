@@ -73,7 +73,6 @@ export class MapBoxComponent implements OnInit {
         mapData: this.mapData,
         code: this.cityCode
       })
-      console.log
     };
 
     // 默认回调
@@ -87,7 +86,7 @@ export class MapBoxComponent implements OnInit {
     }, 500)
   }
 
-  // 获取水闸地图分布的数据
+  // 获取水闸地图分布的数据 
   distribution(areasId?: any): void {
     let data = { 'rank': this.levnl, 'size': this.sizeOfthe };
     if (areasId) {
@@ -356,7 +355,7 @@ export class MapBoxComponent implements OnInit {
         },
         geo: {
           show: true,
-          roam: false,
+          roam: true,
           map: mapName,
           label: {
             normal: {
@@ -384,6 +383,7 @@ export class MapBoxComponent implements OnInit {
             type: 'map',
             map: mapName,
             geoIndex: 0,
+            roam: true,
             aspectScale: 0.9, //长宽比
             showLegendSymbol: false, // 存在legend时显示
             label: {

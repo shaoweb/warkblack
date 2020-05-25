@@ -1,12 +1,11 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RequestService } from "../request.service";
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
-import { Router } from '@angular/router';
-
-import { APIROUTER } from "../router.api"
+import { APIROUTER } from "../router.api";
+import { VideoComponent } from "../component";
 
 import * as echarts from 'echarts';
 
@@ -17,12 +16,17 @@ import * as echarts from 'echarts';
 })
 export class WaterGateComponent implements OnInit {
 
+  isVisible: boolean = false;
+
   // 获取URL上的参数
   parementUrl: any = {};
   // 选中的水闸
   selectWater: any = {};
   // 由父级获取
   routerList: any = JSON.parse(localStorage.getItem("currentCity"));
+
+  // 映射
+  @ViewChild(VideoComponent, { static: false }) videoCom: VideoComponent;
 
   constructor(
     private router: Router,
@@ -48,7 +52,7 @@ export class WaterGateComponent implements OnInit {
   // 可选菜单
   menuList: any = {
     status: [{ name: '现状调查', status: 1 }, { name: '安全检测', status: 2 }, { name: '安全复核', status: 3 }],
-    introduce: [{ name: '工程概况', status: 1 }, { name: '历史评价', status: 2 }, { name: '历史险情', status: 3 }]
+    introduce: [{ name: '工程概况', status: 1 }, { name: '历史评价', status: 2 }, { name: '历史险情', status: 3 }, { name: '工程档案', status: 4 }]
   }
 
   // 默认菜单

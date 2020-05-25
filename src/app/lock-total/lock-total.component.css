@@ -35,7 +35,7 @@
   height: 50%;
   position: relative;
   overflow: hidden;
-  background: url("/forwcp/assets/image/dikuang_four.png")no-repeat center/100% 100%
+  background: url("/assets/image/dikuang_four.png")no-repeat center/100% 100%
 }
 
 .lock_side>.side_list>h3 {
@@ -192,7 +192,7 @@
   cursor: pointer;
   transition: .5s;
   position: relative;
-  background: url("/forwcp/assets/image/qiehuankuang_off.png")no-repeat center/100% 100%;
+  background: url("/assets/image/qiehuankuang_off.png")no-repeat center/100% 100%;
 }
 
 .lock_side>.lockRight_menu>li>i {
@@ -209,7 +209,7 @@
 .lock_side>.lockRight_menu>li:hover,
 .lock_side>.lockRight_menu>.select {
   color: #41EFF9;
-  background: url("/forwcp/assets/image/qiehuankuagn_on.png")no-repeat center/100% 100%;
+  background: url("/assets/image/qiehuankuagn_on.png")no-repeat center/100% 100%;
 }
 
 .lock_side>.lockRight_box {
@@ -266,7 +266,7 @@
 .side_list>.sidEdge {
   height: 33.33%;
   position: relative;
-  background: url("/forwcp/assets/image/dikuang_four.png")no-repeat center/100% 100%;
+  background: url("/assets/image/dikuang_four.png")no-repeat center/100% 100%;
 }
 
 
@@ -424,7 +424,7 @@
 
 .lockmenu_list>li:hover {
   background-repeat: no-repeat;
-  background-image: url('/forwcp/assets/image/xuanzhong_sijiao.png');
+  background-image: url('/assets/image/xuanzhong_sijiao.png');
   background-position: center;
   background-size: 100% 100%;
 }
