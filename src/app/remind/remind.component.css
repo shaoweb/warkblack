@@ -1,0 +1,79 @@
+.remind_box {
+  height: 50%;
+  overflow: hidden;
+}
+
+select {
+  margin: 1.2rem 12px;
+  width: 20rem;
+  padding-left: 12px;
+  color: #52F1FA;
+  height: 3.2rem;
+  font-size: 1.4rem;
+  border: none;
+  outline: none;
+  background-color: #030B29;
+}
+
+.remind_box>h3 {
+  display: inline-block;
+  margin: 1.2rem 0;
+  font-size: 2rem;
+  background-clip: text;
+  background-image: -webkit-linear-gradient(bottom, #EC9C45, #E4C072);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+}
+
+.table_box {
+  height: 33rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+table>thead>tr,
+table>tbody>tr {
+  cursor: pointer;
+  transition: all .3s initial;
+  margin-bottom: 12px;
+  background-color: rgba(15, 207, 247, .1);
+}
+
+table>thead>tr>th,
+table>tbody>tr>td {
+  height: 4rem;
+  padding: 0 1rem;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: normal;
+}
+
+table>thead>tr>th {
+  color: #EBA04A;
+}
+
+table>tbody>tr>td {
+  color: #FFFFFF;
+  vertical-align: middle;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: keep-all;
+  white-space: nowrap;
+}
+
+table>thead>tr>th:nth-child(1),
+table>tbody>tr>td:nth-child(1) {
+  width: 60px;
+}
+
+table>tbody>tr:hover {
+  background-repeat: no-repeat;
+  background-image: url('/assets/image/sijiao_lan.png');
+  background-position: center;
+  background-size: 100% 100%;
+}

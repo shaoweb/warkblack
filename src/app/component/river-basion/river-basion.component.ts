@@ -61,6 +61,13 @@ export class RiverBasionComponent implements OnInit {
     this.switchTitle.emit(status);
   };
 
+  // 条件清空
+  emptyAll(): void{
+    this.levnl = '';
+    this.sizeOfthe = '';
+    this.riverLevenl();
+  };
+
   // 流域等级查询
   riverLevenl(): void {
     let parament = { 'rank': this.levnl, 'size': this.sizeOfthe };

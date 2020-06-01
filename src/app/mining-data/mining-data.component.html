@@ -1,0 +1,15 @@
+<!-- 面包屑 -->
+<div class="menu clearfix">
+    <p class="list_menu">
+        <span routerLink="/home">导航地图</span><i></i>
+        <ng-container *ngFor="let item of routerList; let i = index">
+            <span [ngClass]="{'select': (i+1) == routerList.length}" (click)="menuClick(item)">{{item.name}}</span><i
+                *ngIf="routerList.length > (i + 1)"></i>
+        </ng-container>
+    </p>
+</div>
+<!-- 内容 -->
+<div class="content">
+    <app-timeline [hidden]="status" (children)="childrenView($event)"></app-timeline>
+    <app-figure [hidden]="!status" [information]="routerList"></app-figure>
+</div>

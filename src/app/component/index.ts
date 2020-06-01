@@ -6,3 +6,4 @@ export * from './river-basion';
 export * from './video';
 export * from './figure';
 export * from './timeline';
+export * from './china-threed';

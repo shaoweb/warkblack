@@ -35,6 +35,7 @@
             ],
             "scripts": [
               "./node_modules/echarts/dist/echarts.js",
+              "./node_modules/echarts-gl/dist/echarts-gl.min.js",
               "./node_modules/video.js/dist/video.min.js",
               "./node_modules/videojs-flash/dist/videojs-flash.min.js"
             ]
@@ -59,8 +60,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "5mb",
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -111,6 +112,7 @@
             ],
             "scripts": [
               "./node_modules/echarts/dist/echarts.js",
+              "./node_modules/echarts-gl/dist/echarts-gl.min.js",
               "./node_modules/video.js/dist/video.min.js",
               "./node_modules/videojs-flash/dist/videojs-flash.min.js"
             ]

@@ -6,8 +6,12 @@ import { BasinComponent } from './basin/basin.component';
 import { HomeComponent } from './home/home.component';
 import { ContentComponent } from './content/content.component';
 import { LockTotalComponent } from './lock-total/lock-total.component';
-import { ProgressComponent, RiverBasionComponent, FigureComponent, TimelineComponent } from './component';
 import { RegulatoryComponent } from './regulatory/regulatory.component';
+import { MiningDataComponent } from './mining-data/mining-data.component';
+import { ReportAnalysisComponent } from './report-analysis/report-analysis.component';
+import { RemindComponent } from './remind/remind.component';
+import { NewsComponent } from './news/news.component';
+import { ProgressComponent, RiverBasionComponent, FigureComponent, TimelineComponent, ChinaThreedComponent } from './component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -20,9 +24,15 @@ const routes: Routes = [
     { path: 'waterGate',component: WaterGateComponent},
     { path: 'basin',component: BasinComponent},
     { path: 'lockTotal',component: LockTotalComponent},
+  ]},
+  { path: 'miningData',component: MiningDataComponent, children: [
     { path: 'figure',component: FigureComponent},
     { path: 'timeline',component: TimelineComponent}
-  ]}
+  ]},
+  { path: 'chinathreed',component: ChinaThreedComponent},
+  { path: 'reportAnalysis',component: ReportAnalysisComponent},
+  { path: 'remind',component: RemindComponent},
+  { path: 'news',component: NewsComponent}
   
 ];
 

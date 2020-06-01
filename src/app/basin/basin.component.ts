@@ -141,17 +141,22 @@ export class BasinComponent implements OnInit {
   // 圆的参数配置
   stackParameter(title: string, data: any): object {
     let option = {
+      tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b}: {c} ({d}%)'
+      },
       series: [
         {
           name: title,
           type: 'pie',
           radius: ['40%', '50%'],
+          avoidLabelOverlap: false,
           label: {
-            position: 'outside',
-            formatter: '{b}\n{@2012} ({d}%)'
+            show: false,
+            position: 'center'
           },
           labelLine: {
-            show: true,
+            show: false
           },
           itemStyle: {
             color: function (params) {
@@ -190,8 +195,8 @@ export class BasinComponent implements OnInit {
       },
       dataZoom: [{
         type: 'inside',
-        start: this.testing == false ? 15:100,
-        end: this.testing == false ? 75:0,
+        start: this.testing == false ? 15 : 100,
+        end: this.testing == false ? 75 : 0,
         xAxisIndex: [0]
       }],
       tooltip: {

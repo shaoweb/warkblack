@@ -1,0 +1,128 @@
+<!-- 面包屑 -->
+<div class="menu clearfix">
+    <p class="list_menu">
+        <span routerLink="/home">导航地图</span><i></i>
+        <span routerLink="/reportAnalysis">分析报告</span>
+    </p>
+</div>
+<!-- 内容 -->
+<div class="content" id="table">
+    <!-- 搜索条件 -->
+    <ul class="searchBox nz-row">
+        <li class="search_li fl">
+            <select [(ngModel)]="currentLevel.province" (ngModelChange)="onExpandChange($event)">
+                <option value=''>请选择省</option>
+                <option *ngFor="let data of levelThree.province" [value]="data.id">{{data.name}}</option>
+            </select>
+            <select [(ngModel)]="currentLevel.city" (ngModelChange)="onChangeCounty($event)">
+                <option value=''>请选择市</option>
+                <option *ngFor="let data of levelThree.city" [value]="data.id">{{data.name}}</option>
+            </select>
+            <select [(ngModel)]="currentLevel.area">
+                <option value=''>请选择区/县</option>
+                <option *ngFor="let data of levelThree.area" [value]="data.id">{{data.name}}</option>
+            </select>
+            <input type="text" placeholder="请输入工程名称">
+        </li>
+        <li class="search_btn fl">
+            <button class="para_btn search" (click)="search()">查找</button>
+            <button class="para_btn reset" (click)="reset()">重置</button>
+        </li>
+    </ul>
+    <!-- 操作 -->
+    <div class="operation">
+        <button class="para_btn reset" (click)="export()">导出</button>
+    </div>
+    <!-- 表格 -->
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    <span [ngClass]="{'primary': selectTotaldata == 0, 'select': selectTotaldata == 1, 'selectAll': selectTotaldata == 2}" (click)="checkAll()"></span>
+                </th>
+                <th>工程名称</th>
+                <th>工程等级</th>
+                <th>工程规模</th>
+                <th>工程类别</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of dataAll; let i = index">
+                <td>
+                    <span [ngClass]="{'primary': data.select == false, 'selectAll': data.select == true}" (click)="refreshStatus(data)"></span>
+                </td>
+                <td>{{data.name}}</td>
+                <td>{{data.rank}}</td>
+                <td>{{data.size}}</td>
+                <td>{{data.level}}</td>
+                <td><i class="icon" (click)="getProjectInformation(data.id)">详情</i></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="page_box">
+        <nz-pagination [nzHideOnSinglePage]="true" [nzPageIndex]="parament.page" [nzTotal]="totalCount"
+            (nzPageIndexChange)="pageChange($event)"></nz-pagination>
+    </div>
+</div>
+<!-- 详情 -->
+<nz-drawer [nzVisible]="visible" [nzWidth]="640" [nzClosable]="false" (nzOnClose)="visible=false">
+    <nz-descriptions [nzColumn]="2" [nzTitle]="projectInformation.name">
+        <nz-descriptions-item nzTitle="检测单位" *ngIf="projectInformation.unit" [nzSpan]="1">{{ projectInformation.unit }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="所属流域" *ngIf="!projectInformation.unit" [nzSpan]="1">
+            {{ projectInformation.waterDesc }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="所属地区" [nzSpan]="1">{{ projectInformation.areaDesc }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="工程等别" [nzSpan]="1">{{ projectInformation.rank }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="工程规模" [nzSpan]="1">{{ projectInformation.size }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="工程类别" [nzSpan]="1">{{ projectInformation.level }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="设计流量" [nzSpan]="1">{{ projectInformation.flow }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="建造时间" [nzSpan]="1">{{ projectInformation.buildTime }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="间隔时间" [nzSpan]="1">{{ projectInformation.time }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="工程概况" [nzSpan]="2">{{ projectInformation.overview }}</nz-descriptions-item>
+    </nz-descriptions>
+    <nz-divider></nz-divider>
+    <nz-descriptions [nzColumn]="2" nzTitle="历次工程险情信息"></nz-descriptions>
+    <nz-table #peojectRiskTable nzSize="small" [nzScroll]="{ y: '340px' }" [nzFrontPagination]="false"
+        [nzData]="projectInformation.ds">
+        <thead>
+            <tr>
+                <th nzAlign="center" nzWidth="46px">序号</th>
+                <th nzWidth="150px">险情时间</th>
+                <th>险情内容</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of peojectRiskTable.data; let i = index">
+                <td nzAlign="center">{{i+1}}</td>
+                <td>{{data.date}}</td>
+                <td>{{data.content}}</td>
+            </tr>
+        </tbody>
+    </nz-table>
+    <nz-divider></nz-divider>
+    <nz-descriptions [nzColumn]="2" nzTitle="历次维修加固信息"></nz-descriptions>
+    <nz-table #maintenanceTable nzSize="small" [nzScroll]="{ y: '340px' }" [nzFrontPagination]="false"
+        [nzData]="projectInformation.ms">
+        <thead>
+            <tr>
+                <th nzAlign="center" nzWidth="46px">序号</th>
+                <th nzWidth="150px">维修/加固时间</th>
+                <th>维修/加固原因</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of maintenanceTable.data; let i = index">
+                <td nzAlign="center">{{i+1}}</td>
+                <td>{{data.date}}</td>
+                <td>{{data.reason}}</td>
+            </tr>
+        </tbody>
+    </nz-table>
+    <nz-divider></nz-divider>
+    <nz-descriptions [nzColumn]="2" nzTitle="工程图片"></nz-descriptions>
+    <ul class="img_list">
+        <li class="fl" *ngFor="let data of projectInformation.imgs"><img [src]="data" alt=""></li>
+    </ul>
+</nz-drawer>

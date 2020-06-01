@@ -454,17 +454,20 @@ export class LockTotalComponent implements OnInit {
   // 综合评价-圆的参数配置
   sideTotal(title: string, data: any): object {
     let option = {
+      tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b}: {c} ({d}%)'
+      },
       series: [
         {
           name: title,
           type: 'pie',
           radius: ['30%', '40%'],
           label: {
-            position: 'outside',
-            formatter: '{b}\n{@2012} ({d}%)'
+            show: false
           },
           labelLine: {
-            show: true,
+            show: false
           },
           itemStyle: {
             color: function (params) {

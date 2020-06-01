@@ -6,6 +6,7 @@ import { RequestService } from "../../request.service";
 import { APIROUTER } from "../../router.api"
 import * as echarts from 'echarts';
 import * as $ from 'jquery';
+import { DomSanitizer } from '@angular/platform-browser';
 declare let AMap: any;
 declare let AMapUI: any;
 
@@ -16,7 +17,7 @@ declare let AMapUI: any;
 })
 export class MapBoxComponent implements OnInit {
 
-  constructor(private req: RequestService, private message: NzMessageService, private router: Router) { }
+  constructor(private req: RequestService, private message: NzMessageService, private router: Router, private sanitizer: DomSanitizer) { }
 
   // 定义输出：
   @Output('checked') checkedBack = new EventEmitter<any>();
@@ -59,6 +60,9 @@ export class MapBoxComponent implements OnInit {
   person: any;
   riverBasion: any;
 
+  downloadJsonHref: any;
+  resJsonResponse: any;
+
   ngOnInit() {
     this.cityCode = this.currentCity[this.currentCity.length - 1]['cityCode']
     if (this.currentCity.length > 1) {
@@ -85,6 +89,13 @@ export class MapBoxComponent implements OnInit {
       this.checkedCallback(this.currentCity)
     }, 500)
   }
+
+  // json 下载
+  generateDownloadJsonUri(data: any) {
+    var theJSON = JSON.stringify(data); 
+    var uri = this.sanitizer.bypassSecurityTrustUrl('data:text/json; charset = UTF-8,' + encodeURIComponent(theJSON)); 
+    this.downloadJsonHref = uri; 
+   } 
 
   // 获取水闸地图分布的数据 
   distribution(areasId?: any): void {
@@ -189,38 +200,6 @@ export class MapBoxComponent implements OnInit {
       }
     });
     this.setSearchOption(data, data.level, data.cityCode);
-    // var data;
-    // this.distribution(code);
-    // if (code == 100000) {
-    //   this.mapData = this.deepTree[1].mapData;
-    //   this.deepTree.splice(1, this.deepTree.length - 1);
-    //   this.currentCity.splice(1, this.currentCity.length - 1);
-    //   this.checkedCallback(this.currentCity);
-    //   this.loadMapData(code);
-    // } else {
-    //   for (let item in this.deepTree) {
-    //     if (code == this.deepTree[item]['code']) {
-    //       data = this.currentCity[item];
-    //       this.mapData = this.deepTree[Number(item) + 1].mapData;
-    //       this.deepTree.splice(Number(item) + 1, this.deepTree.length - 1);
-    //       this.currentCity.splice(Number(item) + 1, this.currentCity.length - 1);
-    //       this.checkedCallback(this.currentCity);
-    //       break;
-    //     }
-    //   };
-    //   this.district.setLevel(data.level); //行政区级别
-    //   this.district.setExtensions('all');
-    //   //按照adcode进行查询可以保证数据返回的唯一性
-    //   this.district.search(code, (status, result) => {
-    //     if (status === 'complete') {
-    //       this.deepTree.push({
-    //         mapData: this.mapData,
-    //         code: code
-    //       });
-    //       this.getTotal(result.districtList[0], data.level, code);
-    //     }
-    //   });
-    // }
   };
 
   //地图点击事件
@@ -273,6 +252,8 @@ export class MapBoxComponent implements OnInit {
         if (error) { return; }
         let mapJson = {};
         mapJson['features'] = areaNode.getSubFeatures();
+        // that.resJsonResponse = mapJson;
+        that.generateDownloadJsonUri(mapJson)
         that.loadMap(that.cityName, mapJson);
         that.geoJsonData = mapJson;
       });
@@ -330,6 +311,7 @@ export class MapBoxComponent implements OnInit {
   // 地图参数配置
   loadMap(mapName, data): void {
     if (data) {
+      console.log(mapName);
       echarts.registerMap(mapName, data);
       // echarts 参数配置
       var max = 480, min = 9; // todo 
@@ -510,6 +492,7 @@ export class MapBoxComponent implements OnInit {
         });
       }
     };
+    console.log(res);
     return res;
   };
 

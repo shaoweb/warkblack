@@ -1,0 +1,65 @@
+<!-- 面包屑 -->
+<div class="menu clearfix">
+    <p class="list_menu">
+        <span routerLink="/home">导航地图</span><i></i>
+        <span routerLink="/remind">提醒服务</span>
+    </p>
+</div>
+<div class="content">
+    <div class="remind_box">
+        <h3>到期未检列表</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th [ngStyle]="{'width': '50%'}">工程名称</th>
+                    <th [ngStyle]="{'width': '30%'}">上次检测时间</th>
+                    <th>间隔时间</th>
+                </tr>
+            </thead>
+        </table>
+        <div class="table_box">
+            <table>
+                <tbody>
+                    <tr *ngFor="let item of testData; let i = index">
+                        <td>{{i+1}}</td>
+                        <td [ngStyle]="{'width': '50%'}">{{item.name}}</td>
+                        <td [ngStyle]="{'width': '30%'}">{{item.date}}</td>
+                        <td>{{item.time}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="remind_box">
+        <h3>病患工程列表</h3>
+        <select class="fr" [(ngModel)]="paramenter.type">
+            <option value=''>全部工程</option>
+            <option value="1">水闸</option>
+            <option value="2">大坝</option>
+            <option value="3">堤防</option>
+            <option value="4">隧洞</option>
+            <option value="5">泵站</option>
+        </select>
+        <table>
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th [ngStyle]="{'width': '50%'}">工程名称</th>
+                    <th>水利工程类型</th>
+                </tr>
+            </thead>
+        </table>
+        <div class="table_box">
+            <table>
+                <tbody>
+                    <tr *ngFor="let item of testData; let i = index">
+                        <td>{{i+1}}</td>
+                        <td [ngStyle]="{'width': '50%'}">{{item.name}}</td>
+                        <td>{{item.type}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

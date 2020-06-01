@@ -1,0 +1,202 @@
+.icon {
+  color: #EBA04A;
+  text-decoration: underline;
+}
+
+.para_btn {
+  color: #FFF;
+  font-size: 1.4rem;
+  padding: .3rem 1.2rem;
+  text-align: center;
+  margin-right: 12px;
+  outline: none;
+  cursor: pointer;
+  border: 1px solid #41EFF9;
+}
+
+.search {
+  background-color: #41EFF9;
+}
+
+.reset {
+  background: rgba(65, 239, 249, 0.2);
+}
+
+.page_box {
+  text-align: center;
+  margin-top: 24px;
+}
+
+.primary,
+.select,
+.selectAll {
+  display: inline-block;
+  width: 1.6rem;
+  height: 1.6rem;
+  position: relative;
+  border: 1px solid #41EFF9;
+}
+
+
+.selectAll {
+  background-color: #41EFF9;
+}
+
+.select::before {
+  display: inline-block;
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: .8rem;
+  height: .8rem;
+  margin-top: -.4rem;
+  margin-left: -.4rem;
+  background-color: #41EFF9;
+  clear: both;
+  overflow: hidden;
+}
+
+.selectAll::before {
+  color: #FFF;
+  display: inline-block;
+  content: "✔";
+  position: absolute;
+  top: 20%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  line-height: .8rem;
+  transform: rotate(15deg);
+  clear: both;
+  overflow: hidden;
+}
+
+.content>table {
+  width: 100%;
+  border-collapse: separate;
+}
+
+.searchBox {
+  padding: 12px;
+  margin: 12px 0 16px;
+  background-color: rgba(15, 207, 247, .1);
+  overflow: hidden;
+}
+
+.searchBox>li {
+  margin-left: 12px;
+  overflow: hidden;
+}
+
+.searchBox>.search_li {
+  max-width: 85%;
+}
+
+.searchBox>.search_btn {
+  width: 10%;
+}
+
+.searchBox>li>select,
+.searchBox>li>input {
+  width: 20rem;
+  padding-left: 12px;
+  color: #52F1FA;
+  height: 3.2rem;
+  font-size: 1.4rem;
+  border: none;
+  outline: none;
+  background-color: #030B29;
+  margin-right: 12px;
+}
+
+table>thead>tr,
+table>tbody>tr {
+  cursor: pointer;
+  transition: all .3s initial;
+  margin-bottom: 12px;
+  background-color: rgba(15, 207, 247, .1);
+}
+
+table>thead>tr>th,
+table>tbody>tr>td {
+  height: 4rem;
+  padding: 0 1rem;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: normal;
+}
+
+table>thead>tr>th {
+  color: #EBA04A;
+}
+
+table>tbody>tr>td {
+  color: #FFFFFF;
+  vertical-align: middle;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: keep-all;
+  white-space: nowrap;
+}
+
+table>thead>tr>th:nth-child(1),
+table>tbody>tr>td:nth-child(1) {
+  width: 60px;
+}
+
+table>tbody>tr:hover,
+.searchBox {
+  background-repeat: no-repeat;
+  background-image: url('/assets/image/sijiao_lan.png');
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+/* 详情弹框 */
+.title {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.85);
+  line-height: 24px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.item-wrap {
+  font-size: 14px;
+  line-height: 22px;
+  margin-bottom: 7px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.label {
+  margin-right: 8px;
+  display: inline-block;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.img_list {
+  overflow: hidden;
+}
+
+.img_list>li {
+  width: 33%;
+  margin-right: .5%;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.img_list>li:nth-child(3n) {
+  margin-right: 0;
+}
+
+.img_list>li>img {
+  width: 100%;
+}
+
+.operation{
+  margin: 1.2rem 0;
+  overflow: hidden;
+}
+

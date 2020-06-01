@@ -1,8 +1,13 @@
 // http://192.168.1.130:8080/wcp/ http://58.246.211.154:14200/wcp/
 const API = 'http://58.246.211.154:14200/wcp/';
+// const API = 'http://192.168.1.136:8080/wcp/';
 
 // 接口配置
 export const APIROUTER = {
+    getProjects: API + 'pro/getProjects', // 分析报告-查询所有工程
+    getProjectInformation: API + 'pro/getProject', // 分析报告-查询某个项目的详细信息
+    getAreaInfoTree: API + 'area/getAreaInfoTree', // 分析报告-省市区三级联动
+    exportProDetail: API + 'excel/exportProDetail', // 分析报告-导出
     getSurvey: API + 'data/getSurvey',// 现状调查
     getProject: API + 'data/getProject', //查询工程信息
     getSurveyValues: API + 'data/getSurveyValues', //查询现状逐次分析，安全复核

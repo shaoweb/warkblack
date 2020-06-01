@@ -21,6 +21,7 @@
     "@angular/router": "~8.2.11",
     "@types/jquery": "^3.3.33",
     "echarts": "^4.6.0",
+    "echarts-gl": "^1.1.1",
     "jquery": "^3.4.1",
     "ng-zorro-antd": "^8.5.2",
     "ngx-echarts": "^4.2.2",

@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
 import { HashLocationStrategy, LocationStrategy, registerLocaleData } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,12 +13,16 @@ import { WaterGateComponent } from './water-gate/water-gate.component';
 import { RequestService } from "./request.service";
 import { MenuService } from "./meun.service";
 
-import { ImageSliderComponent, ProgressComponent, MapBoxComponent, CategoryComponent, RiverBasionComponent, VideoComponent, FigureComponent, TimelineComponent } from './component';
+import { ImageSliderComponent, ProgressComponent, MapBoxComponent, CategoryComponent, RiverBasionComponent, VideoComponent, FigureComponent, TimelineComponent, ChinaThreedComponent } from './component';
 import { BasinComponent } from './basin/basin.component';
 import { HomeComponent } from './home/home.component';
 import { ContentComponent } from './content/content.component';
 import { LockTotalComponent } from './lock-total/lock-total.component';
 import { RegulatoryComponent } from './regulatory/regulatory.component';
+import { MiningDataComponent } from './mining-data/mining-data.component';
+import { ReportAnalysisComponent } from './report-analysis/report-analysis.component';
+import { RemindComponent } from './remind/remind.component';
+import { NewsComponent } from './news/news.component';
 
 /** 配置 angular i18n **/
 import zh from '@angular/common/locales/zh';
@@ -40,6 +45,11 @@ registerLocaleData(zh);
     VideoComponent,
     TimelineComponent,
     FigureComponent,
+    MiningDataComponent,
+    ChinaThreedComponent,
+    ReportAnalysisComponent,
+    RemindComponent,
+    NewsComponent,
   ],
   imports: [
     FormsModule,
@@ -47,7 +57,8 @@ registerLocaleData(zh);
     AppRoutingModule,
     HttpClientModule,
     NgxEchartsModule,
-    NgZorroAntdModule
+    NgZorroAntdModule,
+    BrowserAnimationsModule
   ],
   providers: [
     RequestService,
