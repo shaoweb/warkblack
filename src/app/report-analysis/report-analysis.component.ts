@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { WaterGateComponent } from '../water-gate/water-gate.component';
 
 import { RequestService } from "../request.service";
 import { APIROUTER } from "../router.api"
@@ -15,6 +16,8 @@ export class ReportAnalysisComponent implements OnInit {
     private req: RequestService,
     private message: NzMessageService
   ) { }
+
+  @ViewChild(WaterGateComponent, { static: true }) watergate: WaterGateComponent;
 
   /**
    * 接口
@@ -33,7 +36,7 @@ export class ReportAnalysisComponent implements OnInit {
   visible: boolean = false;
   dataAll: any;
   projectInformation: any = {};
-  totalCount: number = 10;
+  totalCount: number = 0;
 
   /**
    * 总选择
@@ -44,6 +47,11 @@ export class ReportAnalysisComponent implements OnInit {
   selectTotaldata: number = 2; // 0：没有选中的，1：有选中的，2：全部选中
   selectAlldata: any = [];
   totalAlldata: any = [];
+
+  /**
+   * 详情
+   * */ 
+  information: boolean = true;
 
   ngOnInit() {
     let height = document.getElementById('table').clientHeight | document.getElementById('table').offsetHeight;
@@ -95,8 +103,9 @@ export class ReportAnalysisComponent implements OnInit {
   // 查询某个项目的详情
   getProjectInformation(projectId: any): void {
     this.req.postData(this.routerApi.getProjectInformation, { 'id': projectId }).subscribe(res => {
-      this.visible = true;
+      this.information = false;
       this.projectInformation = res['data'];
+      this.watergate.fathFunction(res['data']);
     }, error => {
       this.message.create('error', error);
     })
@@ -128,15 +137,23 @@ export class ReportAnalysisComponent implements OnInit {
 
   // 数据发生变化时
   currentPageDataChange(): number {
-    var status = 0;
-    for(let item in this.dataAll){
-      let index = this.selectAlldata.indexOf(this.dataAll[item]['id']);
-      if(index == -1){
-        Number(item) == 0 ? status = 0 : status = 1;
-        return status;
+    let status = 0;
+    let length = 0;
+    if (this.selectAlldata.length == 0) {
+      return status = 0;
+    } else {
+      for (var i = 0; i < this.dataAll.length; i++) {
+        let index = this.selectAlldata.indexOf(this.dataAll[i]['id']);
+        if (index > -1) {
+          length++
+        }
+      };
+      if(length != 0 && length == this.dataAll.length){
+        return status = 2;
+      }else{
+        return status = 1;
       }
     }
-    return status = 2;
   };
 
   // 单选
@@ -174,10 +191,10 @@ export class ReportAnalysisComponent implements OnInit {
   };
 
   // 导出
-  export(): void{
-    if(this.selectAlldata.length == 0){
-      this.message.create('warning','请选择要导出的数据');
-    }else{
+  export(): void {
+    if (this.selectAlldata.length == 0) {
+      this.message.create('warning', '请选择要导出的数据');
+    } else {
       window.open(this.routerApi.exportProDetail + "?ids=" + this.selectAlldata)
     }
   };

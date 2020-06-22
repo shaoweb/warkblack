@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { Router } from '@angular/router';
 
 import { RequestService } from "../request.service";
 import { MapBoxComponent, RiverBasionComponent } from '../component';
+import { WaterGateComponent } from '../water-gate/water-gate.component';
 
 import { APIROUTER } from "../router.api"
 import * as echarts from 'echarts';
@@ -18,10 +20,12 @@ export class BasinComponent implements OnInit {
 
   constructor(
     private req: RequestService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private router: Router
   ) { }
 
   @ViewChild(MapBoxComponent, { static: false }) mapbox: MapBoxComponent;
+  @ViewChild(WaterGateComponent, { static: true }) watergate: WaterGateComponent;
   @ViewChild(RiverBasionComponent, { static: true }) riverbasion: RiverBasionComponent;
 
   // 接口
@@ -38,11 +42,12 @@ export class BasinComponent implements OnInit {
 
   // 标题
   title: any = '全国行政区水利工程';
-  routerList: any = [];
+  routerList: any = JSON.parse(localStorage.getItem("routerList")) == null ? [{ 'name': '全国行政区水利工程', link: '/content/basin', 'areasId': '' }] : JSON.parse(localStorage.getItem("routerList"));
 
   // 其他类的数据
   otherData: any = {};
   testing: boolean = false;
+  information: boolean = true;
 
   ngOnInit() {
     // 随机数的生成
@@ -78,7 +83,7 @@ export class BasinComponent implements OnInit {
     }, error => {
       this.message.create('error', `${error}`);
     })
-  }
+  };
 
   // 水闸信息的查询--省份
   getTypeCount(id?: any): void {
@@ -118,7 +123,7 @@ export class BasinComponent implements OnInit {
       echarts.init(document.getElementById("proporTotalIng")).setOption(this.stackParameter('隧洞', arr), true);
       echarts.init(document.getElementById("proporTotaltion")).setOption(this.stackParameter('泵站', arr), true);
     })
-  }
+  };
 
   // 流域等级查询
   getCountByWater(evnet): void {
@@ -136,7 +141,7 @@ export class BasinComponent implements OnInit {
     }, error => {
       console.log(error);
     })
-  }
+  };
 
   // 圆的参数配置
   stackParameter(title: string, data: any): object {
@@ -177,7 +182,7 @@ export class BasinComponent implements OnInit {
       ]
     };
     return option;
-  }
+  };
 
   // 柱状图的参数配置
   columnParameter(xArr: any, data: any): object {
@@ -232,7 +237,7 @@ export class BasinComponent implements OnInit {
       series: data
     };
     return option
-  }
+  };
 
   // 查询省，市，区（县）的逐年分析
   selectProvinces(selectId: any): void {
@@ -249,22 +254,31 @@ export class BasinComponent implements OnInit {
     }, error => {
       this.message.create('error', `${error}`);
     })
-  }
+  };
 
   // 这个方法由子页面调用
-  checkedBack(data: any) {
-    var event = data[data.length - 1];
+  checkedBack(event: any) {
     this.title = event.name;
-    this.currentProvinces = event.cityCode;
-    this.getTypeCount(event.cityCode);
+    this.currentProvinces = event.areasId;
+    this.getTypeCount(event.areasId);
     this.randomData();
-    if (event.cityCode != 100000) {
-      this.selectProvinces(event.cityCode)
+    if (event.areasId != 100000) {
+      this.selectProvinces(event.areasId)
     } else {
       this.getCountByProvince(event);
     }
-    this.routerList = data;
-  }
+    this.routerList.push(event);
+    if (this.routerList.length > 1) {
+      for (var i = 0; i < this.routerList.length; i++) {
+        for (var e = i + 1; e < this.routerList.length; e++) {
+          if (this.routerList[i].areasId == this.routerList[e].areasId) {
+            this.routerList.splice(e, 1);
+            e--;
+          }
+        }
+      }
+    }
+  };
 
   // 这个方法由子页面调用-切换页面
   switchTitle(status: any): void {
@@ -300,8 +314,36 @@ export class BasinComponent implements OnInit {
   };
 
   // 菜单栏点击事件
-  menuClick(data: any): void {
-    this.mapbox.getBack(data);
+  menuClick(index: number): void {
+    this.information = true;
+    for (let item in this.routerList) {
+      if (this.routerList[index].areasId == this.routerList[item]['areasId']) {
+        this.routerList.splice(Number(item) + 1, this.routerList.length - 1);
+        break;
+      }
+    };
+    if (this.routerList[index]['areasId']) {
+      this.mapbox.cityId(this.routerList[index]);
+    } else {
+      this.getCountByProvince();
+      this.mapbox.returnEchart(this.routerList[index]);
+    };
   };
+
+  // 显示详情
+  informationShow(event: any): void {
+    this.information = false;
+    this.watergate.fathFunction(event);
+    // 本地存储
+    localStorage.setItem('routerList',JSON.stringify(this.routerList));
+  };
+
+  // 跳转水闸工程
+  routerUrl(): void{
+    // 本地存储
+    localStorage.setItem('routerList',JSON.stringify(this.routerList));
+    this.router.navigate(['/content/lockTotal']);
+  };
+
 
 }

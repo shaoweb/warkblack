@@ -13,7 +13,6 @@ import { WaterGateComponent } from './water-gate/water-gate.component';
 import { RequestService } from "./request.service";
 import { MenuService } from "./meun.service";
 
-import { ImageSliderComponent, ProgressComponent, MapBoxComponent, CategoryComponent, RiverBasionComponent, VideoComponent, FigureComponent, TimelineComponent, ChinaThreedComponent } from './component';
 import { BasinComponent } from './basin/basin.component';
 import { HomeComponent } from './home/home.component';
 import { ContentComponent } from './content/content.component';
@@ -23,6 +22,7 @@ import { MiningDataComponent } from './mining-data/mining-data.component';
 import { ReportAnalysisComponent } from './report-analysis/report-analysis.component';
 import { RemindComponent } from './remind/remind.component';
 import { NewsComponent } from './news/news.component';
+import { NamePipPipe, NewsInformationComponent, NewsContentComponent, ImageSliderComponent, ProgressComponent, MapBoxComponent, CategoryComponent, RiverBasionComponent, VideoComponent, FigureComponent, TimelineComponent, ChinaThreedComponent } from './component';
 
 /** 配置 angular i18n **/
 import zh from '@angular/common/locales/zh';
@@ -50,6 +50,9 @@ registerLocaleData(zh);
     ReportAnalysisComponent,
     RemindComponent,
     NewsComponent,
+    NewsContentComponent,
+    NewsInformationComponent,
+    NamePipPipe,
   ],
   imports: [
     FormsModule,
@@ -63,7 +66,7 @@ registerLocaleData(zh);
   providers: [
     RequestService,
     MenuService,
-    {provide: LocationStrategy, useClass: HashLocationStrategy},
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: NZ_I18N, useValue: zh_CN }
   ],
   bootstrap: [AppComponent]

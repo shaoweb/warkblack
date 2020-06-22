@@ -2,11 +2,12 @@
 <div class="menu clearfix">
     <p class="list_menu">
         <span routerLink="/home">导航地图</span><i></i>
-        <span routerLink="/reportAnalysis">分析报告</span>
+        <span (click)="information=true">分析报告</span><i [hidden]="information"></i>
+        <span [hidden]="information" (click)="information=false">{{projectInformation.name}}</span>
     </p>
 </div>
 <!-- 内容 -->
-<div class="content" id="table">
+<div class="content" [hidden]="!information" id="table">
     <!-- 搜索条件 -->
     <ul class="searchBox nz-row">
         <li class="search_li fl">
@@ -38,7 +39,9 @@
         <thead>
             <tr>
                 <th>
-                    <span [ngClass]="{'primary': selectTotaldata == 0, 'select': selectTotaldata == 1, 'selectAll': selectTotaldata == 2}" (click)="checkAll()"></span>
+                    <span
+                        [ngClass]="{'primary': selectTotaldata == 0, 'select': selectTotaldata == 1, 'selectAll': selectTotaldata == 2}"
+                        (click)="checkAll()"></span>
                 </th>
                 <th>工程名称</th>
                 <th>工程等级</th>
@@ -50,7 +53,8 @@
         <tbody>
             <tr *ngFor="let data of dataAll; let i = index">
                 <td>
-                    <span [ngClass]="{'primary': data.select == false, 'selectAll': data.select == true}" (click)="refreshStatus(data)"></span>
+                    <span [ngClass]="{'primary': data.select == false, 'selectAll': data.select == true}"
+                        (click)="refreshStatus(data)"></span>
                 </td>
                 <td>{{data.name}}</td>
                 <td>{{data.rank}}</td>
@@ -61,11 +65,13 @@
         </tbody>
     </table>
     <div class="page_box">
-        <nz-pagination [nzHideOnSinglePage]="true" [nzPageIndex]="parament.page" [nzTotal]="totalCount"
-            (nzPageIndexChange)="pageChange($event)"></nz-pagination>
+        <nz-pagination [nzHideOnSinglePage]="true" [nzPageIndex]="parament.page" [nzPageSize]="parament.count"
+            [nzTotal]="totalCount" (nzPageIndexChange)="pageChange($event)"></nz-pagination>
     </div>
 </div>
 <!-- 详情 -->
+<app-water-gate [hidden]="information"></app-water-gate>
+<!-- 详情-废弃 -->
 <nz-drawer [nzVisible]="visible" [nzWidth]="640" [nzClosable]="false" (nzOnClose)="visible=false">
     <nz-descriptions [nzColumn]="2" [nzTitle]="projectInformation.name">
         <nz-descriptions-item nzTitle="检测单位" *ngIf="projectInformation.unit" [nzSpan]="1">{{ projectInformation.unit }}

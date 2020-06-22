@@ -1,11 +1,11 @@
 
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { RequestService } from "../request.service";
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router, ActivatedRoute } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import { APIROUTER } from "../router.api";
-import { VideoComponent } from "../component";
 
 import * as echarts from 'echarts';
 
@@ -22,23 +22,23 @@ export class WaterGateComponent implements OnInit {
   parementUrl: any = {};
   // 选中的水闸
   selectWater: any = {};
-  // 由父级获取
-  routerList: any = JSON.parse(localStorage.getItem("currentCity"));
 
-  // 映射
-  @ViewChild(VideoComponent, { static: false }) videoCom: VideoComponent;
+  // 输出定义
+  @Output('checked') checkedBack = new EventEmitter<any>();
 
   constructor(
     private router: Router,
     private req: RequestService,
     private activatedRoute: ActivatedRoute,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private sanitizer: DomSanitizer
   ) {
     // 根据url的参数，查询该项目详情
     this.activatedRoute.queryParams.subscribe(queryParam => {
       this.parementUrl['id'] = queryParam.id;
       this.parementUrl['name'] = queryParam.name;
     })
+    this.getUrl(this.url);
   };
 
   // 测试
@@ -92,14 +92,30 @@ export class WaterGateComponent implements OnInit {
   // 所有的水闸
   totalWater: any;
 
+  // 工程档案
+  archives: any;
+
+  // 视频连接
+  url = 'assets/image/oceans.mp4';
+  safeUrl: any;
 
   ngOnInit() {
 
-    this.req.getData(this.routerApi.getProjectsByArea, { 'areasId': this.parementUrl.id }).subscribe(res => {
+  }
+
+  // 处理视频连接
+  getUrl(url: string): void {
+    this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(url);
+  };
+
+  // 父级调用--根据省市查项目
+  fathFunction(data: { areasId: any; }): void {
+    this.req.getData(this.routerApi.getProjectsByArea, { 'areasId': data.areasId }).subscribe(res => {
       this.totalWater = res['data'];
       // 默认选中第一个
       this.selectWater = this.totalWater[0];
-      this.routerList.push({ 'name': this.selectWater.name + '信息', link: null })
+      let data = { 'name': this.selectWater.name + '信息', link: null };
+      this.checkedBack.emit(data);
       // 查询综合评价
       this.comprehensive(this.selectWater.id);
       // 默认回调现状调查，安全复核查询
@@ -107,8 +123,20 @@ export class WaterGateComponent implements OnInit {
     }, error => {
       this.message.create('error', error);
     })
+  };
 
-  }
+  // 父级调用--根据项目ID查看详情
+  projectIdmation(event: any): void {
+    // 项目详情赋值
+    this.selectWater = event;
+    // 返给父级的值
+    let data = { 'name': event.name + '信息', link: null };
+    this.checkedBack.emit(data);
+    // 查询综合评价
+    this.comprehensive(event.id);
+    // 默认回调现状调查，安全复核查询
+    this.testFun(this.currentStatus);
+  };
 
   // 综合评价的查询
   comprehensive(id: any): void {
@@ -142,6 +170,8 @@ export class WaterGateComponent implements OnInit {
           this.getAssesss();
         } else if (this.currentIntroduce.status == 3) {
           this.querygetDangers();
+        } else if (this.currentIntroduce.status == 4) {
+          this.getRecords();
         }
         break;
     }
@@ -376,22 +406,14 @@ export class WaterGateComponent implements OnInit {
     })
   };
 
-  // 菜单栏点击事件
-  menuClick(data: any): void {
-    if (data.cityCode == 100000) {
-      this.routerList.splice(1, this.routerList.length - 1);
-    } else {
-      for (let item in this.routerList) {
-        if (data.cityCode == this.routerList[item]['cityCode']) {
-          this.routerList.splice(Number(item) + 1, this.routerList.length - 1);
-          break;
-        }
-      };
-    }
-    // 本地存储-菜单栏
-    localStorage.setItem("currentCity", JSON.stringify(this.routerList))
-    // 跳转页面
-    this.router.navigateByUrl(data.link);
+  // 获取工程档案
+  getRecords(): void {
+    let data = { 'state': 4, 'pid': this.selectWater.id, 'page': -1 };
+    this.req.postData(this.routerApi.getRecords, data).subscribe(res => {
+      this.archives = res['data'];
+    }, error => {
+      this.message.create('error', error);
+    })
   };
 
   // 滚动事件

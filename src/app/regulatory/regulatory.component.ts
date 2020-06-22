@@ -14,6 +14,12 @@ declare let AMapUI: any;
   styleUrls: ['./regulatory.component.css']
 })
 export class RegulatoryComponent implements OnInit {
+  returnEchart(arg0: any) {
+    throw new Error("Method not implemented.");
+  }
+  cityId(arg0: any) {
+    throw new Error("Method not implemented.");
+  }
 
   constructor(private req: RequestService, private message: NzMessageService, private router: Router) { }
 

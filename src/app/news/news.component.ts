@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
+import { NewsInformationComponent, NewsContentComponent } from '../component';
 @Component({
   selector: 'app-news',
   templateUrl: './news.component.html',
@@ -8,6 +9,9 @@ import { Component, OnInit } from '@angular/core';
 export class NewsComponent implements OnInit {
 
   constructor() { }
+  
+  @ViewChild(NewsContentComponent, { static: true }) newsContent: NewsContentComponent;
+  @ViewChild(NewsInformationComponent, { static: false }) newsInformation: NewsInformationComponent;
 
   ngOnInit() {
   }

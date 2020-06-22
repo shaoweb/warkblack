@@ -1,0 +1,110 @@
+.content_side,
+.content_middle {
+  height: 100%;
+}
+
+.content_side {
+  width: 30%;
+}
+
+.content_middle {
+  width: 40%;
+  padding: 0 1.5rem;
+}
+
+.news_middle,
+.system_middle {
+  height: 49.5%;
+  overflow: hidden;
+}
+
+.news_middle {
+  margin-top: 1%;
+}
+
+.img_list {
+  width: 100%;
+  height: 100%;
+}
+
+h3 {
+  margin: 1% 0 0;
+  height: 4%;
+  font-size: 2rem;
+  display: inline-block;
+  font-weight: bolder;
+  background-clip: text;
+  background-image: -webkit-linear-gradient(bottom, #EC9C45, #E4C072);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.system_middle>h3 {
+  height: 10%;
+}
+
+.news_list {
+  margin: 0;
+  height: 94.5%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.system_middle>.news_list {
+  height: 89.5%;
+}
+
+.news_list>li {
+  color: #FFF;
+  padding: 0 4rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  height: 4rem;
+  line-height: 4rem;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: all .3s initial;
+  background-color: rgba(15, 207, 247, .1);
+}
+
+.news_list>li::before {
+  display: inline-block;
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 1.2rem;
+  width: .8rem;
+  height: .8rem;
+  margin-top: -.4rem;
+  background-color: aqua;
+  border-radius: 50%;
+}
+
+.system_middle>.news_list>li::before {
+  display: none;
+}
+
+.system_middle>.news_list>li>span {
+  position: absolute;
+  top: 50%;
+  left: 1.2rem;
+  color: #FFF;
+  width: 2rem;
+  height: 2rem;
+  text-align: center;
+  line-height: 2rem;
+  margin-top: -1rem;
+  border-radius: 50%;
+  background-image: linear-gradient(#3D22B0, #01CADA);
+  overflow: hidden;
+}
+
+.news_list>li:hover {
+  background-repeat: no-repeat;
+  background-image: url('/forwcp/assets/image/sijiao_lan.png');
+  background-position: center;
+  background-size: 100% 100%;
+}

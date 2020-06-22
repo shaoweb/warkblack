@@ -9,7 +9,11 @@ export class HomeComponent implements OnInit {
 
   constructor() { }
 
+  effect = 'scrollx';
+
   ngOnInit() {
+    // 清除cookie 缓存
+    localStorage.removeItem('routerList');
   }
 
   // 打开新链接

@@ -3,13 +3,13 @@
     <p class="list_menu">
         <span routerLink="/home">导航地图</span><i></i>
         <ng-container *ngFor="let item of routerList; let i = index">
-            <span [routerLink]="item.link" [ngClass]="{'select': (i+1) == routerList.length}" (click)="menuClick(item)">{{item.name}}</span><i
+            <span [routerLink]="item.link" [ngClass]="{'select': (i+1) == routerList.length}" (click)="menuClick(i)">{{item.name}}</span><i
                 *ngIf="routerList.length > (i + 1)"></i>
         </ng-container>
     </p>
 </div>
 <!-- 内容 -->
-<div class="content">
+<div class="content" [hidden]="!information">
     <!-- 左 -->
     <div class="contentSidedge fl clearfix">
         <!-- 上 -->
@@ -26,7 +26,7 @@
                     <p>堤防总量: <span class="span_yellow">120</span></p>
                     <p>到期未检: <span class="span_blue">12</span></p>
                 </li>
-                <li [routerLink]="['/content/lockTotal']">
+                <li (click)="routerUrl()">
                     <img src="assets/image/shuizha.png" alt="">
                     <p>水闸总量: <span class="span_yellow">{{lockTotal.projectsCount}}</span></p>
                     <p>到期未检: <span class="span_blue">{{lockTotal.countByOverdue}}</span></p>
@@ -96,16 +96,12 @@
         <!-- 上半部 -->
         <div class="conMiddle_top">
             <app-map-box *ngIf="!testing" (checked)="checkedBack($event)" (getCountby)='getCountByProvince($event)'
-                (switchType)="switchTitle($event)"></app-map-box>
+                (switchType)="switchTitle($event)" (inforShow)="informationShow($event)"></app-map-box>
             <app-river-basion *ngIf="testing" (getCountWater)='getCountByWater($event)' (dataRandom)='randomData()'
                 (switchType)="switchTitle($event)"></app-river-basion>
         </div>
         <!-- 下半部 -->
-        <div class="conMiddle_bottom">
-            <h3 *ngIf="!testing">{{ title == '全国行政区水利工程' ? title : title + '水利工程' }}</h3>
-            <h3 *ngIf="testing">{{ title }}</h3>
-            <div class="conMiddle_box" id="conMiddle"></div>
-        </div>
+        <div class="conMiddle_bottom" id="conMiddle"></div>
     </div>
     <!-- 右边 -->
     <div class="contentSidedge fl clearfix">
@@ -176,3 +172,5 @@
         </div>
     </div>
 </div>
+<!-- 详情 -->
+<app-water-gate [hidden]="information" (checked)="checkedBack($event)"></app-water-gate>

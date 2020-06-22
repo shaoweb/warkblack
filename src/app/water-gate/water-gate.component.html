@@ -1,13 +1,3 @@
-<!-- 面包屑 -->
-<div class="menu clearfix">
-    <p class="list_menu">
-        <span routerLink="/home">导航地图</span><i></i>
-        <ng-container *ngFor="let item of routerList; let i = index">
-            <span [ngClass]="{'select': (i+1) == routerList.length}" (click)="menuClick(item)">{{item.name}}</span><i
-                *ngIf="routerList.length > (i + 1)"></i>
-        </ng-container>
-    </p>
-</div>
 <div class="content">
     <!-- 左部分 -->
     <div class="contentSidedge fl clearfix">
@@ -74,7 +64,7 @@
             <div class="under_content" [ngClass]="{'select': currentIntroduce.status == 1}">
                 <div class="header_img fl">
                     <img src="assets/image/yonghu_lan.png" alt="">
-                    <h3>测试数据</h3>
+                    <h3>工程概况</h3>
                 </div>
                 <div class="header_text fl">
                     <p class="header_cotent">{{totalData.overview}}</p>
@@ -97,7 +87,17 @@
                 </ul>
             </div>
             <div class="under_content underCon_thead" [ngClass]="{'select': currentIntroduce.status == 4}">
-                <p>工程档案</p>
+                <ul class="underCon_table">
+                    <li class="fl">相关档案记录</li>
+                </ul>
+                <ul class="underCon_tbody">
+                    <li *ngFor="let item of archives" id="archives">
+                        <span class="fl time">{{item.date}}</span>
+                        <span class="fl text">{{item.title}}
+                            <p>{{item.content}}</p>
+                        </span>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -245,10 +245,16 @@
                             </em>
                         </li>
                     </ul>
-                    <div class="onRight_item_list">
+                    <div class="onRight_item_list" *ngIf="safeselect == '总指标'">
                         <span class="name fl">总指标:</span>
                         <div class="fr list_menu">
-                            <em>A类</em>
+                            <em>{{safeSearch['nowData'][0]['state']}}</em>
+                        </div>
+                    </div>
+                    <div class="onRight_item_list" *ngIf="safeselect == '启闭机'">
+                        <span class="name fl">启闭机:</span>
+                        <div class="fr list_menu">
+                            <em>{{safeSearch['nowData'][0]['state']}}</em>
                         </div>
                     </div>
                     <table>
@@ -264,12 +270,14 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of safeSearch['nowData']">
-                                <td>{{item.name}}</td>
-                                <td><span class="selct_red">{{item.max}}</span></td>
-                                <td><span class="selct_eff">{{item.min}}</span></td>
-                                <td><span>{{item.avg}}</span></td>
-                                <td><span>{{item.value}}</span></td>
-                                <td><span
+                                <td *ngIf="item.name != '启闭机' && item.name != '总指标' ">{{item.name}}</td>
+                                <td *ngIf="item.name != '启闭机' && item.name != '总指标' "><span
+                                        class="selct_red">{{item.max}}</span></td>
+                                <td *ngIf="item.name != '启闭机' && item.name != '总指标' "><span
+                                        class="selct_eff">{{item.min}}</span></td>
+                                <td *ngIf="item.name != '启闭机' && item.name != '总指标' "><span>{{item.avg}}</span></td>
+                                <td *ngIf="item.name != '启闭机' && item.name != '总指标' "><span>{{item.value}}</span></td>
+                                <td *ngIf="item.name != '启闭机' && item.name != '总指标' "><span
                                         [ngClass]="{'selct_red': item.state == '不满足', 'selct_eff': item.state == '满足'}">{{item.state}}</span>
                                 </td>
                             </tr>
@@ -299,6 +307,23 @@
     </div>
 </div>
 <!-- 视频 -->
-<nz-modal [(nzVisible)]="isVisible" nzTitle="相关视频" nzFooter="null" (nzOnCancel)="isVisible=false" (nzOnOk)="isVisible=false">
-    <app-video></app-video>
-  </nz-modal>
+<div class="video_modal" *ngIf="isVisible">
+    <div class="video_show">
+        <div class="video_autplay fl">
+            <video id="my-video" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto"
+                data-setup="{}" autoplay poster>
+                <source [src]="safeUrl" type='video/mp4'>
+                <p class="vjs-no-js">播放视频需要启用JavaScript，推荐使用支持HTML5的浏览器访问。
+                    To view this video please enable JavaScript,
+                    and consider upgrading to a web browser that
+                    <a href="http://videojs.com/html5-video-support/" target="_blank">
+                        supports HTML5 video</a>
+                </p>
+            </video>
+        </div>
+        <h3 class="fr"><i nz-icon nzType="close" nzTheme="outline" (click)="isVisible=false"></i></h3>
+        <ul class="video_list fl">
+            <li>第一集</li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+<!-- 左侧 -->
+<div class="fl content_side">
+    <h3>行业新闻</h3>
+    <ul class="news_list">
+        <li *ngFor="let data of testData" (click)="linkBlank(data.href)">{{data.title}}</li>
+    </ul>
+</div>
+<!-- 中间 -->
+<div class="fl content_middle">
+    <!-- 轮播图 -->
+    <div class="news_middle">
+        <nz-carousel nzAutoPlay>
+            <div nz-carousel-content *ngFor="let item of imgArr">
+                <img class="img_list" [src]="item.src" alt="">
+            </div>
+        </nz-carousel>
+    </div>
+    <!-- 系统通知 -->
+    <div class="system_middle">
+        <h3>系统通知</h3>
+        <ul class="news_list">
+            <li *ngFor="let data of notice; let i = index;" (click)="linkBlank(data.href)">
+                <span>{{i+1}}</span>
+                <p>{{data.title}}</p>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- 右侧 -->
+<div class="fl content_side">
+    <h3>标准规范</h3>
+    <ul class="news_list">
+        <li *ngFor="let data of specification" (click)="linkBlank(data.href)">{{data.title}}</li>
+    </ul>
+</div>

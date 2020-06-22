@@ -7,3 +7,6 @@ export * from './video';
 export * from './figure';
 export * from './timeline';
 export * from './china-threed';
+export * from './news-content';
+export * from './news-information';
+export * from './name-pip';

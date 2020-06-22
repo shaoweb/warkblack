@@ -2,16 +2,18 @@
 <div class="menu clearfix">
     <p class="list_menu">
         <span routerLink="/home">导航地图</span><i></i>
-        <span routerLink="/content/basin" *ngIf="routerList.length == 1">全国行政区水利工程</span><i *ngIf="routerList.length == 1"></i>
-        <span routerLink="/content/lockTotal" *ngIf="routerList.length == 1">水闸工程</span>
-        <ng-container  *ngFor="let item of routerList; let i = index">
-            <span *ngIf="routerList.length != 1" [ngClass]="{'select': (i+1) == routerList.length}" (click)="menuClick(item)">{{item.name}}</span><i
+        <span routerLink="/content/basin" *ngIf="routerList.length == 1">全国行政区水利工程</span><i
+            *ngIf="routerList.length == 1"></i>
+        <span routerLink="/content/lockTotal" class="select" *ngIf="routerList.length == 1">水闸工程</span>
+        <ng-container *ngFor="let item of routerList; let i = index">
+            <span *ngIf="routerList.length != 1" [ngClass]="{'select': (i+1) == routerList.length}"
+                (click)="menuClick(i)">{{item.name}}</span><i
                 *ngIf="routerList.length > (i + 1) && routerList.length != 1"></i>
         </ng-container>
     </p>
 </div>
 <!-- 内容 -->
-<div class="content">
+<div class="content" [hidden]="!information">
     <!-- 左边 -->
     <div class="clearfix fl lock_side">
         <div class="side_list">
@@ -32,46 +34,73 @@
             </ul>
             <div class="fl propor_box">
                 <div class="propor_id" id="sideTotal"></div>
-                <h3 class="propor_text">到期未检<br><i>{{lockTotal.countByOverdue}}</i></h3>
+                <h3 class="propor_text" (click)="alldataDueto(routerList[routerList.length - 1]['areasId'])">
+                    到期未检<br><i>{{lockTotal.countByOverdue}}</i></h3>
             </div>
         </div>
         <div class="side_list">
             <h3>工程规模 <img src="assets/image/hangbian_lan.png" alt=""></h3>
-            <div class="sidelist_box">
-                <div class="side_pietion" id="sidePietion"></div>
-                <div class="side_bartion" id="sideBartion"></div>
-            </div>
+            <div class="sidelist_box" id="sidePietion"></div>
         </div>
     </div>
     <!-- 中间 -->
     <div class="clearfix fl lock_box">
         <!-- 上半部 -->
         <div class="conMiddle_top">
-           <!-- <app-category (checked)="checkedBack($event)"></app-category> -->
-           <app-regulatory (checked)="checkedBack($event)"></app-regulatory>
+            <app-category (checked)="checkedBack($event)" (inforShow)="informationShow($event)"></app-category>
+            <!-- <app-regulatory (checked)="checkedBack($event)"></app-regulatory> -->
         </div>
         <!-- 下半部 -->
-        <div class="conMiddle_bottom">
-            <h3>{{title == '全国行政区水利工程水闸工程' ? '全国水闸工程': title}}</h3>
-            <div class="conMiddle_box" id="lockBar"></div>
-        </div>
+        <div class="conMiddle_bottom" id="lockBar"></div>
     </div>
     <!-- 右边 -->
     <div class="clearfix fl lock_side">
-        <div class="lockRight_box clearfix">
-            <ul class="lockbox_menu fl" id="lockboxMenu">
-                <li *ngFor="let item of locklistAll">
-                    <span id="{{item.index}}">{{item.index}}</span>
-                    <ul class="lockmenu_list">
-                        <li *ngFor="let data of item.pros" (click)="selectLocak(data)">{{data.name}}</li>
+        <div class="onthe_right clearfix">
+            <ul class="onRight_menu">
+                <li class="fl" [ngClass]="{'select': currentStatus == item}" *ngFor="let item of menuType"
+                    (click)="currentStatus=item"><i>{{item.name}}</i></li>
+            </ul>
+            <div class="onRight_list">
+                <div class="lockRight_box clearfix" *ngIf="currentStatus.type == 1">
+                    <ul class="lock_levenl">
+                        <li><i class="list_i_6A"></i>A类</li>
+                        <li><i class="list_i_F8"></i>B类</li>
+                        <li><i class="list_i_D9"></i>C类</li>
                     </ul>
-                </li>
-            </ul>
-            <ul class="lockserial fl">
-                <li *ngFor="let any of testMenu">
-                    <span [ngClass]="{'select': currentIndex == any}" (click)="selectIndex(any)">{{any}}</span>
-                </li>
-            </ul>
-         </div>
+                    <ul class="lock_facilities">
+                        <li *ngFor="let data of securityReview">
+                            <span class="fl">{{data.con}}</span>
+                            <div class="fl statistics">
+                                <i *ngFor="let item of data.typeList"
+                                    [ngClass]="{'list_i_6A': item.value == 'A类', 'list_i_F8': item.value == 'B类', 'list_i_D9': item.value == 'C类', 'percentage': item.percentage == 100}"
+                                    class="list_i_6A" [ngStyle]="{'width': item.percentage + '%'}">
+                                    <em
+                                        [ngClass]="{'progress_a': item.value == 'A类', 'progress_b': item.value == 'B类', 'progress_c': item.value == 'C类'}">{{item.percentage + '%'}}</em>
+                                </i>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="lockRight_box clearfix" *ngIf="currentStatus.type == 2">
+                    <ul class="lockbox_menu fl" id="lockboxMenu">
+                        <li>
+                            <input type="text" placeholder="请输入水闸名" [(ngModel)]="lockName">
+                        </li>
+                        <li *ngFor="let item of locklistAll | namePip: lockName">
+                            <span id="{{item.index}}">{{item.index}}</span>
+                            <ul class="lockmenu_list">
+                                <li *ngFor="let data of item.pros" (click)="selectLocak(data)">{{data.name}}</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="lockserial fl">
+                        <li *ngFor="let any of testMenu">
+                            <span [ngClass]="{'select': currentIndex == any}" (click)="selectIndex(any)">{{any}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+<app-water-gate [hidden]="information" (checked)="checkedBack($event)"></app-water-gate>

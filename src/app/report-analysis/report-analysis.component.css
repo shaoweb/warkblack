@@ -3,6 +3,10 @@
   text-decoration: underline;
 }
 
+.content {
+  height: 87%;
+}
+
 .para_btn {
   color: #FFF;
   font-size: 1.4rem;
@@ -33,6 +37,8 @@
   display: inline-block;
   width: 1.6rem;
   height: 1.6rem;
+  min-width: 12px;
+  min-height: 12px;
   position: relative;
   border: 1px solid #41EFF9;
 }
@@ -149,7 +155,7 @@ table>tbody>tr>td:nth-child(1) {
 table>tbody>tr:hover,
 .searchBox {
   background-repeat: no-repeat;
-  background-image: url('/assets/image/sijiao_lan.png');
+  background-image: url('/forwcp/assets/image/sijiao_lan.png');
   background-position: center;
   background-size: 100% 100%;
 }
@@ -195,8 +201,7 @@ table>tbody>tr:hover,
   width: 100%;
 }
 
-.operation{
+.operation {
   margin: 1.2rem 0;
   overflow: hidden;
 }
-

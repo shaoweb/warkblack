@@ -2,30 +2,33 @@
 <div class="menu clearfix">
     <p class="list_menu">
         <span routerLink="/home">导航地图</span><i></i>
-        <span routerLink="/remind">提醒服务</span>
+        <span (click)="information=true">提醒服务</span><i [hidden]="information"></i>
+        <span [hidden]="information" (click)="information=false">{{projectInformation.name}}</span>
     </p>
 </div>
-<div class="content">
+<div class="content" [hidden]="!information">
     <div class="remind_box">
         <h3>到期未检列表</h3>
         <table>
             <thead>
                 <tr>
                     <th>序号</th>
-                    <th [ngStyle]="{'width': '50%'}">工程名称</th>
-                    <th [ngStyle]="{'width': '30%'}">上次检测时间</th>
-                    <th>间隔时间</th>
+                    <th [ngStyle]="{'width': '40%'}">工程名称</th>
+                    <th [ngStyle]="{'width': '20%'}">上次检测时间</th>
+                    <th [ngStyle]="{'width': '20%'}">间隔时间</th>
+                    <th>预计本次检测时间</th>
                 </tr>
             </thead>
         </table>
         <div class="table_box">
             <table>
                 <tbody>
-                    <tr *ngFor="let item of testData; let i = index">
+                    <tr *ngFor="let item of locklistAll['list1']; let i = index">
                         <td>{{i+1}}</td>
-                        <td [ngStyle]="{'width': '50%'}">{{item.name}}</td>
-                        <td [ngStyle]="{'width': '30%'}">{{item.date}}</td>
-                        <td>{{item.time}}</td>
+                        <td [ngStyle]="{'width': '40%'}" (click)="getProjectInformation(item.id)">{{item.name}}</td>
+                        <td [ngStyle]="{'width': '20%'}">{{item.year}}</td>
+                        <td [ngStyle]="{'width': '20%'}">{{item.time + '年'}}</td>
+                        <td>{{item.expect}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -46,20 +49,22 @@
                 <tr>
                     <th>序号</th>
                     <th [ngStyle]="{'width': '50%'}">工程名称</th>
-                    <th>水利工程类型</th>
+                    <th>当前安全评价</th>
                 </tr>
             </thead>
         </table>
         <div class="table_box">
             <table>
                 <tbody>
-                    <tr *ngFor="let item of testData; let i = index">
+                    <tr *ngFor="let item of locklistAll['list2']; let i = index">
                         <td>{{i+1}}</td>
-                        <td [ngStyle]="{'width': '50%'}">{{item.name}}</td>
-                        <td>{{item.type}}</td>
+                        <td [ngStyle]="{'width': '50%'}" (click)="getProjectInformation(item.id)">{{item.name}}</td>
+                        <td>{{item.level}}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+<!-- 详情 -->
+<app-water-gate [hidden]="information"></app-water-gate>

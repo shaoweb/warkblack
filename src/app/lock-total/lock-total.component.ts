@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { CategoryComponent } from '../component';
+import { WaterGateComponent } from '../water-gate/water-gate.component';
+import { RegulatoryComponent } from '../regulatory/regulatory.component';
 
 import { RequestService } from "../request.service";
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { CategoryComponent } from '../component';
-import { RegulatoryComponent } from '../regulatory/regulatory.component';
 
 import { APIROUTER } from "../router.api"
 import * as echarts from 'echarts';
@@ -22,10 +23,8 @@ export class LockTotalComponent implements OnInit {
     private message: NzMessageService
   ) { }
 
-  @ViewChild(RegulatoryComponent, { static: false }) category: RegulatoryComponent;
-
-  // 由父级获取
-  routItem: any = { name: '全国水闸工程', link: '/content/lockTotal' }
+  @ViewChild(WaterGateComponent, { static: true }) watergate: WaterGateComponent;
+  @ViewChild(CategoryComponent, { static: false }) category: CategoryComponent;
 
   // 指定进度条的数据格式
   format = (percent: number) => `${percent}`;
@@ -61,23 +60,39 @@ export class LockTotalComponent implements OnInit {
   currentProvinces: any = '';
 
   // 菜单栏
-  routerList: any = JSON.parse(localStorage.getItem("currentCity")) == null ? [{'name':'全国行政区水利工程', 'link': '/content/basin', 'cityCode': 100000}] : JSON.parse(localStorage.getItem("currentCity"));
+  routerList: any = JSON.parse(localStorage.getItem("routerList")) == null ? [{ 'name': '全国行政区水利工程', 'link': '/content/basin', 'areasId': '' }] : JSON.parse(localStorage.getItem("routerList"));
 
   // 水闸列表
   locklistAll: any;
-  
+
   // 字母列表，选中字母
-  testMenu: any = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','#'];
+  testMenu: any = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '#'];
   currentIndex: any;
+
+  // 是否展示详情
+  information: boolean = true;
+
+  // 菜单的切换
+  menuType: any = [{ 'name': '安全复核数量统计', type: 1 }, { 'name': '水闸工程检索', type: 2 }];
+  currentStatus: any = this.menuType[0];
+
+  // 安全复核数量统计
+  securityReview: any;
+
+  // 水闸名
+  lockName: any;
 
   ngOnInit() {
 
     // 水闸信息的查询
     this.req.getData(this.routerApi.getTypeCount).subscribe(res => {
-      let data = [], typeData = [];
-
+      let data = [];
       for (let item in res['data']['typeListOverdue']) {
-        data.push({ 'name': res['data']['typeListOverdue'][item]['type'], 'value': res['data']['typeListOverdue'][item]['typeCount'], 'color': this.returnColor(res['data']['typeListOverdue'][item]['type']) })
+        data.push({
+          'name': res['data']['typeListOverdue'][item]['type'],
+          'value': res['data']['typeListOverdue'][item]['typeCount'],
+          'color': this.returnColor(res['data']['typeListOverdue'][item]['type'])
+        })
       }
       for (let item in res['data']['typePro']) {
         res['data']['typePro'][item]['proportion'] = Math.ceil((res['data']['typePro'][item]['count'] / res['data']['projectsCount']) * 100);
@@ -104,14 +119,27 @@ export class LockTotalComponent implements OnInit {
 
     // 获取工程规模
     this.req.getData(this.routerApi.getCountBySize).subscribe(res => {
-      let data = [], charts = { cityList: [], cityData: [] };
+      let data = [], total = 0;
+      res['data'].forEach(element => { total += element.count });
       for (let item in res['data']) {
-        charts.cityList.push(res['data'][item]['size']);
-        charts.cityData.push(res['data'][item]['count']);
-        data.push({ name: res['data'][item]['size'], value: res['data'][item]['count'] })
+        let any = {
+          value: res['data'][item]['count'],
+          name: res['data'][item]['size'],
+          label: {
+            color: '#fff'
+          },
+          itemStyle: {
+
+          },
+          emphasis: {
+            itemStyle: {
+
+            }
+          }
+        }
+        data.push(any)
       }
-      echarts.init(document.getElementById("sidePietion")).setOption(this.sidePietion(data), true);
-      echarts.init(document.getElementById("sideBartion")).setOption(this.sideBartion(charts), true);
+      this.sidePietion(data)
     }, error => {
       this.message.create('error', `${error}`)
     })
@@ -119,7 +147,7 @@ export class LockTotalComponent implements OnInit {
     // 根据省市区查询
     if (this.routerList.length > 1) {
       this.title = this.routerList[this.routerList.length - 1]['name'] + '水闸工程';
-      this.selectProvinces(this.routerList[this.routerList.length - 1]['cityCode']);
+      this.selectProvinces(this.routerList[this.routerList.length - 1]['areasId']);
     } else {
       this.getCountByProvince()
     }
@@ -132,36 +160,45 @@ export class LockTotalComponent implements OnInit {
     })
 
     // 安全复核查询
-    this.req.getData(this.routerApi.getConCountByValue).subscribe(res => {
+    this.getConCountByValue();
+
+    // 根据省市ID，查询数据
+    this.alldata(this.routerList[this.routerList.length - 1]['areasId'])
+  };
+
+  // 根据省市ID，查询安全复核数量统计
+  getConCountByValue(): void {
+    let data = { 'proName': this.currentStatus.name, 'areaId': this.routerList[this.routerList.length - 1]['areaId'] };
+    this.req.getData(this.routerApi.getConCountByValue, data).subscribe(res => {
       for (let item in res['data']) {
+        res['data'][item]['total'] = 0;
+        res['data'][item]['typeList'].forEach(element => {
+          res['data'][item]['total'] += element.count;
+        });
         for (let any in res['data'][item]['typeList']) {
-          switch (res['data'][item]['typeList'][any]['value']) {
-            case 'A类':
-              res['data'][item]['typeList'][any]['strokeColor'] = { '0%': '#2D70F8', '100%': '#92B4FB' };
-              break;
-            case 'B类':
-              res['data'][item]['typeList'][any]['strokeColor'] = { '0%': '#F8B62D', '100%': '#F8D282' };
-              break;
-            case 'C类':
-              res['data'][item]['typeList'][any]['strokeColor'] = { '0%': '#E80042', '100%': '#FF9AB7' };
-              break;
-          }
+          res['data'][item]['typeList'][any]['percentage'] = Math.ceil((res['data'][item]['typeList'][any]['count'] / res['data'][item]['total']) * 100);
         }
-      }
-      this.checkSecurity = res['data'];
+      };
+      this.securityReview = res['data'];
     }, error => {
       this.message.create('error', error);
     })
-
-    // 根据省市ID，查询数据
-    this.alldata(this.routerList[this.routerList.length - 1]['cityCode'])
   };
 
-  // 根据省市ID，查询数据
+  // 根据省市ID，查询水闸列表
   alldata(areaId: any): void {
-    this.req.getData(this.routerApi.getOrderProByArea, {'areaId': areaId}).subscribe(res=>{
+    this.req.getData(this.routerApi.getOrderProByArea, { 'areaId': areaId }).subscribe(res => {
       this.locklistAll = res['data'];
-    }, error=>{
+    }, error => {
+      this.message.create('error', error)
+    })
+  };
+
+  // 查询到期未检
+  alldataDueto(areaId: any): void{
+    this.req.getData(this.routerApi.getOrderProByArea1, { 'areaId': areaId }).subscribe(res => {
+      this.locklistAll = res['data'];
+    }, error => {
       this.message.create('error', error)
     })
   };
@@ -195,7 +232,7 @@ export class LockTotalComponent implements OnInit {
       case '四类':
         return "#D92A5C";
     }
-  }
+  };
 
   // 根据类别返回图片地址
   returnImg(data: any): Object {
@@ -209,7 +246,7 @@ export class LockTotalComponent implements OnInit {
       case '四类':
         return { border: 'bor_D9', imgUrl: "assets/image/shuizha_hong.png" };
     }
-  }
+  };
 
   // 综合评价-圆的参数配置
   stackParameter(data: any): object {
@@ -449,20 +486,20 @@ export class LockTotalComponent implements OnInit {
         }]
     }
     return option
-  }
+  };
 
   // 综合评价-圆的参数配置
   sideTotal(title: string, data: any): object {
     let option = {
       tooltip: {
         trigger: 'item',
-        formatter: '{a} <br/>{b}: {c} ({d}%)'
+        formatter: '{b}: {c} ({d}%)'
       },
       series: [
         {
           name: title,
           type: 'pie',
-          radius: ['30%', '40%'],
+          radius: ['45%', '55%'],
           label: {
             show: false
           },
@@ -484,331 +521,226 @@ export class LockTotalComponent implements OnInit {
             }
           },
           data: data
+        },
+        {
+          type: 'pie',
+          color: '#2AC9FD',
+          radius: ['40%', '41%'],
+          data: [100],
+          label: {
+            show: false
+          }
         }
       ]
     };
     return option;
-  }
+  };
 
   // 工程规模-圆的参数配置
-  sidePietion(data: any): object {
-    let arrName = getArrayValue(data, "name");
-    let arrValue = getArrayValue(data, "value");
-    let sumValue = eval(arrValue.join('+'));
-    let objData = array2obj(data, "name");
-    let optionData = getData(data);
-    function getArrayValue(array, key) {
-      let name = key || "value";
-      let res = [];
-      if (array) {
-        array.forEach(function (t) {
-          res.push(t[name]);
-        });
+  sidePietion(data: any): void {
+    let myChart = echarts.init(document.getElementById("sidePietion"));
+
+    function angleText(i, num) {
+      //每个元素的角度
+      var everyAngle = 360 / num;
+      //文字现在所在的角度
+      var currentAngle = i * everyAngle + everyAngle / 2;
+      //文字所在模块的所占角度
+      var currentArea = (i + 1) * everyAngle;
+      if (currentAngle <= 90) {
+        return -currentAngle;
+      } else if (currentAngle <= 180 && currentAngle > 90) {
+        return 180 - currentAngle;
+      } else if (currentAngle < 270 && currentAngle > 180) {
+        return 180 - currentAngle;
+      } else if (currentAngle < 360 && currentAngle >= 270) {
+        return 360 - currentAngle;
       }
-      return res;
     }
 
-    function array2obj(array, key) {
-      let resObj = {};
-      for (let i = 0; i < array.length; i++) {
-        resObj[array[i][key]] = array[i];
+    //有值的色图的正切处理
+    var data3 = [];
+    data3 = JSON.parse(JSON.stringify(data));
+    for (var i = 0; i < data3.length; i++) {
+      if (i === 0) {
+        data3[i]['label']['color'] = '#333';
+        data3[i]['itemStyle']['color'] = 'rgba(25, 255, 224)';
+        data3[i]['emphasis']['itemStyle']['color'] = 'rgba(25, 255, 224)';
+        data3[i]['label']['rotate'] = angleText(i, data3.length);
+      } else {
+        data3[i]['label']['color'] = '#fff';
+        data3[i]['itemStyle']['color'] = '#4169E1';
+        data3[i]['emphasis']['itemStyle']['color'] = '#6A5ACD';
+        data3[i]['label']['rotate'] = angleText(i, data3.length);
       }
-      return resObj;
     }
 
-    function getData(data) {
-      let res = {
-        series: [],
-        yAxis: []
-      };
-      for (let i = 0; i < data.length; i++) {
-        // console.log([70 - i * 15 + '%', 67 - i * 15 + '%']);
-        res.series.push({
-          name: '',
-          type: 'pie',
-          clockWise: false, //顺时加载
-          hoverAnimation: false, //鼠标移入变大
-          radius: [73 - i * 15 + '%', 68 - i * 15 + '%'],
-          center: ["30%", "55%"],
-          label: {
-            show: false
-          },
+    //最外层大圈的数据
+    var data1 = [];
+    data1 = JSON.parse(JSON.stringify(data));
+    for (var i = 0; i < data1.length; i++) {
+      data1[i].value = 1;
+      data1[i]['label']['rotate'] = angleText(i, data1.length);
+      if (i === 0) {
+        data1[i]['label']['color'] = 'rgba(25, 255, 224)';
+      }
+    }
+
+    //透明饼图的数据
+    var data2 = [];
+    for (var i = 0; i < data.length; i++) {
+      if (i === 0) {
+        data2.push({
+          value: 1,
           itemStyle: {
-            label: {
-              show: false,
-            },
-            labelLine: {
-              show: false
-            },
-            borderWidth: 5,
-          },
-          data: [{
-            value: data[i].value,
-            name: data[i].name
-          }, {
-            value: sumValue - data[i].value,
-            name: '',
-            itemStyle: {
-              color: "rgba(0,0,0,0)",
-              borderWidth: 0
-            },
-            tooltip: {
-              show: false
-            },
-            hoverAnimation: false
-          }]
-        });
-        res.series.push({
-          name: '',
-          type: 'pie',
-          silent: true,
-          z: 1,
-          clockWise: false, //顺时加载
-          hoverAnimation: false, //鼠标移入变大
-          radius: [73 - i * 15 + '%', 68 - i * 15 + '%'],
-          center: ["30%", "55%"],
-          label: {
-            show: false
-          },
-          itemStyle: {
-            label: {
-              show: false,
-            },
-            labelLine: {
-              show: false
-            },
-            borderWidth: 5,
-          },
-          data: [{
-            value: 7.5,
-            itemStyle: {
-              color: "rgb(3, 31, 62)",
-              borderWidth: 0
-            },
-            tooltip: {
-              show: false
-            },
-            hoverAnimation: false
-          }, {
-            value: 2.5,
-            name: '',
-            itemStyle: {
-              color: "rgba(0,0,0,0)",
-              borderWidth: 0
-            },
-            tooltip: {
-              show: false
-            },
-            hoverAnimation: false
-          }]
-        });
-        res.yAxis.push((data[i].value / sumValue * 100).toFixed(2) + "%");
-      }
-      return res;
-    }
-
-    let option = {
-      legend: {
-        show: true,
-        icon: "circle",
-        top: '15%',
-        right: '5%',
-        data: arrName,
-        width: '50',
-        padding: [0, 5],
-        itemGap: 10,
-        formatter: function (name) {
-          return "{title|" + name + "}{value| " + (objData[name].value) + "}{title| 项}"
-        },
-        textStyle: {
-          rich: {
-            title: {
-              fontSize: 12,
-              lineHeight: 12,
-              color: "rgb(0, 178, 246)"
-            },
-            value: {
-              fontSize: 12,
-              lineHeight: 12,
-              color: "#fff"
-            }
+            color: 'rgba(25, 255, 224,0.05)',
           }
-        },
-      },
-      tooltip: {
-        show: true,
-        trigger: "item",
-        formatter: "{a}<br>{b}:{c}({d}%)"
-      },
-      color: ['rgb(16,122,209)', 'rgb(12,177,181)', 'rgb(192,135,19)', 'rgb(192,86,48)', 'rgb(129,48,192)'],
-      grid: {
-        top: '16%',
-        bottom: '53%',
-        left: "30%",
-        containLabel: false
-      },
-      yAxis: [{
-        type: 'category',
-        inverse: true,
-        axisLine: {
-          show: false
-        },
-        axisTick: {
-          show: false
-        },
-        axisLabel: {
-          interval: 0,
-          inside: true,
-          textStyle: {
-            color: "#fff",
-            fontSize: 12,
-          },
-          show: true
-        },
-        data: optionData.yAxis
-      }],
-      xAxis: [{
-        show: false
-      }],
-      series: optionData.series
-    };
-    return option;
-  }
-
-  // 工程规模-进度条的参数配置
-  sideBartion(charts: any): object {
-    let top10CityList = charts.cityList;
-    let top10CityData = charts.cityData;
-    let color = ['rgba(16,122,209', 'rgba(12,177,181', 'rgba(192,135,19', 'rgba(192,86,48', 'rgba(129,48,192']
-
-    let lineY = []
-    for (let i = 0; i < charts.cityList.length; i++) {
-      let x = i
-      if (x > color.length - 1) {
-        x = color.length - 1
+        });
+      } else {
+        data2.push({
+          value: 1,
+          itemStyle: {
+            color: 'transparent',
+          }
+        });
       }
-      let data = {
-        name: charts.cityList[i],
-        color: color[x] + ')',
-        value: top10CityData[i],
-        itemStyle: {
-          normal: {
-            show: true,
-            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{
-              offset: 0,
-              color: color[x] + ', 0.3)'
-            }, {
-              offset: 1,
-              color: color[x] + ', 1)'
-            }], false),
-            barBorderRadius: 10
+    }
+
+    var option = {
+      grid: {},
+      polar: {},
+      angleAxis: {
+        show: false,
+        interval: 1,
+        type: 'category',
+        data: [],
+      },
+      //中间画圈圈的坐标轴
+      radiusAxis: {
+        show: false
+      },
+      series: [
+        {
+          type: 'pie',
+          radius: ["68%", "90%"],
+          hoverAnimation: false,
+          itemStyle: {
+            color: 'transparent'
+          },
+          labelLine: {
+            normal: {
+              show: false,
+              length: 30,
+              length2: 55
+            },
+          },
+          label: {
+            normal: {
+              position: 'inside',
+              align: 'right'
+            }
+          },
+          name: "",
+          data: data1
+        },
+        {
+          stack: 'a',
+          type: 'pie',
+          radius: ['75%', '42%'],
+          roseType: 'area',
+          zlevel: 10,
+          itemStyle: {
+            color: '#4169E1',
           },
           emphasis: {
-            shadowBlur: 15,
-            shadowColor: 'rgba(0, 0, 0, 0.1)'
-          }
-        }
-      }
-      lineY.push(data)
-    }
-
-    let option = {
-      title: {
-        show: false
-      },
-      tooltip: {
-        trigger: 'item'
-      },
-      grid: {
-        borderWidth: 0,
-        top: '0',
-        left: '5%',
-        right: '5%',
-        bottom: '3%'
-      },
-      color: color,
-      yAxis: [{
-        type: 'category',
-        inverse: true,
-        axisTick: {
-          show: false
-        },
-        axisLine: {
-          show: false
-        },
-        axisLabel: {
-          show: false,
-          inside: false
-        },
-        data: top10CityList
-      }, {
-        type: 'category',
-        axisLine: {
-          show: false
-        },
-        axisTick: {
-          show: false
-        },
-        axisLabel: {
-          show: false,
-          inside: false,
-          textStyle: {
-            color: '#b3ccf8',
-            fontSize: '14',
-            fontFamily: 'PingFangSC-Regular'
-          },
-          formatter: function (val) {
-            return `${val}项`
-          }
-        },
-        splitArea: {
-          show: false
-        },
-        splitLine: {
-          show: false
-        },
-        data: top10CityData
-      }],
-      xAxis: {
-        type: 'value',
-        axisTick: {
-          show: false
-        },
-        axisLine: {
-          show: false
-        },
-        splitLine: {
-          show: false
-        },
-        axisLabel: {
-          show: false
-        }
-      },
-      series: [{
-        name: '',
-        type: 'bar',
-        zlevel: 2,
-        barWidth: '12px',
-        data: lineY,
-        animationDuration: 1500,
-        label: {
-          normal: {
-            color: '#b3ccf8',
-            show: true,
-            position: [8, 2],
-            textStyle: {
-              fontSize: 10
-            },
-            formatter: function (a, b) {
-              return a.name
+            itemStyle: {
+              color: '#6A5ACD'
             }
-          }
-        }
-      }],
-      animationEasing: 'cubicOut'
-    }
-    return option;
-  }
+          },
+          label: {
+            normal: {
+              show: true,
+              textStyle: {
+                fontSize: 16,
+                color: '#fff'
+              },
+              position: 'inside',
+              rotate: 14,
+              align: 'right',
+              fontWeight: 'normal',
+              formatter: '{c} 项'
+            },
+            emphasis: {
+              show: true
+            }
+          },
+          animation: false,
+          data: data3
+        },
+        {
+          type: 'pie',
+          zlevel: 99,
+          radius: ["15%", "95%"],
+          selectedOffset: 0,
+          animation: false,
+          hoverAnimation: false,
+          label: {
+            normal: {
+              show: false,
+            }
+          },
+          data: data2
+        }]
+    };
+
+    myChart.setOption(option);
+
+    myChart.on('click', function (a) {
+      //最外层的字体颜色重置变色
+      for (var da1 = 0; da1 < option.series[0].data.length; da1++) {
+        option.series[0].data[da1].label.color = '#fff';
+      }
+
+      //色圈的字体颜色和选中颜色重置
+      for (var da2 = 0; da2 < option.series[1].data.length; da2++) {
+        option.series[1].data[da2].itemStyle.color = '#4169E1';
+        option.series[1].data[da2].label.color = '#fff';
+        //hover颜色重置
+        option.series[1].data[da2].emphasis.itemStyle.color = '#6A5ACD';
+
+      }
+
+      //背景的透明饼图的重置
+      for (var da3 = 0; da3 < option.series[2].data.length; da3++) {
+        option.series[2].data[da3].itemStyle.color = 'transparent';
+      }
+
+      option.series[1].data[a.dataIndex].itemStyle.color = 'rgba(25, 255, 224)';
+      option.series[1].data[a.dataIndex].label.color = '#333';
+      //hover 颜色改变
+      option.series[1].data[a.dataIndex].emphasis.itemStyle.color = 'rgba(25, 255, 224)';
+      option.series[0].data[a.dataIndex].label.color = 'rgba(25, 255, 224)';
+      option.series[2].data[a.dataIndex].itemStyle.color = 'rgba(25, 255, 224,0.1)';
+      //console.log(option)
+      myChart.setOption(option);
+    });
+
+    myChart.on('mouseover', function (a) {
+      myChart.dispatchAction({
+        type: 'highlight',
+        seriesIndex: 1,
+        dataIndex: a.dataIndex
+      });
+    });
+
+    myChart.on('mouseout', function (a) {
+      myChart.dispatchAction({
+        type: 'downplay',
+        seriesIndex: 1,
+        dataIndex: a.dataIndex
+      });
+    });
+  };
 
   // 安全检测的查询
   getExamine(item: any, child: any): void {
@@ -818,7 +750,7 @@ export class LockTotalComponent implements OnInit {
     }, error => {
       this.message.create('error', `${error}`)
     })
-  }
+  };
 
   // 选择省份
   selectProvinces(selectId: any): void {
@@ -835,7 +767,7 @@ export class LockTotalComponent implements OnInit {
     }, error => {
       this.message.create('error', `${error}`);
     })
-  }
+  };
 
   // 柱状图的参数配置
   columnParameter(xArr: any, data: any): object {
@@ -889,55 +821,74 @@ export class LockTotalComponent implements OnInit {
       series: data
     };
     return option
-  }
+  };
 
   // 这个方法由子页面调用
-  checkedBack(data: any) {
-    var event = data[data.length - 1];
+  checkedBack(event: any) {
     this.title = event.name + '水闸工程';
-    this.currentProvinces = event.cityCode;
-    this.selectProvinces(event.cityCode);
-    this.alldata(event.cityCode);
-    this.routerList = data;
+    this.currentProvinces = event.areasId;
+    this.selectProvinces(event.areasId); // 选择省份
+    this.alldata(event.areasId); // 根据省市ID，查询数据
+    this.getConCountByValue(); // 安全复核查询
+    this.routerList.push(event);
+    // 数组去重
+    if (this.routerList.length > 1) {
+      for (var i = 0; i < this.routerList.length; i++) {
+        for (var e = i + 1; e < this.routerList.length; e++) {
+          if (this.routerList[i].areasId == this.routerList[e].areasId) {
+            this.routerList.splice(e, 1);
+            e--;
+          }
+        }
+      }
+    }
   };
 
   // 菜单栏点击事件
-  menuClick(data: any): void {
-    if (data.link == '/content/lockTotal') {
-      this.category.getBack(data);
+  menuClick(index: number): void {
+    if (this.routerList[index].link == '/content/basin') {
+      this.router.navigate(['/content/basin']);
     } else {
-      if (data.cityCode == 100000) {
-        this.routerList.splice(1, this.routerList.length - 1);
+      this.information = true;
+      for (let item in this.routerList) {
+        if (this.routerList[index].areasId == this.routerList[item]['areasId']) {
+          this.routerList.splice(Number(item) + 1, this.routerList.length - 1);
+          break;
+        }
+      };
+      if (this.routerList[index]['areasId']) {
+        this.category.cityId(this.routerList[index]);
       } else {
-        for (let item in this.routerList) {
-          if (data.cityCode == this.routerList[item]['cityCode']) {
-            this.routerList.splice(Number(item) + 1, this.routerList.length - 1);
-            break;
-          }
-        };
-      }
-      // 本地存储-菜单栏
-      localStorage.setItem("currentCity", JSON.stringify(this.routerList))
-      // 跳转页面
-      this.router.navigateByUrl(data.link);
+        this.getCountByProvince();
+        this.category.returnEchart(this.routerList[index]);
+      };
     }
   };
 
   // 选择水闸
-  selectLocak(data: any): void{
-    this.router.navigate(['/content/waterGate'], {
-      queryParams: { 'id': data.areasId, 'name': data.name }
-    });
+  selectLocak(data: any): void {
+    this.information = false;
+    this.watergate.projectIdmation(data);
   };
 
   // 索引选择
-  selectIndex(data: any): void{
+  selectIndex(data: any): void {
     this.currentIndex = data;
     var currentDiv = document.getElementById(data);
     var lockboxMenu = document.getElementById('lockboxMenu');
-    if(currentDiv){
+    if (currentDiv) {
       lockboxMenu.scrollTo(0, currentDiv.getBoundingClientRect().top)
     }
+    // 本地存储
+    localStorage.setItem('routerList', JSON.stringify(this.routerList));
+  };
+
+  // 显示详情
+  informationShow(event: any): void {
+    this.information = false;
+    this.watergate.fathFunction(event);
+    // 本地存储
+    localStorage.setItem('routerList', JSON.stringify(this.routerList));
   };
 
 

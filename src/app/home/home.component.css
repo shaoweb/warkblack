@@ -1,148 +1,144 @@
-.uplogin{
-    cursor: pointer;
-    margin-right: 5rem;
-    overflow: hidden;
-}
-.uplogin>i{
-    display: inline-block;
-    width: 2.4rem;
-    height: 2.4rem;
-    margin: 0 1rem -.4rem;
-    background: url("/assets/image/tuichu_lan@2x.png")no-repeat center/100% 100%;
-}
-.uplogin>span{
-    display: inline-block;
-    font-size: 2rem;
-    color: #41EFF9;
-}
-.title{
-    margin: 2% auto;
-    height: 5%;
-    display: block;
-}
-.listmenu{
-    display: inline-block;
-    width: 80%;
-    margin: 2% 10% 0;
-    overflow: hidden;
+.title {
+  margin: 2% auto;
+  height: 5%;
+  display: block;
 }
 
-.listmenu>li{
-    float: left;
-    width: 18%;
-    padding: 3%;
-    margin-right: 2%;
-    margin-bottom: 3%;
-    cursor: pointer;
-    outline: none;
-    -webkit-transition: all .3s;
-    transition: all .3s;
-    background: url("/assets/image/weixuanzhong@2x.png")no-repeat center/100% 100%;
+[nz-carousel-content] {
+  text-align: center;
+  overflow: hidden;
 }
 
-.listmenu>li:nth-child(5n){
-    margin-right: 0;
+.listmenu {
+  display: inline-block;
+  margin-top: 3%;
+  width: 80%;
+  overflow: hidden;
 }
 
-.listmenu>li>.img{
-    display: block;
-    width: 4rem;
-    height: 4rem;
-    margin: 0 auto 10%;
+.listmenu>li {
+  float: left;
+  width: 18%;
+  padding: 3%;
+  margin-right: 2%;
+  margin-bottom: 5%;
+  cursor: pointer;
+  outline: none;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  background: url("/forwcp/assets/image/weixuanzhong@2x.png")no-repeat center/100% 100%;
 }
 
-.listmenu>li>p{
-    color: #41EFF9;
-    font-size: 2rem;
-    text-align: center;
-    font-weight: bold;
+.listmenu>li:nth-child(5n) {
+  margin-right: 0;
 }
 
-.listmenu>li:hover{
-    background: url("/assets/image/xuanzhong_gaolaing@2x.png")no-repeat center/100% 100%;
+.listmenu>li>.img {
+  display: block;
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 10%;
 }
 
-.listmenu>li:hover>p{
-    color: #FFF;
+.listmenu>li>p {
+  color: #41EFF9;
+  font-size: 2rem;
+  text-align: center;
+  font-weight: bold;
 }
 
-.listmenu>li>.dashuju{
-    background: url("/assets/image/dashuju_jianbian@2x.png")no-repeat center/100% 100%;
+.listmenu>li:hover {
+  background: url("/forwcp/assets/image/xuanzhong_gaolaing@2x.png")no-repeat center/100% 100%;
 }
 
-.listmenu>li:hover>.dashuju{
-    background: url("/assets/image/dashuju_bai@2x.png")no-repeat center/100% 100%;
+.listmenu>li:hover>p {
+  color: #FFF;
 }
 
-.listmenu>li>.yonghu_jiabian{
-    background: url("/assets/image/yonghu_jiabian@2x.png")no-repeat center/100% 100%;
+.listmenu>li>.dashuju {
+  background: url("/forwcp/assets/image/dashuju_jianbian@2x.png")no-repeat center/100% 100%;
 }
 
-.listmenu>li:hover>.yonghu_jiabian{
-    background: url("/assets/image/yonghu_bai@2x.png")no-repeat center/100% 100%;
+.listmenu>li:hover>.dashuju {
+  background: url("/forwcp/assets/image/dashuju_bai@2x.png")no-repeat center/100% 100%;
 }
 
-.listmenu>li>.jiance_jianbian{
-    background: url("/assets/image/jiance_jianbian@2x.png")no-repeat center/100% 100%;
+.listmenu>li>.yonghu_jiabian {
+  background: url("/forwcp/assets/image/yonghu_jiabian@2x.png")no-repeat center/100% 100%;
 }
 
-.listmenu>li:hover>.jiance_jianbian{
-    background: url("/assets/image/jiance_bai@2x.png")no-repeat center/100% 100%;
+.listmenu>li:hover>.yonghu_jiabian {
+  background: url("/forwcp/assets/image/yonghu_bai@2x.png")no-repeat center/100% 100%;
 }
 
-.listmenu>li>.fenxi_jianbian{
-    background: url("/assets/image/fenxi_jianbian@2x.png")no-repeat center/100% 100%;
+.listmenu>li>.jiance_jianbian {
+  background: url("/forwcp/assets/image/jiance_jianbian@2x.png")no-repeat center/100% 100%;
 }
 
-.listmenu>li:hover>.fenxi_jianbian{
-    background: url("/assets/image/fenxi_bai@2x.png")no-repeat center/100% 100%;
+.listmenu>li:hover>.jiance_jianbian {
+  background: url("/forwcp/assets/image/jiance_bai@2x.png")no-repeat center/100% 100%;
 }
 
-.listmenu>li>.guanli_jianbian{
-    background: url("/assets/image/guanli_jianbian@2x.png")no-repeat center/100% 100%;
+.listmenu>li>.fenxi_jianbian {
+  background: url("/forwcp/assets/image/fenxi_jianbian@2x.png")no-repeat center/100% 100%;
 }
 
-.listmenu>li:hover>.guanli_jianbian{
-    background: url("/assets/image/guanli_bai@2x.png")no-repeat center/100% 100%;
+.listmenu>li:hover>.fenxi_jianbian {
+  background: url("/forwcp/assets/image/fenxi_bai@2x.png")no-repeat center/100% 100%;
 }
 
-.listmenu>li>.xinxi_jianbian{
-    background: url("/assets/image/xinxi_jianbian@2x.png")no-repeat center/100% 100%;
+.listmenu>li>.guanli_jianbian {
+  background: url("/forwcp/assets/image/guanli_jianbian@2x.png")no-repeat center/100% 100%;
 }
 
-.listmenu>li:hover>.xinxi_jianbian{
-    background: url("/assets/image/xinxi_bai@2x.png")no-repeat center/100% 100%;
+.listmenu>li:hover>.guanli_jianbian {
+  background: url("/forwcp/assets/image/guanli_bai@2x.png")no-repeat center/100% 100%;
 }
 
-.listmenu>li>.tixing_jianbian{
-    background: url("/assets/image/tixing_jianbian@2x.png")no-repeat center/100% 100%;
+.listmenu>li>.xinxi_jianbian {
+  background: url("/forwcp/assets/image/xinxi_jianbian@2x.png")no-repeat center/100% 100%;
 }
 
-.listmenu>li:hover>.tixing_jianbian{
-    background: url("/assets/image/tixing_bai@2x.png")no-repeat center/100% 100%;
+.listmenu>li:hover>.xinxi_jianbian {
+  background: url("/forwcp/assets/image/xinxi_bai@2x.png")no-repeat center/100% 100%;
 }
 
-.listmenu>li>.xingzheng_jianbian{
-    background: url("/assets/image/xingzheng_hui.png")no-repeat center/100% 100%;
+.listmenu>li>.tixing_jianbian {
+  background: url("/forwcp/assets/image/tixing_jianbian@2x.png")no-repeat center/100% 100%;
 }
 
-.listmenu>li>.yauncheng_jianbian{
-    width: 4rem;
-    background: url("/assets/image/yauncheng_hui.png")no-repeat center/100% 100%;
+.listmenu>li:hover>.tixing_jianbian {
+  background: url("/forwcp/assets/image/tixing_bai@2x.png")no-repeat center/100% 100%;
 }
 
-.listmenu>li>.huishang_zanwu{
-    width: 4rem;
-    background: url("/assets/image/huishang_zanwu@2x.png")no-repeat center/100% 100%;
+.listmenu>li>.xingzheng_jianbian {
+  background: url("/forwcp/assets/image/xingzheng_hui.png")no-repeat center/100% 100%;
 }
+
+.listmenu>li>.yauncheng_jianbian {
+  width: 4rem;
+  background: url("/forwcp/assets/image/yauncheng_hui.png")no-repeat center/100% 100%;
+}
+
+.listmenu>li>.huishang_zanwu {
+  width: 4rem;
+  background: url("/forwcp/assets/image/huishang_zanwu@2x.png")no-repeat center/100% 100%;
+}
+
+.listmenu>li>.app_zanwu {
+  width: 3.5rem;
+  height: 5rem;
+  background: url("/forwcp/assets/image/shouji_hui.png")no-repeat center/100% 100%;
+}
+
 .listmenu>.dis,
-.listmenu>.dis:hover{
-    outline: none !important;
-    opacity: .8;
-    background: url("/assets/image/weixuanzhong@2x.png")no-repeat center/100% 100%;
+.listmenu>.dis:hover {
+  outline: none !important;
+  opacity: .8;
+  background: url("/forwcp/assets/image/weixuanzhong@2x.png")no-repeat center/100% 100%;
 }
 
 .listmenu>.dis>p,
-.listmenu>.dis:hover>p{
-    color: rgb(0, 0, 0);
+.listmenu>.dis:hover>p {
+  color: rgb(0, 0, 0);
 }
