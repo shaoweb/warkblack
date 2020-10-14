@@ -35,7 +35,7 @@
   height: 50%;
   position: relative;
   overflow: hidden;
-  background: url("/forwcp/assets/image/dikuang_four.png")no-repeat center/100% 100%
+  background: url("/assets/image/dikuang_four.png")no-repeat center/100% 100%
 }
 
 .lock_side>.side_list>h3 {
@@ -192,7 +192,7 @@
   cursor: pointer;
   transition: .5s;
   position: relative;
-  background: url("/forwcp/assets/image/qiehuankuang_off.png")no-repeat center/100% 100%;
+  background: url("/assets/image/qiehuankuang_off.png")no-repeat center/100% 100%;
 }
 
 .lock_side>.lockRight_menu>li>i {
@@ -209,7 +209,7 @@
 .lock_side>.lockRight_menu>li:hover,
 .lock_side>.lockRight_menu>.select {
   color: #41EFF9;
-  background: url("/forwcp/assets/image/qiehuankuagn_on.png")no-repeat center/100% 100%;
+  background: url("/assets/image/qiehuankuagn_on.png")no-repeat center/100% 100%;
 }
 
 .lock_side>.onthe_right {
@@ -221,7 +221,7 @@
 .onthe_right>.onRight_list {
   width: 100%;
   height: 96%;
-  background: url("/forwcp/assets/image/dikuang_three.png")no-repeat center/100% 100%;
+  background: url("/assets/image/dikuang_three.png")no-repeat center/100% 100%;
   overflow: hidden;
 }
 
@@ -245,7 +245,7 @@
   cursor: pointer;
   transition: .5s;
   position: relative;
-  background: url("/forwcp/assets/image/qiehuankuang_off.png")no-repeat center/100% 100%;
+  background: url("/assets/image/qiehuankuang_off.png")no-repeat center/100% 100%;
 }
 
 .onRight_menu>li>i {
@@ -262,7 +262,7 @@
 .onRight_menu>li:hover,
 .onRight_menu>.select {
   color: #41EFF9;
-  background: url("/forwcp/assets/image/qiehuankuagn_on.png")no-repeat center/100% 100%;
+  background: url("/assets/image/qiehuankuagn_on.png")no-repeat center/100% 100%;
 }
 
 .lock_box>.conMiddle_top {
@@ -313,7 +313,7 @@
 .side_list>.sidEdge {
   height: 33.33%;
   position: relative;
-  background: url("/forwcp/assets/image/dikuang_four.png")no-repeat center/100% 100%;
+  background: url("/assets/image/dikuang_four.png")no-repeat center/100% 100%;
 }
 
 
@@ -487,7 +487,7 @@
 
 .lockmenu_list>li:hover {
   background-repeat: no-repeat;
-  background-image: url('/forwcp/assets/image/xuanzhong_sijiao.png');
+  background-image: url('/assets/image/xuanzhong_sijiao.png');
   background-position: center;
   background-size: 100% 100%;
 }
@@ -512,7 +512,7 @@
   color: #FFF;
   text-align: center;
   font-size: 1.2rem;
-  background: url("/forwcp/assets/image/box_little.png")no-repeat center/100% 100%;
+  background: url("/assets/image/box_little.png")no-repeat center/100% 100%;
   overflow: hidden;
 }
 

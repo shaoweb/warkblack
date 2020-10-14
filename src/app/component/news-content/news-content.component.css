@@ -104,7 +104,7 @@ h3 {
 
 .news_list>li:hover {
   background-repeat: no-repeat;
-  background-image: url('/forwcp/assets/image/sijiao_lan.png');
+  background-image: url('/assets/image/sijiao_lan.png');
   background-position: center;
   background-size: 100% 100%;
 }

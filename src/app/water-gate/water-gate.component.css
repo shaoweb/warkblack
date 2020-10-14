@@ -70,7 +70,7 @@ video {
 .contentSidedge>.onthe_left>.onthe_left_content>.onthe_show {
   width: 45%;
   height: 50%;
-  background: url("/forwcp/assets/image/zonghepingjia.png")no-repeat center/100%;
+  background: url("/assets/image/zonghepingjia.png")no-repeat center/100%;
 }
 
 .contentSidedge>.onthe_left>.onthe_left_content>.onthe_show>h3 {
@@ -117,7 +117,7 @@ video {
   font-size: 1.4rem;
   text-align: center;
   line-height: 3rem;
-  background: url("/forwcp/assets/image/neirongkuang_lan.png")no-repeat center/100% 100%;
+  background: url("/assets/image/neirongkuang_lan.png")no-repeat center/100% 100%;
 }
 
 .contentSidedge>.onthe_left>.onthe_left_content>.onthe_introduce>p>.yellow {
@@ -140,7 +140,7 @@ video {
   text-align: center;
   margin-right: .5%;
   margin-bottom: .6rem;
-  background: url("/forwcp/assets/image/gongchegnpingjia.png")no-repeat center/100% 100%;
+  background: url("/assets/image/gongchegnpingjia.png")no-repeat center/100% 100%;
 }
 
 .contentSidedge>.onthe_left>.onthe_left_content>.onthe_list>li:nth-child(4n) {
@@ -211,7 +211,7 @@ video {
   cursor: pointer;
   transition: .5s;
   position: relative;
-  background: url("/forwcp/assets/image/qiehuankuang_off.png")no-repeat center/100% 100%;
+  background: url("/assets/image/qiehuankuang_off.png")no-repeat center/100% 100%;
 }
 
 .contentSidedge>.onthe_right>.onRight_menu>li>i,
@@ -231,13 +231,13 @@ video {
 .contentSidedge>.onthe_right>.onRight_menu>.select,
 .contentSidedge>.under_left>.under_introduce>.select {
   color: #41EFF9;
-  background: url("/forwcp/assets/image/qiehuankuagn_on.png")no-repeat center/100% 100%;
+  background: url("/assets/image/qiehuankuagn_on.png")no-repeat center/100% 100%;
 }
 
 .contentSidedge>.onthe_right>.onRight_list {
   width: 100%;
   height: 96%;
-  background: url("/forwcp/assets/image/dikuang_three.png")no-repeat center/100% 100%;
+  background: url("/assets/image/dikuang_three.png")no-repeat center/100% 100%;
   overflow: hidden;
 }
 
@@ -302,13 +302,13 @@ video {
   padding: .5rem 1.6rem;
   font-size: 1.6rem;
   margin-bottom: .4rem;
-  background: url("/forwcp/assets/image/xiaokuan_off.png")no-repeat center/100% 100%;
+  background: url("/assets/image/xiaokuan_off.png")no-repeat center/100% 100%;
   margin-right: 1.2rem;
 }
 
 .contentSidedge>.onthe_right>.onRight_list>.onRihgt_content>li>.list_menu>.select,
 .contentSidedge>.onthe_right>.onRight_list>.onRihgt_content>li>.name_list>li>.select {
-  background: url("/forwcp/assets/image/canshukaugn_xuanzhong.png")no-repeat center/100% 100%;
+  background: url("/assets/image/canshukaugn_xuanzhong.png")no-repeat center/100% 100%;
 }
 
 .contentSidedge>.onthe_right>.onRight_list>.onRihgt_content>li>.name_list {
@@ -400,7 +400,7 @@ video {
   font-size: .6rem;
   font-weight: bold;
   margin: .5rem 0;
-  background: url("/forwcp/assets/image/xiaokuan_off.png")no-repeat center/100% 100%;
+  background: url("/assets/image/xiaokuan_off.png")no-repeat center/100% 100%;
 }
 
 .contentSidedge>.onthe_right>.onRight_list>.onRightTable>table>tbody>tr>td>.selct_red {
@@ -430,7 +430,7 @@ video {
   font-size: 1.2rem;
   text-align: center;
   padding: .7rem 0;
-  background: url("/forwcp/assets/image/box_little.png")no-repeat center/100% 100%;
+  background: url("/assets/image/box_little.png")no-repeat center/100% 100%;
 }
 
 .contentSidedge>.onthe_right>.onRight_list>.progress_bar>li>p {
@@ -445,7 +445,7 @@ video {
   font-size: 1.2rem;
   text-align: center;
   padding: .7rem 0;
-  background: url('/forwcp/assets/image/xiaokuan_off.png')no-repeat center/100% 100%;
+  background: url('/assets/image/xiaokuan_off.png')no-repeat center/100% 100%;
 }
 
 .contentSidedge>.onthe_right>.onRight_list>.progress_list {
@@ -492,7 +492,7 @@ video {
 
 .contentSidedge>.under_left {
   height: 50%;
-  background: url("/forwcp/assets/image/dikaung.png")no-repeat center/100% 100%;
+  background: url("/assets/image/dikaung.png")no-repeat center/100% 100%;
   position: relative;
   overflow: hidden;
 }
@@ -512,7 +512,7 @@ video {
   cursor: pointer;
   transition: .5s;
   position: relative;
-  background: url("/forwcp/assets/image/qiehuankuang_off.png")no-repeat center/100% 100%;
+  background: url("/assets/image/qiehuankuang_off.png")no-repeat center/100% 100%;
 }
 
 .contentSidedge>.under_left>.under_introduce>li:last-child {
@@ -527,7 +527,7 @@ video {
   height: 70%;
   opacity: 0;
   z-index: 2;
-  background: url("/forwcp/assets/image/wenzidikuang.png")no-repeat center/100% 100%;
+  background: url("/assets/image/wenzidikuang.png")no-repeat center/100% 100%;
   overflow: auto;
 }
 
@@ -648,7 +648,7 @@ video {
 .contentMiddle>.under_right {
   height: 50%;
   position: relative;
-  background: url("/forwcp/assets/image/changkuan.png")no-repeat center/100% 100%;
+  background: url("/assets/image/changkuan.png")no-repeat center/100% 100%;
   overflow: hidden;
 }
 
@@ -688,7 +688,7 @@ video {
   color: #B1ECFF;
   padding: .5rem 2rem;
   font-size: 1.5rem;
-  background: url("/forwcp/assets/image/qiehuankuang_off.png")no-repeat center/100% 100%;
+  background: url("/assets/image/qiehuankuang_off.png")no-repeat center/100% 100%;
 }
 
 .table_i {
@@ -701,7 +701,7 @@ video {
 }
 
 .table_are {
-  background: url("/forwcp/assets/image/you_lv.png")no-repeat center/100% 100%;
+  background: url("/assets/image/you_lv.png")no-repeat center/100% 100%;
 }
 
 .table_none {
@@ -728,7 +728,7 @@ video {
   width: .5rem;
   height: 100%;
   background-color: rgba(69, 239, 249, 0.4);
-  /* background: url("/forwcp/assets/image/kuohao.png") no-repeat center/100% 100%; */
+  /* background: url("/assets/image/kuohao.png") no-repeat center/100% 100%; */
 }
 
 .underTable {

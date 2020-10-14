@@ -62,11 +62,10 @@ export class MapBoxComponent implements OnInit {
   gaodeAllMap: any = {};
 
   ngOnInit() {
-
     if (this.currentCity.center) {
       // 高德 地图初始化
       this.gaodeMap = false;
-      let data = { 'value': this.currentCity.center, 'data': [{ 'url': this.currentCity.areasId }], 'levenl': this.currentCity.levenl }
+      let data = { 'name': this.currentCity.name, 'value': this.currentCity.center, 'data': [{ 'url': this.currentCity.areasId }], 'levenl': this.currentCity.levenl }
       this.gaoDeMapStart(data);
     } else {
       // echarts 地图初始化
@@ -97,13 +96,16 @@ export class MapBoxComponent implements OnInit {
   };
 
   // 高德 地图初始化
-  gaoDeMapStart(data): void {
+  gaoDeMapStart(data: any): void {
     this.map = new AMap.Map('gaoMap', {
       mapStyle: 'amap://styles/6d22d4e96993fd840a616e863ab0ccd0', //设置地图的显示样式
       resizeEnable: true,
       center: [data.value[0], data.value[1]],
       zoom: 6
     });
+
+    // 创建遮罩
+    this.districtSearch(data.name);
 
     //行政区划查询
     var opts = {
@@ -226,19 +228,31 @@ export class MapBoxComponent implements OnInit {
         roam: true,
         itemStyle: {
           normal: {
-            areaColor: 'rgba(0,255,255,.02)',
-            borderColor: '#00ffff',
-            borderWidth: 1.5,
-            shadowColor: '#00ffff',
-            shadowOffsetX: 0,
-            shadowOffsetY: 4,
-            shadowBlur: 10,
+            borderColor: 'rgba(147, 235, 248, 1)',
+            borderWidth: 1,
+            areaColor: {
+              type: 'radial',
+              x: 0.5,
+              y: 0.5,
+              r: 0.8,
+              colorStops: [{
+                offset: 0,
+                color: 'rgba(147, 235, 248, 0)' // 0% 处的颜色
+              }, {
+                offset: 1,
+                color: 'rgba(147, 235, 248, .2)' // 100% 处的颜色
+              }],
+              globalCoord: false // 缺省为 false
+            },
+            shadowColor: 'rgba(128, 217, 248, 1)',
+            // shadowColor: 'rgba(255, 255, 255, 1)',
+            shadowOffsetX: -2,
+            shadowOffsetY: 2,
+            shadowBlur: 10
           },
           emphasis: {
-            areaColor: 'transparent', //悬浮背景
-            textStyle: {
-              color: '#fff'
-            }
+            areaColor: '#389BB7',
+            borderWidth: 0
           }
         }
       },
@@ -325,8 +339,43 @@ export class MapBoxComponent implements OnInit {
     });
   };
 
+  // 地图创建遮罩
+  districtSearch(name: any): void {
+    var that = this;
+    new AMap.DistrictSearch({
+      extensions: 'all',
+      subdistrict: 0
+    }).search(name, function (status, result) {
+      // 外多边形坐标数组和内多边形坐标数组
+      var outer = [
+        new AMap.LngLat(-360, 90, true),
+        new AMap.LngLat(-360, -90, true),
+        new AMap.LngLat(360, -90, true),
+        new AMap.LngLat(360, 90, true),
+      ];
+      var holes = result.districtList[0].boundaries
+
+      var pathArray = [
+        outer
+      ];
+      pathArray.push.apply(pathArray, holes)
+      that.polygons = new AMap.Polygon({
+        pathL: pathArray,
+        strokeColor: '#090937',
+        strokeWeight: 1,
+        fillColor: '#000',
+        fillOpacity: 0.6
+      });
+      that.polygons.setPath(pathArray);
+      // 重新填入
+      that.map.add(that.polygons);
+    })
+  };
+
   // 根据省市ID查询
   cityId(event): void {
+    this.map.remove(this.polygons); // 清除上次的遮罩
+    this.districtSearch(event.name); // 创建遮罩层
     this.district.setLevel(event.levenl); //行政区级别
     this.district.setExtensions('all');
     //按照adcode进行查询可以保证数据返回的唯一性

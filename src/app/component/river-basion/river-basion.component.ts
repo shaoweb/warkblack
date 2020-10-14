@@ -37,7 +37,7 @@ export class RiverBasionComponent implements OnInit {
   // 点标记显示内容，HTML要素字符串
   markerContent = '' +
     '<div class="custom-content-marker" style="width: 25px;height: 34px">' +
-    '   <img style="width:100%" src="'+ this.icon +'">' +
+    '   <img style="width:100%" src="' + this.icon + '">' +
     '</div>';
 
   ngOnInit() {
@@ -46,8 +46,8 @@ export class RiverBasionComponent implements OnInit {
       mapStyle: 'amap://styles/60da58b3d8e77ac25b45ae050ddb0453', //设置地图的显示样式
       view: new AMap.View2D({
         resizeEnable: true,
-        center: [104.2297,35.2677],
-        zoom: 4//地图显示的缩放级别
+        center: [116.44923, 40.207714],
+        zoom: 8 //地图显示的缩放级别
       }),
     });
 
@@ -62,7 +62,7 @@ export class RiverBasionComponent implements OnInit {
   };
 
   // 条件清空
-  emptyAll(): void{
+  emptyAll(): void {
     this.levnl = '';
     this.sizeOfthe = '';
     this.riverLevenl();
@@ -81,7 +81,7 @@ export class RiverBasionComponent implements OnInit {
           areasId: res['data'][item]['areasId']
         });
       };
-      if (this.marker) { this.map.remove(this.marker)};// 清空标记
+      if (this.marker) { this.map.remove(this.marker) };// 清空标记
       this.addMarker(data); //创建地图坐标点
       this.getCountByWater.emit(parament); // 查询流域等级
       this.randomData.emit(); //更新其他数据
@@ -108,7 +108,7 @@ export class RiverBasionComponent implements OnInit {
         markerion.setTitle(event.name + ":" + event.levenl);
         that.marker.push(markerion);
         // 点击事件
-        markerion.on('click', (e)=>{
+        markerion.on('click', (e) => {
           console.log(event);
           that.router.navigate(['/content/waterGate'], {
             queryParams: { 'id': event.areasId, 'name': event.name }

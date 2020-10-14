@@ -27,7 +27,7 @@
   width: 1.4rem;
   height: 1.4rem;
   cursor: pointer;
-  background: url('/forwcp/assets/image/shuaxin_an.png')no-repeat center/100% 100%;
+  background: url('/assets/image/shuaxin_an.png')no-repeat center/100% 100%;
 }
 
 .cinMiddle_box>h3>.refresh:hover {
@@ -35,7 +35,7 @@
 }
 
 .cinMiddle_box>h3>.refresh:active {
-  background: url('/forwcp/assets/image/shuaxin_liang.png')no-repeat center/100% 100%;
+  background: url('/assets/image/shuaxin_liang.png')no-repeat center/100% 100%;
 }
 
 @keyframes mymove {

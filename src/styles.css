@@ -60,7 +60,7 @@ body {
   width: 100%;
   height: 100%;
   min-width: 1200px;
-  background: url("/forwcp/assets/image/diceng.png")no-repeat center/100% 100%;
+  background: url("/assets/image/diceng.png")no-repeat center/100% 100%;
 }
 
 div::-webkit-scrollbar,
@@ -137,12 +137,12 @@ ul::-webkit-scrollbar-track {
   display: inline-block;
   padding: .2rem 2rem;
   font-size: 1.6rem;
-  background: url("/forwcp/assets/image/xiekaung_weizhong.png")no-repeat center/100% 100%;
+  background: url("/assets/image/xiekaung_weizhong.png")no-repeat center/100% 100%;
 }
 
 .menu>.list_menu>.select {
   color: #00ECFC;
-  background: url("/forwcp/assets/image/xiekuang_xuanzhong.png")no-repeat center/100% 100%;
+  background: url("/assets/image/xiekuang_xuanzhong.png")no-repeat center/100% 100%;
 }
 
 .menu>.list_menu>i {
@@ -150,7 +150,7 @@ ul::-webkit-scrollbar-track {
   margin: 0 1.2rem -.1rem;
   width: 1rem;
   height: 1rem;
-  background: url("/forwcp/assets/image/suangbiao_hui.png")no-repeat center/100%;
+  background: url("/assets/image/suangbiao_hui.png")no-repeat center/100%;
 }
 
 .content {
